@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { LanguageProvider, useTFT } from '@/context/language-context';
-import { solveTeamComp } from '@/lib/solver';
+import { solveTeamComp, SolverStrategy } from '@/lib/solver';
 import { getEmblemTraits } from '@/lib/trait-rules';
 // Assuming solveTeamComp is available globally or imported from a separate file.
 // For example: import { solveTeamComp } from '@/utils/team-solver';
@@ -12,6 +12,10 @@ function MainLayout() {
 
   // State for selected emblems
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
+  // State for solver settings
+  const [level, setLevel] = useState<number>(8);
+  const [strategy, setStrategy] = useState<SolverStrategy>('Standard');
+
 
   // Memoize unique traits that have emblems
   const availableTraits = useMemo(() => {
@@ -30,8 +34,8 @@ function MainLayout() {
     selectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
 
     // Using imported solveTeamComp
-    return solveTeamComp(champions, activeEmblems, 8, 'Standard');
-  }, [champions, selectedEmblems]);
+    return solveTeamComp(champions, activeEmblems, level, strategy);
+  }, [champions, selectedEmblems, level, strategy]);
 
   const addEmblem = (trait: string) => {
     setSelectedEmblems(prev => [...prev, trait]);
@@ -62,6 +66,37 @@ function MainLayout() {
             {language === 'tr' ? 'TFT Takım Oluşturucu' : 'TFT Set 16 Gen'}
           </h1>
         </div>
+
+        {/* Controls */}
+        <div className="flex items-center gap-4 bg-gray-900/50 p-1.5 rounded-lg border border-white/5">
+          <div className="flex items-center gap-2 px-2">
+            <span className="text-xs font-medium text-gray-400">Lvl:</span>
+            <select
+              value={level}
+              onChange={(e) => setLevel(Number(e.target.value))}
+              className="bg-transparent text-sm font-medium text-white focus:outline-none cursor-pointer"
+            >
+              <option value={8}>8</option>
+              <option value={9}>9</option>
+              <option value={10}>10</option>
+            </select>
+          </div>
+          <div className="w-px h-4 bg-white/10" />
+          <div className="flex items-center gap-2 px-2">
+            <span className="text-xs font-medium text-gray-400">Strat:</span>
+            <select
+              value={strategy}
+              onChange={(e) => setStrategy(e.target.value as SolverStrategy)}
+              className="bg-transparent text-sm font-medium text-white focus:outline-none cursor-pointer"
+            >
+              <option value="Standard">Standard</option>
+              <option value="RegionRyze">Region Ryze</option>
+              <option value="BronzeLife">Bronze Life</option>
+            </select>
+          </div>
+        </div>
+
+
 
         <div className="flex items-center gap-4">
           <button
