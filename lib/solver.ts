@@ -1,4 +1,5 @@
 import { Champion } from '@/types/tft';
+import { TRAIT_RULES, TraitRule } from '@/lib/trait-rules';
 
 export interface TeamComp {
     champions: Champion[];
@@ -6,118 +7,175 @@ export interface TeamComp {
     activeSynergies: string[];
 }
 
-const TEAM_SIZE = 8; // Standard TFT team size
+export type SolverStrategy = 'Standard' | 'RegionRyze' | 'BronzeLife';
 
 /**
- * Generates team compositions based on selected emblems.
- * 
- * Algorithm:
- * 1. Identify "Core Units": Champions that possess at least one of the selected emblems.
- * 2. Score all champions based on how well they fit:
- *    - High bonus for matching a selected emblem.
- *    - Small bonus for cost (higher cost = generally stronger).
- *    - Bonus for sharing traits with already selected Core Units (Synergy potential).
- * 3. Generate a primary composition by greedily selecting top scoring units.
+ * Calculates the score of a team based on active traits and strategy.
+ */
+function calculateScore(
+    champions: Champion[],
+    activeEmblems: Record<string, number>,
+    strategy: SolverStrategy
+): { score: number; synergies: string[] } {
+    const traitCounts: Record<string, number> = { ...activeEmblems };
+
+    // Count traits from champions
+    for (const champ of champions) {
+        for (const trait of champ.traits) {
+            traitCounts[trait] = (traitCounts[trait] || 0) + 1;
+        }
+    }
+
+    let score = 0;
+    const activeSynergies: string[] = [];
+    let bronzeLifeCount = 0;
+
+    for (const [trait, count] of Object.entries(traitCounts)) {
+        if (count === 0) continue;
+
+        const rule = TRAIT_RULES[trait];
+        if (!rule) continue;
+
+        // Find the highest active breakpoint
+        let activeBreakpointIndex = -1;
+        for (let i = 0; i < rule.breakpoints.length; i++) {
+            if (count >= rule.breakpoints[i]) {
+                activeBreakpointIndex = i;
+            } else {
+                break;
+            }
+        }
+
+        if (activeBreakpointIndex !== -1) {
+            const level = activeBreakpointIndex + 1;
+            activeSynergies.push(`${trait} (${count})`);
+
+            // Base Score: +1 per active synergy level (level 1 = 1pt, level 2 = 2pts, etc)
+            // Or use the user requirements: +1 per active synergy?
+            // "Base Score: +1 per active synergy (use TRAIT_RULES[t].breakpoints)"
+            // Let's interpret "per active synergy" as a flat bonus or scaled by level.
+            // Giving points based on the breakpoint index is standard.
+            let traitScore = 1 * (activeBreakpointIndex + 1);
+
+            // Emblem Bonus: "If activeEmblems[t] > 0, give HUGE score if that trait hits a higher breakpoint"
+            if ((activeEmblems[trait] || 0) > 0) {
+                // Check if the emblem actually HELPED reach a new breakpoint
+                // count without emblem = count - activeEmblems[trait]
+                // But the prompt implies: "Give HUGE score if that trait hits a higher breakpoint"
+                // effectively rewarding using the emblem.
+                traitScore += 50 * (activeBreakpointIndex + 1);
+            }
+
+            // Strategy: RegionRyze
+            if (strategy === 'RegionRyze' && rule.type === 'Region') {
+                traitScore *= 2;
+            }
+
+            // Strategy: BronzeLife (Count lowest breakpoint)
+            if (activeBreakpointIndex === 0) {
+                bronzeLifeCount++;
+            }
+
+            score += traitScore;
+        }
+    }
+
+    if (strategy === 'BronzeLife') {
+        // "Maximize this count." -> Add heavy weight to the count
+        score += bronzeLifeCount * 100;
+    }
+
+    return { score, synergies: activeSynergies.sort() };
+}
+
+/**
+ * Recursive function to generate combinations.
+ */
+function getCombinations(
+    pool: Champion[],
+    k: number,
+    start: number = 0,
+    current: Champion[] = [],
+    results: Champion[][] = []
+): Champion[][] {
+    if (current.length === k) {
+        results.push([...current]);
+        return results;
+    }
+
+    for (let i = start; i < pool.length; i++) {
+        // Optimization: Stop if we don't have enough elements left to fill k
+        if (pool.length - i < k - current.length) break;
+
+        current.push(pool[i]);
+        getCombinations(pool, k, i + 1, current, results);
+        current.pop();
+    }
+    return results;
+}
+
+/**
+ * Solves for the best team compositions.
  */
 export function solveTeamComp(
     activeChampions: Champion[],
-    selectedEmblems: string[]
+    activeEmblems: Record<string, number>,
+    level: number,
+    strategy: SolverStrategy = 'Standard'
 ): TeamComp[] {
-    if (selectedEmblems.length === 0) {
-        return [];
-    }
+    const emblemTraits = Object.keys(activeEmblems);
 
-    // 1. Calculate a "Static Score" for each champion based purely on selected emblems
-    const scoredChampions = activeChampions.map(champ => {
-        let score = 0;
-        const matchingTraits = champ.traits.filter(t => selectedEmblems.includes(t));
+    // 1. FILTER POOL
+    // "Pick high-cost units + units that match activeEmblems first to reduce search space"
+    // Target pool size: ~15-20 to keep combinations manageable.
+    // Combinations(20, 8) = 125,970 -> Manageable.
+    // Combinations(25, 9) = 2,042,975 -> A bit slow but okay if scoring is fast.
 
-        // Heuristic Scoring
-        score += matchingTraits.length * 100; // Heavy weight for requested traits
-        score += champ.cost * 5;              // Prefer higher cost units slightly
+    // Score champions for POOL INCLUSION only
+    const poolCandidates = activeChampions.map(champ => {
+        let poolScore = 0;
+        // High cost
+        poolScore += champ.cost * 2;
 
-        return { ...champ, rawScore: score, matchingTraits };
-    });
-
-    // Sort by score descending
-    scoredChampions.sort((a, b) => b.rawScore - a.rawScore);
-
-    // 2. Select initial core (Fit as many matching units as possible up to TEAM_SIZE)
-    // If we have more matches than team size, we just take the best ones.
-    // If we have fewer, we fill with synergy bots.
-
-    let currentComp: typeof scoredChampions = [];
-    const compIds = new Set<string>();
-
-    // Take top candidates
-    for (const champ of scoredChampions) {
-        if (currentComp.length >= TEAM_SIZE) break;
-        currentComp.push(champ);
-        compIds.add(champ.id);
-    }
-
-    // 3. If we still have room (currentComp.length < TEAM_SIZE), fill with Synergy Bots
-    if (currentComp.length < TEAM_SIZE) {
-        // Identify traits currently in the comp
-        const currentTraits = new Map<string, number>();
-        currentComp.forEach(c => {
-            c.traits.forEach(t => {
-                currentTraits.set(t, (currentTraits.get(t) || 0) + 1);
-            });
+        // Matches active emblem
+        champ.traits.forEach(t => {
+            if (activeEmblems[t]) {
+                poolScore += 10;
+            }
         });
 
-        // Find candidates from the remaining pool
-        const remainingChampions = activeChampions.filter(c => !compIds.has(c.id));
+        return { champ, poolScore };
+    });
 
-        // Score remaining champions based on how many VALID EXISTING traits they activate
-        const fillerCandidates = remainingChampions.map(champ => {
-            let synergyScore = 0;
-            champ.traits.forEach(t => {
-                if (currentTraits.has(t)) {
-                    synergyScore += 10; // Bonus for activating/adding to an existing trait
-                }
-            });
-            return { ...champ, synergyScore: synergyScore + champ.cost };
-        });
+    // Sort and take top N
+    poolCandidates.sort((a, b) => b.poolScore - a.poolScore);
+    const POOL_SIZE = 18; // Keep it tight for performance in browser
+    const pool = poolCandidates.slice(0, POOL_SIZE).map(c => c.champ);
 
-        fillerCandidates.sort((a, b) => b.synergyScore - a.synergyScore);
-
-        // Fill the rest
-        for (const champ of fillerCandidates) {
-            if (currentComp.length >= TEAM_SIZE) break;
-            currentComp.push({ ...champ, rawScore: 0, matchingTraits: [] }); // formatting to match type
-        }
+    if (pool.length < level) {
+        return []; // Not enough champs
     }
 
-    // 4. Finalize and Calculate Output Metrics
-    const finalChampions = currentComp.map(({ rawScore, matchingTraits, ...c }) => c); // strip internal props
+    // 2. GENERATE COMBINATIONS
+    // We used a custom recursive function, but for 18C8 it is 43k iterations. Fast.
 
-    // Calculate active synergies for this specific team
-    const traitCounts = new Map<string, number>();
-    finalChampions.forEach(c => {
-        c.traits.forEach(t => {
-            traitCounts.set(t, (traitCounts.get(t) || 0) + 1);
-        });
+    const combinations: Champion[][] = [];
+
+    // Iterative combination generator or recursive? Recursive is fine for < 100k
+    // Actually, let's allow a slightly larger pool if level is small, but 18 is safe.
+    getCombinations(pool, level, 0, [], combinations);
+
+    // 3. SCORE TEAMS
+    const scoredTeams = combinations.map(team => {
+        const { score, synergies } = calculateScore(team, activeEmblems, strategy);
+        return { champions: team, score, activeSynergies: synergies };
     });
 
-    const activeSynergies: string[] = [];
-    // For now, we consider a synergy "active" if it has > 1 unit, or if it's a selected emblem (even if 1).
-    // Real TFT logic requires breakpoints (e.g. 2/4/6), but we don't have that data in the JSON.
-    // We'll estimate: if count >= 2 or it is a selected emblem.
-    traitCounts.forEach((count, trait) => {
-        if (count >= 2 || selectedEmblems.includes(trait)) {
-            activeSynergies.push(`${trait} (${count})`);
-        }
-    });
+    // 4. SORT AND RETURN TOP 5
+    scoredTeams.sort((a, b) => b.score - a.score);
 
-    // Calculate total team score
-    const totalScore = currentComp.reduce((sum, c) => sum + (c.rawScore || 0) + (c.cost || 0), 0);
+    // Deduplicate? They are unique combinations by definition of our generator.
+    // But we might want unique SYNERGIES? Prompt says "Top 5 unique teams", which usually means unique champions.
 
-    return [
-        {
-            champions: finalChampions,
-            score: totalScore,
-            activeSynergies: activeSynergies.sort()
-        }
-    ];
+    return scoredTeams.slice(0, 5);
 }

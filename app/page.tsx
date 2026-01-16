@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { LanguageProvider, useTFT } from '@/context/language-context';
 import { solveTeamComp } from '@/lib/solver';
+import { getEmblemTraits } from '@/lib/trait-rules';
 // Assuming solveTeamComp is available globally or imported from a separate file.
 // For example: import { solveTeamComp } from '@/utils/team-solver';
 
@@ -12,34 +13,41 @@ function MainLayout() {
   // State for selected emblems
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
 
-  // Memoize unique traits
-  const allTraits = useMemo(() => {
-    const traits = new Set<string>();
-    champions.forEach(c => {
-      c.traits.forEach(t => traits.add(t));
-    });
-    return Array.from(traits).sort();
-  }, [champions]);
+  // Memoize unique traits that have emblems
+  const availableTraits = useMemo(() => {
+    const traits = getEmblemTraits();
+    return traits.sort();
+  }, []);
 
   // Derived state: generated team
   // We re-run the solver whenever champions or selectedEmblems change.
   // In a real app with heavy computation, we might debounce this or run it in a worker/effect.
   const teamRecommendations = useMemo(() => {
     if (selectedEmblems.length === 0) return [];
-    // Dynamically import solver? No, we can import it at top level.
-    // Ideally we import solveTeamComp. For now let's assume it's available.
-    // Placeholder for solveTeamComp function, replace with actual implementation
-    // Using imported solveTeamComp
 
-    return solveTeamComp(champions, selectedEmblems);
+    // Convert string[] to Record<string, number>
+    const activeEmblems: Record<string, number> = {};
+    selectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
+
+    // Using imported solveTeamComp
+    return solveTeamComp(champions, activeEmblems, 8, 'Standard');
   }, [champions, selectedEmblems]);
 
-  const toggleEmblem = (trait: string) => {
-    setSelectedEmblems(prev =>
-      prev.includes(trait)
-        ? prev.filter(t => t !== trait)
-        : [...prev, trait]
-    );
+  const addEmblem = (trait: string) => {
+    setSelectedEmblems(prev => [...prev, trait]);
+  };
+
+  const removeEmblem = (trait: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering addEmblem
+    setSelectedEmblems(prev => {
+      const index = prev.indexOf(trait);
+      if (index > -1) {
+        const newArr = [...prev];
+        newArr.splice(index, 1);
+        return newArr;
+      }
+      return prev;
+    });
   };
 
   return (
@@ -92,12 +100,13 @@ function MainLayout() {
               )}
             </div>
             <div className="space-y-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent flex-1">
-              {allTraits.map((trait) => {
-                const isSelected = selectedEmblems.includes(trait);
+              {availableTraits.map((trait) => {
+                const count = selectedEmblems.filter(e => e === trait).length;
+                const isSelected = count > 0;
                 return (
                   <button
                     key={trait}
-                    onClick={() => toggleEmblem(trait)}
+                    onClick={() => addEmblem(trait)}
                     className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
                       ? 'bg-indigo-500/20 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]'
                       : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-indigo-500/30'
@@ -106,9 +115,25 @@ function MainLayout() {
                     <span className={`transition-colors ${isSelected ? 'text-white font-medium' : 'group-hover:text-indigo-200 text-gray-300'}`}>
                       {trait}
                     </span>
-                    {isSelected && (
-                      <span className="text-indigo-400 text-sm animate-pulse">●</span>
-                    )}
+
+                    <div className="flex items-center gap-2">
+                      {isSelected && (
+                        <div className="flex items-center gap-1">
+                          <div
+                            onClick={(e) => removeEmblem(trait, e)}
+                            className="w-5 h-5 rounded-full bg-indigo-500/30 hover:bg-red-500/50 flex items-center justify-center text-xs text-white transition-colors"
+                          >
+                            -
+                          </div>
+                          <span className="bg-indigo-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                            {count}
+                          </span>
+                        </div>
+                      )}
+                      {!isSelected && (
+                        <span className="opacity-0 group-hover:opacity-100 text-indigo-400 text-sm transition-opacity">+</span>
+                      )}
+                    </div>
                   </button>
                 );
               })}
