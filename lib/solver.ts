@@ -50,19 +50,9 @@ function calculateScore(
             const level = activeBreakpointIndex + 1;
             activeSynergies.push(`${trait} (${count})`);
 
-            // Base Score: +1 per active synergy level (level 1 = 1pt, level 2 = 2pts, etc)
-            // Or use the user requirements: +1 per active synergy?
-            // "Base Score: +1 per active synergy (use TRAIT_RULES[t].breakpoints)"
-            // Let's interpret "per active synergy" as a flat bonus or scaled by level.
-            // Giving points based on the breakpoint index is standard.
             let traitScore = 1 * (activeBreakpointIndex + 1);
 
-            // Emblem Bonus: "If activeEmblems[t] > 0, give HUGE score if that trait hits a higher breakpoint"
             if ((activeEmblems[trait] || 0) > 0) {
-                // Check if the emblem actually HELPED reach a new breakpoint
-                // count without emblem = count - activeEmblems[trait]
-                // But the prompt implies: "Give HUGE score if that trait hits a higher breakpoint"
-                // effectively rewarding using the emblem.
                 traitScore += 50 * (activeBreakpointIndex + 1);
             }
 
@@ -126,10 +116,6 @@ export function solveTeamComp(
     const emblemTraits = Object.keys(activeEmblems);
 
     // 1. FILTER POOL
-    // "Pick high-cost units + units that match activeEmblems first to reduce search space"
-    // Target pool size: ~15-20 to keep combinations manageable.
-    // Combinations(20, 8) = 125,970 -> Manageable.
-    // Combinations(25, 9) = 2,042,975 -> A bit slow but okay if scoring is fast.
 
     // Score champions for POOL INCLUSION only
     const poolCandidates = activeChampions.map(champ => {
@@ -156,13 +142,8 @@ export function solveTeamComp(
         return []; // Not enough champs
     }
 
-    // 2. GENERATE COMBINATIONS
-    // We used a custom recursive function, but for 18C8 it is 43k iterations. Fast.
-
     const combinations: Champion[][] = [];
 
-    // Iterative combination generator or recursive? Recursive is fine for < 100k
-    // Actually, let's allow a slightly larger pool if level is small, but 18 is safe.
     getCombinations(pool, level, 0, [], combinations);
 
     // 3. SCORE TEAMS
@@ -173,9 +154,6 @@ export function solveTeamComp(
 
     // 4. SORT AND RETURN TOP 5
     scoredTeams.sort((a, b) => b.score - a.score);
-
-    // Deduplicate? They are unique combinations by definition of our generator.
-    // But we might want unique SYNERGIES? Prompt says "Top 5 unique teams", which usually means unique champions.
 
     return scoredTeams.slice(0, 5);
 }

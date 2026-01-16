@@ -36,8 +36,6 @@ const translations: Record<Language, Record<string, string>> = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<Language>('en');
 
-    // Dynamically select the correct champion list based on language
-    // Using type assertion because imports might be inferred as generic JSON types
     const champions = language === 'en' ? (enChampions as unknown as Champion[]) : (trChampions as unknown as Champion[]);
 
     const t = (key: string) => {

@@ -4,36 +4,25 @@ import React, { useState, useMemo } from 'react';
 import { LanguageProvider, useTFT } from '@/context/language-context';
 import { solveTeamComp, SolverStrategy } from '@/lib/solver';
 import { getEmblemTraits } from '@/lib/trait-rules';
-// Assuming solveTeamComp is available globally or imported from a separate file.
-// For example: import { solveTeamComp } from '@/utils/team-solver';
 
 function MainLayout() {
   const { champions, language, setLanguage, t } = useTFT();
 
-  // State for selected emblems
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
-  // State for solver settings
   const [level, setLevel] = useState<number>(8);
   const [strategy, setStrategy] = useState<SolverStrategy>('Standard');
 
-
-  // Memoize unique traits that have emblems
   const availableTraits = useMemo(() => {
     const traits = getEmblemTraits();
     return traits.sort();
   }, []);
 
-  // Derived state: generated team
-  // We re-run the solver whenever champions or selectedEmblems change.
-  // In a real app with heavy computation, we might debounce this or run it in a worker/effect.
   const teamRecommendations = useMemo(() => {
     if (selectedEmblems.length === 0) return [];
 
-    // Convert string[] to Record<string, number>
     const activeEmblems: Record<string, number> = {};
     selectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
 
-    // Using imported solveTeamComp
     return solveTeamComp(champions, activeEmblems, level, strategy);
   }, [champions, selectedEmblems, level, strategy]);
 
@@ -42,7 +31,7 @@ function MainLayout() {
   };
 
   const removeEmblem = (trait: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering addEmblem
+    e.stopPropagation();
     setSelectedEmblems(prev => {
       const index = prev.indexOf(trait);
       if (index > -1) {
@@ -141,7 +130,7 @@ function MainLayout() {
                 // Construct Image URL
                 // Trying conservative approach: remove spaces and lowercase.
                 const normalizedName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
-                const imageUrl = `https://raw.communitydragon.org/latest/game/assets/ux/tft/traits/trait_icon_${normalizedName}.tft_set16.png`;
+                const imageUrl = `https://raw.communitydragon.org/16.1/game/assets/maps/particles/tft/item_icons/traits/spatula/set16/tft16_emblem_${normalizedName}.tft_set16.png`;
 
                 return (
                   <button
@@ -247,8 +236,8 @@ function MainLayout() {
                       {team.champions.map((champ) => (
                         <div key={champ.id} className="group relative aspect-square">
                           <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${champ.cost === 5 ? 'border-yellow-500/50 shadow-yellow-500/20' :
-                              champ.cost === 4 ? 'border-purple-500/50 shadow-purple-500/20' :
-                                'border-gray-700 group-hover:border-indigo-400'
+                            champ.cost === 4 ? 'border-purple-500/50 shadow-purple-500/20' :
+                              'border-gray-700 group-hover:border-indigo-400'
                             }`}>
                             <img
                               src={`https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName.toLowerCase()}_square.tft_set16.png`}
@@ -260,8 +249,8 @@ function MainLayout() {
                             />
                             {/* Cost Badge */}
                             <div className={`absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg text-[10px] font-black text-white ${champ.cost === 5 ? 'bg-yellow-500' :
-                                champ.cost === 4 ? 'bg-purple-600' :
-                                  'bg-gray-700'
+                              champ.cost === 4 ? 'bg-purple-600' :
+                                'bg-gray-700'
                               }`}>
                               ${champ.cost}
                             </div>
