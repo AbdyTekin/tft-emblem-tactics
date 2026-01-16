@@ -68,26 +68,26 @@ function MainLayout() {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4 bg-gray-900/50 p-1.5 rounded-lg border border-white/5">
-          <div className="flex items-center gap-2 px-2">
-            <span className="text-xs font-medium text-gray-400">Lvl:</span>
-            <select
+        <div className="flex items-center gap-6 bg-gray-900/80 p-2 rounded-xl border border-white/10 shadow-lg">
+          <div className="flex items-center gap-3 px-2">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Level {level}</span>
+            <input
+              type="range"
+              min="6"
+              max="10"
+              step="1"
               value={level}
               onChange={(e) => setLevel(Number(e.target.value))}
-              className="bg-transparent text-sm font-medium text-white focus:outline-none cursor-pointer"
-            >
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
-            </select>
+              className="w-24 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition-all"
+            />
           </div>
-          <div className="w-px h-4 bg-white/10" />
+          <div className="w-px h-6 bg-white/10" />
           <div className="flex items-center gap-2 px-2">
-            <span className="text-xs font-medium text-gray-400">Strat:</span>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Strategy</span>
             <select
               value={strategy}
               onChange={(e) => setStrategy(e.target.value as SolverStrategy)}
-              className="bg-transparent text-sm font-medium text-white focus:outline-none cursor-pointer"
+              className="bg-transparent text-xs font-bold text-indigo-300 focus:outline-none cursor-pointer uppercase tracking-wide hover:text-white transition-colors"
             >
               <option value="Standard">Standard</option>
               <option value="RegionRyze">Region Ryze</option>
@@ -118,57 +118,67 @@ function MainLayout() {
       <main className="flex-1 container mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* Left Panel: Emblem Selector */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
-          <div className="rounded-xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-sm shadow-xl flex flex-col h-[calc(100vh-8rem)]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-indigo-300 flex items-center gap-2">
-                <span className="text-indigo-400">❖</span>
+        <div className="lg:col-span-3 flex flex-col gap-4">
+          <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col h-[calc(100vh-8rem)]">
+            <div className="flex items-center justify-between mb-4 px-2">
+              <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                 {t('traits') || 'Traits'}
               </h2>
               {selectedEmblems.length > 0 && (
                 <button
                   onClick={() => setSelectedEmblems([])}
-                  className="text-xs text-gray-400 hover:text-white transition-colors"
+                  className="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase border border-red-500/30 px-2 py-0.5 rounded-full hover:bg-red-500/10"
                 >
-                  {t('reset') || 'Reset'}
+                  {t('reset') || 'RESET'}
                 </button>
               )}
             </div>
-            <div className="space-y-2 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent flex-1">
+            <div className="space-y-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent flex-1">
               {availableTraits.map((trait) => {
                 const count = selectedEmblems.filter(e => e === trait).length;
                 const isSelected = count > 0;
+
+                // Construct Image URL
+                // Trying conservative approach: remove spaces and lowercase.
+                const normalizedName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const imageUrl = `https://raw.communitydragon.org/latest/game/assets/ux/tft/traits/trait_icon_${normalizedName}.tft_set16.png`;
+
                 return (
                   <button
                     key={trait}
                     onClick={() => addEmblem(trait)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
-                      ? 'bg-indigo-500/20 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]'
-                      : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-indigo-500/30'
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      removeEmblem(trait, e);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
+                      ? 'bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)]'
+                      : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-white/10'
                       }`}
                   >
-                    <span className={`transition-colors ${isSelected ? 'text-white font-medium' : 'group-hover:text-indigo-200 text-gray-300'}`}>
-                      {trait}
-                    </span>
-
-                    <div className="flex items-center gap-2">
-                      {isSelected && (
-                        <div className="flex items-center gap-1">
-                          <div
-                            onClick={(e) => removeEmblem(trait, e)}
-                            className="w-5 h-5 rounded-full bg-indigo-500/30 hover:bg-red-500/50 flex items-center justify-center text-xs text-white transition-colors"
-                          >
-                            -
-                          </div>
-                          <span className="bg-indigo-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
-                            {count}
-                          </span>
-                        </div>
-                      )}
-                      {!isSelected && (
-                        <span className="opacity-0 group-hover:opacity-100 text-indigo-400 text-sm transition-opacity">+</span>
-                      )}
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded p-0.5 ${isSelected ? 'bg-indigo-500' : 'bg-gray-700'}`}>
+                        <img
+                          src={imageUrl}
+                          alt={trait}
+                          className="w-full h-full object-contain filter drop-shadow-sm"
+                          onError={(e) => {
+                            // Fallback to text initials or generic icon if needed
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.innerText = trait.substring(0, 2);
+                          }}
+                        />
+                      </div>
+                      <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                        {trait}
+                      </span>
                     </div>
+
+                    {isSelected && (
+                      <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-500 text-white text-xs font-bold shadow-sm">
+                        {count}
+                      </div>
+                    )}
                   </button>
                 );
               })}
@@ -177,63 +187,91 @@ function MainLayout() {
         </div>
 
         {/* Right Panel: Team Recommendations */}
-        <div className="lg:col-span-8 flex flex-col gap-4">
+        <div className="lg:col-span-9 flex flex-col gap-4">
           {selectedEmblems.length === 0 ? (
             <div className="rounded-xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-sm shadow-xl h-full min-h-[500px] flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-800/50 flex items-center justify-center mb-4 border border-white/5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-500">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center mb-6 border border-white/5 shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-gray-600">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-medium text-gray-300">{t('team_generator') || 'Team Recommendations'}</h3>
-              <p className="text-gray-500 mt-2 max-w-sm">
-                Select emblems from the left to generate optimized team compositions.
+              <h3 className="text-2xl font-bold text-gray-200">Ready to Build</h3>
+              <p className="text-gray-500 mt-2 max-w-md text-lg">
+                Select your emblems from the sidebar. The solver will automatically generate the best possible {level}-unit team compositions.
               </p>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 gap-6">
               {teamRecommendations.map((team, idx) => (
-                <div key={idx} className="rounded-xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-sm shadow-xl">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-bold text-white">Recommended Team</h3>
-                    <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm font-medium border border-green-500/30">
-                      Score: {team.score}
-                    </span>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">Active Synergies</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {team.activeSynergies.map((syn, i) => (
-                        <span key={i} className="px-2 py-1 rounded-md bg-indigo-500/20 text-indigo-300 text-sm border border-indigo-500/30">
-                          {syn}
-                        </span>
-                      ))}
+                <div key={idx} className="rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
+                  {/* Card Header */}
+                  <div className="bg-white/5 px-6 py-4 flex items-center justify-between border-b border-white/5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500 text-white font-bold text-lg shadow-lg">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white leading-tight">Option {idx + 1}</h3>
+                        <p className="text-xs text-indigo-300 font-medium uppercase tracking-wide">
+                          {/* Highlight: First synergy or "Flex" */}
+                          {team.activeSynergies.length > 0 ? team.activeSynergies[0].split('(')[0].trim() : "Flex"} Build
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="text-2xl font-black text-white tracking-tight">{team.score}</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Score Points</span>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">Champions</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                  <div className="p-6">
+                    {/* Synergies */}
+                    <div className="mb-6 flex flex-wrap gap-2">
+                      {team.activeSynergies.map((syn, i) => {
+                        // Example: "Demacia (9)"
+                        const [name, countStr] = syn.split('(');
+                        const count = countStr ? countStr.replace(')', '') : '1';
+                        return (
+                          <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-800 border border-white/10 shadow-sm">
+                            {/* Simplified Icon based on name */}
+                            <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
+                            <span className="text-xs font-bold text-gray-200">{name}</span>
+                            <span className="text-xs font-black text-indigo-400">{count}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Champions Grid */}
+                    <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
                       {team.champions.map((champ) => (
-                        <div key={champ.id} className="group relative flex flex-col items-center">
-                          <div className="relative w-16 h-16 rounded-xl overflow-hidden border-2 border-gray-700 group-hover:border-indigo-500 transition-colors shadow-lg bg-gray-800">
-                            {/* Image Placeholder using ID */}
+                        <div key={champ.id} className="group relative aspect-square">
+                          <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${champ.cost === 5 ? 'border-yellow-500/50 shadow-yellow-500/20' :
+                              champ.cost === 4 ? 'border-purple-500/50 shadow-purple-500/20' :
+                                'border-gray-700 group-hover:border-indigo-400'
+                            }`}>
                             <img
                               src={`https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName.toLowerCase()}_square.tft_set16.png`}
                               alt={champ.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/-1.png';
                               }}
                             />
-                            <div className="absolute bottom-0 right-0 bg-gray-900/80 px-1 rounded-tl text-[10px] font-bold text-white border-t border-l border-white/10">
-                              {champ.cost}
+                            {/* Cost Badge */}
+                            <div className={`absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg text-[10px] font-black text-white ${champ.cost === 5 ? 'bg-yellow-500' :
+                                champ.cost === 4 ? 'bg-purple-600' :
+                                  'bg-gray-700'
+                              }`}>
+                              ${champ.cost}
+                            </div>
+                            {/* Name Overlay */}
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
+                              <span className="text-[10px] font-bold text-white truncate block">
+                                {champ.name}
+                              </span>
                             </div>
                           </div>
-                          <span className="mt-2 text-xs font-medium text-gray-300 text-center truncate w-full group-hover:text-white transition-colors">
-                            {champ.name}
-                          </span>
                         </div>
                       ))}
                     </div>
