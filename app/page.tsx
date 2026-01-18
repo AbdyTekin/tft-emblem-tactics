@@ -5,8 +5,47 @@ import { LanguageProvider, useTFT } from '@/context/language-context';
 import { solveTeamComp, SolverStrategy } from '@/lib/solver';
 import { getEmblemTraits } from '@/lib/trait-rules';
 
+const TraitIcon = ({ trait, className }: { trait: string, className?: string }) => {
+  const normalizedTrait = trait.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  // Potential URL patterns based on user feedback and common CDragon patterns
+  const urls = [
+    `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_16_${normalizedTrait}.tft_set16.png`,
+    `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_16_${normalizedTrait}.png`,
+    `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_${normalizedTrait}.png`, // Specific case for Bilgewater/Legacy
+    `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_4_${normalizedTrait}.png` // Generic fallback
+  ];
+
+  const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (currentUrlIndex < urls.length - 1) {
+      setCurrentUrlIndex(prev => prev + 1);
+    } else {
+      setHasError(true);
+    }
+  };
+
+  if (hasError) {
+    // Fallback UI or empty
+    return null;
+  }
+
+  return (
+    <img
+      src={urls[currentUrlIndex]}
+      alt={trait}
+      className={className}
+      onError={handleError}
+    />
+  );
+};
+
 function MainLayout() {
   const { champions, language, setLanguage, t } = useTFT();
+
+
 
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
   const [level, setLevel] = useState<number>(8);
@@ -56,37 +95,6 @@ function MainLayout() {
           </h1>
         </div>
 
-        {/* Controls */}
-        <div className="flex items-center gap-6 bg-gray-900/80 p-2 rounded-xl border border-white/10 shadow-lg">
-          <div className="flex items-center gap-3 px-2">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Level {level}</span>
-            <input
-              type="range"
-              min="6"
-              max="10"
-              step="1"
-              value={level}
-              onChange={(e) => setLevel(Number(e.target.value))}
-              className="w-24 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition-all"
-            />
-          </div>
-          <div className="w-px h-6 bg-white/10" />
-          <div className="flex items-center gap-2 px-2">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Strategy</span>
-            <select
-              value={strategy}
-              onChange={(e) => setStrategy(e.target.value as SolverStrategy)}
-              className="bg-transparent text-xs font-bold text-indigo-300 focus:outline-none cursor-pointer uppercase tracking-wide hover:text-white transition-colors"
-            >
-              <option value="Standard">Standard</option>
-              <option value="RegionRyze">Region Ryze</option>
-              <option value="BronzeLife">Bronze Life</option>
-            </select>
-          </div>
-        </div>
-
-
-
         <div className="flex items-center gap-4">
           <button
             onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
@@ -108,7 +116,38 @@ function MainLayout() {
 
         {/* Left Panel: Emblem Selector */}
         <div className="lg:col-span-3 flex flex-col gap-4">
-          <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col h-[calc(100vh-8rem)]">
+          {/* Controls Panel */}
+          <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Level {level}</span>
+              </div>
+              <input
+                type="range"
+                min="6"
+                max="10"
+                step="1"
+                value={level}
+                onChange={(e) => setLevel(Number(e.target.value))}
+                className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition-all"
+              />
+            </div>
+            <div className="h-px bg-white/5 w-full" />
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Strategy</span>
+              <select
+                value={strategy}
+                onChange={(e) => setStrategy(e.target.value as SolverStrategy)}
+                className="bg-black/20 rounded-lg p-2 text-xs font-bold text-indigo-300 focus:outline-none cursor-pointer uppercase tracking-wide hover:text-white transition-colors border border-white/5"
+              >
+                <option value="Standard">Standard</option>
+                <option value="RegionRyze">Region Ryze</option>
+                <option value="BronzeLife">Bronze Life</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col h-[calc(100vh-20rem)]">
             <div className="flex items-center justify-between mb-4 px-2">
               <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                 {t('traits') || 'Traits'}
@@ -122,7 +161,7 @@ function MainLayout() {
                 </button>
               )}
             </div>
-            <div className="space-y-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent flex-1">
+            <div className="space-y-1 overflow-y-auto pr-2 flex-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
               {availableTraits.map((trait) => {
                 const count = selectedEmblems.filter(e => e === trait).length;
                 const isSelected = count > 0;
@@ -193,42 +232,34 @@ function MainLayout() {
             <div className="grid grid-cols-1 gap-6">
               {teamRecommendations.map((team, idx) => (
                 <div key={idx} className="rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
-                  {/* Card Header */}
-                  <div className="bg-white/5 px-6 py-4 flex items-center justify-between border-b border-white/5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500 text-white font-bold text-lg shadow-lg">
-                        {idx + 1}
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-white leading-tight">Option {idx + 1}</h3>
-                        <p className="text-xs text-indigo-300 font-medium uppercase tracking-wide">
-                          {/* Highlight: First synergy or "Flex" */}
-                          {team.activeSynergies.length > 0 ? team.activeSynergies[0].split('(')[0].trim() : "Flex"} Build
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <span className="text-2xl font-black text-white tracking-tight">{team.score}</span>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Score Points</span>
-                    </div>
-                  </div>
+                  <div className="p-4">
+                    {/* Synergies & Score Row */}
+                    <div className="mb-4 flex items-start justify-between gap-4">
 
-                  <div className="p-6">
-                    {/* Synergies */}
-                    <div className="mb-6 flex flex-wrap gap-2">
-                      {team.activeSynergies.map((syn, i) => {
-                        // Example: "Demacia (9)"
-                        const [name, countStr] = syn.split('(');
-                        const count = countStr ? countStr.replace(')', '') : '1';
-                        return (
-                          <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-800 border border-white/10 shadow-sm">
-                            {/* Simplified Icon based on name */}
-                            <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
-                            <span className="text-xs font-bold text-gray-200">{name}</span>
-                            <span className="text-xs font-black text-indigo-400">{count}</span>
-                          </div>
-                        );
-                      })}
+                      {/* Synergies */}
+                      <div className="flex flex-wrap gap-2 flex-1">
+                        {team.activeSynergies.map((syn, i) => {
+                          // Example: "Demacia (9)"
+                          const [name, countStr] = syn.split('(');
+                          const count = countStr ? countStr.replace(')', '') : '1';
+                          return (
+                            <div key={i} className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-gray-800 border border-white/10 shadow-sm">
+                              <TraitIcon
+                                trait={name}
+                                className="w-5 h-5 object-contain"
+                              />
+                              <span className="text-xs font-bold text-gray-200">{name}</span>
+                              {/* <span className="text-xs font-black text-indigo-400">{count}</span> -- User said convert text/number to pngs. */}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Score */}
+                      <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Score</span>
+                        <span className="text-xl font-black text-white tracking-tight">{team.score}</span>
+                      </div>
                     </div>
 
                     {/* Champions Grid */}
@@ -248,11 +279,16 @@ function MainLayout() {
                               }}
                             />
                             {/* Cost Badge */}
-                            <div className={`absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg text-[10px] font-black text-white ${champ.cost === 5 ? 'bg-yellow-500' :
+                            <div className={`absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg flex items-center justify-center ${champ.cost === 5 ? 'bg-yellow-500' :
                               champ.cost === 4 ? 'bg-purple-600' :
                                 'bg-gray-700'
                               }`}>
-                              ${champ.cost}
+                              <img
+                                src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png"
+                                alt="Gold"
+                                className="w-2.5 h-2.5 mr-0.5"
+                              />
+                              <span className="text-[10px] font-black text-white">{champ.cost}</span>
                             </div>
                             {/* Name Overlay */}
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
