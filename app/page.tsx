@@ -48,39 +48,40 @@ function MainLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
+    <div className="flex h-screen flex-col overflow-hidden bg-gray-900 text-gray-100 font-sans">
       <Header />
 
-      {/* Main Content */}
-      <main className="flex-1 container mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <main className="flex-1 overflow-y-auto">
+        <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        {/* Left Panel: Emblem Selector */}
-        <div className="lg:col-span-3 flex flex-col gap-4">
-          <Controls
-            level={level}
-            setLevel={setLevel}
-            strategy={strategy}
-            setStrategy={setStrategy}
-          />
+          {/* Left Panel */}
+          <div className="lg:col-span-3 flex flex-col gap-4">
+            <Controls
+              level={level}
+              setLevel={setLevel}
+              strategy={strategy}
+              setStrategy={setStrategy}
+            />
 
-          <TraitList
-            availableTraits={availableTraits}
-            selectedEmblems={selectedEmblems}
-            addEmblem={addEmblem}
-            removeEmblem={removeEmblem}
-            resetEmblems={() => setSelectedEmblems([])}
-          />
+            <TraitList
+              availableTraits={availableTraits}
+              selectedEmblems={selectedEmblems}
+              addEmblem={addEmblem}
+              removeEmblem={removeEmblem}
+              resetEmblems={() => setSelectedEmblems([])}
+            />
+          </div>
+
+          {/* Right Panel */}
+          <div className="lg:col-span-9 flex flex-col gap-4">
+            <TeamRecommendations
+              teamRecommendations={teamRecommendations}
+              selectedEmblems={selectedEmblems}
+              level={level}
+            />
+          </div>
+
         </div>
-
-        {/* Right Panel: Team Recommendations */}
-        <div className="lg:col-span-9 flex flex-col gap-4">
-          <TeamRecommendations
-            teamRecommendations={teamRecommendations}
-            selectedEmblems={selectedEmblems}
-            level={level}
-          />
-        </div>
-
       </main>
     </div>
   );
