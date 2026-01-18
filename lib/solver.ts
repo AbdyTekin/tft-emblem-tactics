@@ -7,7 +7,7 @@ export interface TeamComp {
     activeSynergies: string[];
 }
 
-export type SolverStrategy = 'Standard' | 'RegionRyze' | 'BronzeLife';
+export type SolverStrategy = 'RegionRyze' | 'BronzeLife';
 
 /**
  * Calculates the score of a team based on active traits and strategy.
@@ -111,7 +111,7 @@ export function solveTeamComp(
     activeChampions: Champion[],
     activeEmblems: Record<string, number>,
     level: number,
-    strategy: SolverStrategy = 'Standard'
+    strategy: SolverStrategy = 'RegionRyze'
 ): TeamComp[] {
     const emblemTraits = Object.keys(activeEmblems);
 

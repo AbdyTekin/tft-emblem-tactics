@@ -14,7 +14,7 @@ function MainLayout() {
 
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
   const [level, setLevel] = useState<number>(8);
-  const [strategy, setStrategy] = useState<SolverStrategy>('Standard');
+  const [strategy, setStrategy] = useState<SolverStrategy>('RegionRyze');
 
   const availableTraits = useMemo(() => {
     const traits = getEmblemTraits();
