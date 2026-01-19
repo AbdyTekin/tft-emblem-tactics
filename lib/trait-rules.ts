@@ -4,22 +4,23 @@ export interface TraitRule {
     type: TraitType;
     breakpoints: number[];
     hasEmblem: boolean;
+    isPrismatic?: boolean;
 }
 
 export const TRAIT_RULES: Record<string, TraitRule> = {
     // REGIONS
-    "Bilgewater": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true },
-    "Demacia": { type: 'Region', breakpoints: [3, 5, 7, 11], hasEmblem: true },
+    "Bilgewater": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true, isPrismatic: true },
+    "Demacia": { type: 'Region', breakpoints: [3, 5, 7, 11], hasEmblem: true, isPrismatic: true },
     "Freljord": { type: 'Region', breakpoints: [3, 5, 7], hasEmblem: true },
-    "Ionia": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true },
+    "Ionia": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true, isPrismatic: true },
     "Ixtal": { type: 'Region', breakpoints: [3, 5, 7], hasEmblem: true },
-    "Noxus": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true },
+    "Noxus": { type: 'Region', breakpoints: [3, 5, 7, 10], hasEmblem: true, isPrismatic: true },
     "Piltover": { type: 'Region', breakpoints: [2, 4, 6], hasEmblem: true },
     "Shadow Isles": { type: 'Region', breakpoints: [2, 3, 4, 5], hasEmblem: false },
-    "Shurima": { type: 'Region', breakpoints: [2, 3, 4], hasEmblem: false },
+    "Shurima": { type: 'Region', breakpoints: [2, 3, 4], hasEmblem: false, isPrismatic: true },
     "Targon": { type: 'Region', breakpoints: [1], hasEmblem: false },
     "Void": { type: 'Region', breakpoints: [2, 4, 6, 9], hasEmblem: true },
-    "Yordle": { type: 'Region', breakpoints: [2, 4, 6, 8, 10], hasEmblem: true },
+    "Yordle": { type: 'Region', breakpoints: [2, 4, 6, 8, 10], hasEmblem: true, isPrismatic: true },
     "Zaun": { type: 'Region', breakpoints: [3, 5, 7], hasEmblem: true },
 
     // CLASSES

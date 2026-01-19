@@ -25,17 +25,33 @@ const TraitIcon = ({ trait, className }: { trait: string, className?: string }) 
     };
 
     if (hasError) {
-        // Fallback UI or empty
         return null;
     }
 
     return (
-        <img
-            src={urls[currentUrlIndex]}
-            alt={trait}
-            className={className}
-            onError={handleError}
-        />
+        <div className={`${className} relative inline-block align-middle`} style={{ width: '20px', height: '20px' }}> {/* Enforce dimensions if not provided, or rely on className */}
+            {/* The actual image element handles loading and errors, but is hidden */}
+            <img
+                src={urls[currentUrlIndex]}
+                alt={trait}
+                className="absolute inset-0 w-full h-full opacity-0 z-0"
+                onError={handleError}
+            />
+            {/* The visible element uses the image as a mask and takes the background color (currentColor) */}
+            <div
+                className="absolute inset-0 bg-current z-10"
+                style={{
+                    maskImage: `url(${urls[currentUrlIndex]})`,
+                    WebkitMaskImage: `url(${urls[currentUrlIndex]})`,
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center'
+                }}
+            />
+        </div>
     );
 };
 

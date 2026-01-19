@@ -3,6 +3,7 @@
 import React from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import { TeamComp } from '@/lib/solver';
+import { TRAIT_RULES } from '@/lib/trait-rules';
 
 interface TeamRecommendationsProps {
     teamRecommendations: TeamComp[];
@@ -39,16 +40,79 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                             <div className="flex flex-wrap gap-2 flex-1">
                                 {team.activeSynergies.map((syn, i) => {
                                     // Example: "Demacia (9)"
-                                    const [name, countStr] = syn.split('(');
-                                    const count = countStr ? countStr.replace(')', '') : '1';
+                                    const match = syn.match(/^(.+)\s\((\d+)\)$/);
+                                    if (!match) return null;
+                                    const name = match[1];
+                                    const count = parseInt(match[2], 10);
+
+                                    const traitRule = TRAIT_RULES[name];
+                                    // Default (Inactive/Low)
+                                    let styleClass = "bg-transparent border-white/10 text-gray-500";
+                                    let displayCount = `${count}`;
+
+                                    if (traitRule) {
+                                        const { breakpoints, isPrismatic } = traitRule;
+                                        let tier = -1;
+
+                                        for (let b = 0; b < breakpoints.length; b++) {
+                                            if (count >= breakpoints[b]) {
+                                                tier = b;
+                                            } else {
+                                                break;
+                                            }
+                                        }
+
+                                        // Set Display Text: "Count"
+                                        displayCount = `${count}`;
+
+                                        // Determine Color Style
+                                        if (tier >= 0) {
+                                            const isMax = tier === breakpoints.length - 1;
+
+                                            // Prismatic
+                                            if (isPrismatic && isMax) {
+                                                styleClass = "bg-transparent border-cyan-400 text-cyan-400 shadow-[0_0_8px_-1px_rgba(34,211,238,0.6)]";
+                                            }
+                                            // Gold (Max non-prismatic)
+                                            else if (isMax) {
+                                                styleClass = "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]";
+                                            }
+                                            // Bronze/Silver Logic
+                                            else if (breakpoints.length > 2 && tier === 0) {
+                                                // Bronze
+                                                styleClass = "bg-transparent border-orange-600 text-orange-600";
+                                            } else {
+                                                // Silver
+                                                styleClass = "bg-transparent border-gray-300 text-gray-300";
+                                            }
+
+                                            // Override for 3-tier traits explicitly if needed (handled above mostly)
+                                            // Adjust strictly for 3-tier logic (Bronze, Silver, Gold)
+                                            if (!isPrismatic && breakpoints.length === 3) {
+                                                if (tier === 0) {
+                                                    // Bronze
+                                                    styleClass = "bg-transparent border-orange-600 text-orange-600";
+                                                }
+                                                else if (tier === 1) {
+                                                    // Silver
+                                                    styleClass = "bg-transparent border-gray-300 text-gray-300";
+                                                }
+                                                else if (tier === 2) {
+                                                    // Gold
+                                                    styleClass = "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]";
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     return (
-                                        <div key={i} className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-gray-800 border border-white/10 shadow-sm">
+                                        <div key={i} className={`flex items-center gap-2 pl-2 pr-3 py-1 rounded-full border shadow-sm transition-all ${styleClass}`}>
+                                            <span className="text-[10px] font-black w-3 text-center opacity-90">{displayCount}</span>
                                             <TraitIcon
                                                 trait={name}
-                                                className="w-5 h-5 object-contain"
+                                                className="w-5 h-5"
                                             />
-                                            <span className="text-xs font-bold text-gray-200">{name}</span>
-                                            {/* <span className="text-xs font-black text-indigo-400">{count}</span> -- User said convert text/number to pngs. */}
+                                            <span className="text-[10px] font-bold opacity-90">{name}</span>
                                         </div>
                                     );
                                 })}
