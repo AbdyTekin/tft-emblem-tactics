@@ -106,11 +106,11 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                     }
 
                                     return (
-                                        <div key={i} className={`flex items-center gap-2 pl-2 pr-3 py-1 rounded-full border shadow-sm transition-all ${styleClass}`}>
-                                            <span className="text-[10px] font-black w-3 text-center opacity-90">{displayCount}</span>
+                                        <div key={i} className={`flex items-center gap-1 pl-1.5 pr-2 py-1 rounded-full border-[1.5px] shadow-sm transition-all ${styleClass}`}>
+                                            <span className="text-[12px] font-black w-1.5 text-center opacity-90">{displayCount}</span>
                                             <TraitIcon
                                                 trait={name}
-                                                className="w-5 h-5"
+                                                className="w-2 h-2"
                                             />
                                             <span className="text-[10px] font-bold opacity-90">{name}</span>
                                         </div>
