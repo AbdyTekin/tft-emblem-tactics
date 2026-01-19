@@ -5,6 +5,27 @@ import TraitIcon from '@/components/TraitIcon';
 import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 
+// --- CONFIGURATION START ---
+
+const TRAIT_STYLES = {
+    DEFAULT: "bg-transparent border-white/10 text-gray-500",
+    BRONZE: "bg-transparent border-yellow-700 text-yellow-700",
+    SILVER: "bg-transparent border-gray-300 text-gray-300",
+    GOLD: "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]",
+    PRISMATIC: "bg-transparent border-cyan-400 text-cyan-400 shadow-[0_0_8px_-1px_rgba(34,211,238,0.6)]",
+    UNIQUE: "bg-transparent border-rose-600 text-rose-600 shadow-[0_0_8px_-1px_rgba(251,146,60,0.5)]"
+};
+
+const CHAMPION_STYLES: Record<number, { border: string; badge: string }> = {
+    1: { border: 'border-gray-500', badge: 'bg-gray-500' },
+    2: { border: 'border-green-600', badge: 'bg-green-600' },
+    3: { border: 'border-blue-500', badge: 'bg-blue-500' },
+    4: { border: 'border-purple-600', badge: 'bg-purple-600' },
+    5: { border: 'border-yellow-500', badge: 'bg-yellow-500' },
+};
+
+// --- CONFIGURATION END ---
+
 interface TeamRecommendationsProps {
     teamRecommendations: TeamComp[];
     selectedEmblems: string[];
@@ -47,7 +68,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
 
                                     const traitRule = TRAIT_RULES[name];
                                     // Default (Inactive/Low)
-                                    let styleClass = "bg-transparent border-white/10 text-gray-500";
+                                    let styleClass = TRAIT_STYLES.DEFAULT;
                                     let displayCount = `${count}`;
 
                                     if (traitRule) {
@@ -69,38 +90,16 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                         if (tier >= 0) {
                                             const isMax = tier === breakpoints.length - 1;
 
-                                            // Prismatic
-                                            if (isPrismatic && isMax) {
-                                                styleClass = "bg-transparent border-cyan-400 text-cyan-400 shadow-[0_0_8px_-1px_rgba(34,211,238,0.6)]";
-                                            }
-                                            // Gold (Max non-prismatic)
-                                            else if (isMax) {
-                                                styleClass = "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]";
-                                            }
-                                            // Bronze/Silver Logic
-                                            else if (breakpoints.length > 2 && tier === 0) {
-                                                // Bronze
-                                                styleClass = "bg-transparent border-orange-600 text-orange-600";
+                                            if (traitRule.type === 'Origin') {
+                                                styleClass = TRAIT_STYLES.UNIQUE;
+                                            } else if (isPrismatic && isMax) {
+                                                styleClass = TRAIT_STYLES.PRISMATIC;
+                                            } else if (isMax) {
+                                                styleClass = TRAIT_STYLES.GOLD;
+                                            } else if (breakpoints.length > 2 && tier === 0) {
+                                                styleClass = TRAIT_STYLES.BRONZE;
                                             } else {
-                                                // Silver
-                                                styleClass = "bg-transparent border-gray-300 text-gray-300";
-                                            }
-
-                                            // Override for 3-tier traits explicitly if needed (handled above mostly)
-                                            // Adjust strictly for 3-tier logic (Bronze, Silver, Gold)
-                                            if (!isPrismatic && breakpoints.length === 3) {
-                                                if (tier === 0) {
-                                                    // Bronze
-                                                    styleClass = "bg-transparent border-orange-600 text-orange-600";
-                                                }
-                                                else if (tier === 1) {
-                                                    // Silver
-                                                    styleClass = "bg-transparent border-gray-300 text-gray-300";
-                                                }
-                                                else if (tier === 2) {
-                                                    // Gold
-                                                    styleClass = "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]";
-                                                }
+                                                styleClass = TRAIT_STYLES.SILVER;
                                             }
                                         }
                                     }
@@ -129,9 +128,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                         <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
                             {team.champions.map((champ) => (
                                 <div key={champ.id} className="group relative aspect-square">
-                                    <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${champ.cost === 5 ? 'border-yellow-500/50 shadow-yellow-500/20' :
-                                        champ.cost === 4 ? 'border-purple-500/50 shadow-purple-500/20' :
-                                            'border-gray-700 group-hover:border-indigo-400'
+                                    <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
                                         }`}>
                                         <img
                                             src={`https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName.toLowerCase()}_square.tft_set16.png`}
@@ -142,14 +139,12 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                             }}
                                         />
                                         {/* Cost Badge */}
-                                        <div className={`absolute top-0 right-0 px-1.5 py-0.5 rounded-bl-lg flex items-center justify-center ${champ.cost === 5 ? 'bg-yellow-500' :
-                                            champ.cost === 4 ? 'bg-purple-600' :
-                                                'bg-gray-700'
+                                        <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
                                             }`}>
                                             <img
                                                 src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png"
                                                 alt="Gold"
-                                                className="w-2.5 h-2.5 mr-0.5"
+                                                className="w-3 h-3 mr-0.5"
                                             />
                                             <span className="text-[10px] font-black text-white">{champ.cost}</span>
                                         </div>
