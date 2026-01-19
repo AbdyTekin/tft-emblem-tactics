@@ -11,17 +11,17 @@ const TRAIT_STYLES = {
     DEFAULT: "bg-transparent border-white/10 text-gray-500",
     BRONZE: "bg-transparent border-yellow-700 text-yellow-700",
     SILVER: "bg-transparent border-gray-300 text-gray-300",
-    GOLD: "bg-transparent border-yellow-400 text-yellow-400 shadow-[0_0_8px_-1px_rgba(250,204,21,0.5)]",
-    PRISMATIC: "bg-transparent border-cyan-400 text-cyan-400 shadow-[0_0_8px_-1px_rgba(34,211,238,0.6)]",
-    UNIQUE: "bg-transparent border-rose-600 text-rose-600 shadow-[0_0_8px_-1px_rgba(251,146,60,0.5)]"
+    GOLD: "bg-transparent border-yellow-500 text-yellow-500",
+    PRISMATIC: "bg-transparent border-cyan-400 text-cyan-400",
+    UNIQUE: "bg-transparent border-rose-600 text-rose-600"
 };
 
 const CHAMPION_STYLES: Record<number, { border: string; badge: string }> = {
-    1: { border: 'border-gray-500', badge: 'bg-gray-500' },
-    2: { border: 'border-green-600', badge: 'bg-green-600' },
-    3: { border: 'border-blue-500', badge: 'bg-blue-500' },
-    4: { border: 'border-purple-600', badge: 'bg-purple-600' },
-    5: { border: 'border-yellow-500', badge: 'bg-yellow-500' },
+    1: { border: 'border-gray-500', badge: 'bg-gray-700' },
+    2: { border: 'border-green-600', badge: 'bg-green-800' },
+    3: { border: 'border-blue-500', badge: 'bg-blue-700' },
+    4: { border: 'border-purple-600', badge: 'bg-purple-800' },
+    5: { border: 'border-yellow-500', badge: 'bg-yellow-700' },
 };
 
 // --- CONFIGURATION END ---
@@ -88,18 +88,26 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
 
                                         // Determine Color Style
                                         if (tier >= 0) {
-                                            const isMax = tier === breakpoints.length - 1;
-
                                             if (traitRule.type === 'Origin') {
                                                 styleClass = TRAIT_STYLES.UNIQUE;
-                                            } else if (isPrismatic && isMax) {
-                                                styleClass = TRAIT_STYLES.PRISMATIC;
-                                            } else if (isMax) {
-                                                styleClass = TRAIT_STYLES.GOLD;
-                                            } else if (breakpoints.length > 2 && tier === 0) {
-                                                styleClass = TRAIT_STYLES.BRONZE;
+                                            } else if (isPrismatic) {
+                                                if (tier === breakpoints.length - 1) {
+                                                    styleClass = TRAIT_STYLES.PRISMATIC;
+                                                } else if (tier === breakpoints.length - 2) {
+                                                    styleClass = TRAIT_STYLES.GOLD;
+                                                } else if (tier === 0) {
+                                                    styleClass = TRAIT_STYLES.BRONZE;
+                                                } else {
+                                                    styleClass = TRAIT_STYLES.SILVER;
+                                                }
                                             } else {
-                                                styleClass = TRAIT_STYLES.SILVER;
+                                                if (tier === breakpoints.length - 1) {
+                                                    styleClass = TRAIT_STYLES.GOLD;
+                                                } else if (tier === 0) {
+                                                    styleClass = TRAIT_STYLES.BRONZE;
+                                                } else {
+                                                    styleClass = TRAIT_STYLES.SILVER;
+                                                }
                                             }
                                         }
                                     }
