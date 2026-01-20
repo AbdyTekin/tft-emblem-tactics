@@ -10,7 +10,7 @@ A tool designed to help Teamfight Tactics players optimize their compositions ba
 
 - **Smart Team Solver**: Automatically calculates the best team compositions based on your available champions and emblems.
 - **Emblem Selector**: Easily add and remove emblems to see how they affect your potential synergies.
-- **Strategy Modes**: Choose between different solver strategies (e.g., 'RegionRyze', 'BronzeLife') to tailor recommendations to your playstyle.
+- **Strategy Modes**: Choose between different solver strategies ('RegionRyze', 'BronzeLife') to tailor recommendations to your playstyle.
 - **Level Optimization**: Adjust player level (6-10) to discover optimal boards for different stages of the game.
 - **Multi-language Support**: Built-in architecture for supporting multiple languages.
 
