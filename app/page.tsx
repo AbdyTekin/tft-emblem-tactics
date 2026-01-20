@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import Controls from '@/components/Controls';
 import TraitList from '@/components/TraitList';
 import TeamRecommendations from '@/components/TeamRecommendations';
+import ScrollArea from '@/components/ScrollArea';
 
 function MainLayout() {
   const { champions } = useTFT();
@@ -73,12 +74,16 @@ function MainLayout() {
           </div>
 
           {/* Right Panel */}
-          <div className="lg:col-span-9 flex flex-col gap-4 h-full min-h-0 overflow-y-auto pr-2">
-            <TeamRecommendations
-              teamRecommendations={teamRecommendations}
-              selectedEmblems={selectedEmblems}
-              level={level}
-            />
+          <div className="lg:col-span-9 h-full min-h-0">
+            <ScrollArea className="h-full pr-1">
+              <div className="flex flex-col gap-4">
+                <TeamRecommendations
+                  teamRecommendations={teamRecommendations}
+                  selectedEmblems={selectedEmblems}
+                  level={level}
+                />
+              </div>
+            </ScrollArea>
           </div>
 
         </div>

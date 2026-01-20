@@ -2,6 +2,7 @@
 
 import React from 'react';
 import TraitIcon from '@/components/TraitIcon';
+import ScrollArea from '@/components/ScrollArea';
 import { useTFT } from '@/context/language-context';
 
 interface TraitListProps {
@@ -30,56 +31,58 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                     </button>
                 )}
             </div>
-            <div className="space-y-1 overflow-y-auto pr-2 flex-1 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
-                {availableTraits.map((trait) => {
-                    const count = selectedEmblems.filter(e => e === trait).length;
-                    const isSelected = count > 0;
+            <ScrollArea className="flex-1 min-h-0 pr-1">
+                <div className="space-y-1">
+                    {availableTraits.map((trait) => {
+                        const count = selectedEmblems.filter(e => e === trait).length;
+                        const isSelected = count > 0;
 
-                    // Construct Image URL
-                    // Trying conservative approach: remove spaces and lowercase.
-                    const normalizedName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
-                    const imageUrl = `https://raw.communitydragon.org/16.1/game/assets/maps/particles/tft/item_icons/traits/spatula/set16/tft16_emblem_${normalizedName}.tft_set16.png`;
+                        // Construct Image URL
+                        // Trying conservative approach: remove spaces and lowercase.
+                        const normalizedName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        const imageUrl = `https://raw.communitydragon.org/16.1/game/assets/maps/particles/tft/item_icons/traits/spatula/set16/tft16_emblem_${normalizedName}.tft_set16.png`;
 
-                    return (
-                        <button
-                            key={trait}
-                            onClick={() => addEmblem(trait)}
-                            onContextMenu={(e) => {
-                                e.preventDefault();
-                                removeEmblem(trait, e);
-                            }}
-                            className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
-                                ? 'bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)]'
-                                : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-white/10'
-                                }`}
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded p-0.5 ${isSelected ? 'bg-indigo-500' : 'bg-gray-700'}`}>
-                                    <img
-                                        src={imageUrl}
-                                        alt={trait}
-                                        className="w-full h-full object-contain filter drop-shadow-sm"
-                                        onError={(e) => {
-                                            // Fallback to text initials or generic icon if needed
-                                            (e.target as HTMLImageElement).style.display = 'none';
-                                            (e.target as HTMLImageElement).parentElement!.innerText = trait.substring(0, 2);
-                                        }}
-                                    />
+                        return (
+                            <button
+                                key={trait}
+                                onClick={() => addEmblem(trait)}
+                                onContextMenu={(e) => {
+                                    e.preventDefault();
+                                    removeEmblem(trait, e);
+                                }}
+                                className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
+                                    ? 'bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)]'
+                                    : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-white/10'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded p-0.5 ${isSelected ? 'bg-indigo-500' : 'bg-gray-700'}`}>
+                                        <img
+                                            src={imageUrl}
+                                            alt={trait}
+                                            className="w-full h-full object-contain filter drop-shadow-sm"
+                                            onError={(e) => {
+                                                // Fallback to text initials or generic icon if needed
+                                                (e.target as HTMLImageElement).style.display = 'none';
+                                                (e.target as HTMLImageElement).parentElement!.innerText = trait.substring(0, 2);
+                                            }}
+                                        />
+                                    </div>
+                                    <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                        {trait}
+                                    </span>
                                 </div>
-                                <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
-                                    {trait}
-                                </span>
-                            </div>
 
-                            {isSelected && (
-                                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-500 text-white text-xs font-bold shadow-sm">
-                                    {count}
-                                </div>
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
+                                {isSelected && (
+                                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-500 text-white text-xs font-bold shadow-sm">
+                                        {count}
+                                    </div>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+            </ScrollArea>
         </div>
     );
 }

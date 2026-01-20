@@ -29,7 +29,7 @@ const TraitIcon = ({ trait, className }: { trait: string, className?: string }) 
     }
 
     return (
-        <div className={`${className} relative inline-block align-middle`} style={{ width: '18px', height: '18px' }}> {/* Enforce dimensions if not provided, or rely on className */}
+        <div className={`${className} relative inline-block align-middle`} style={{ width: '20px', height: '20px' }}> {/* Enforce dimensions if not provided, or rely on className */}
             {/* The actual image element handles loading and errors, but is hidden */}
             <img
                 src={urls[currentUrlIndex]}
