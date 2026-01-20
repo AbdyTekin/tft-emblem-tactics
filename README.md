@@ -1,6 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TFT Emblem Tactics
 
-## Getting Started
+![TFT Emblem Tactics](https://tft-emblem-tactics.vercel.app/opengraph-image.png)
+
+A tool designed to help Teamfight Tactics players optimize their compositions based on collected emblems.
+
+[**Live Demo**](https://tft-emblem-tactics.vercel.app/)
+
+## 🚀 Features
+
+- **Smart Team Solver**: Automatically calculates the best team compositions based on your available champions and emblems.
+- **Emblem Selector**: Easily add and remove emblems to see how they affect your potential synergies.
+- **Strategy Modes**: Choose between different solver strategies (e.g., 'RegionRyze', 'BronzeLife') to tailor recommendations to your playstyle.
+- **Level Optimization**: Adjust player level (6-10) to discover optimal boards for different stages of the game.
+- **Multi-language Support**: Built-in architecture for supporting multiple languages.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI Library**: React 19
+
+## 🏃‍♂️ Getting Started
 
 First, run the development server:
 
@@ -16,21 +37,21 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📂 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **`app/`**: Contains the Next.js App Router pages and layouts.
+- **`components/`**: Reusable UI components such as the Solver controls, Trait list, and Team recommendations.
+- **`lib/`**: Core utility functions, including the team solver algorithm (`solver.ts`) and trait rules (`trait-rules.ts`).
+- **`context/`**: React Context providers, such as the `LanguageProvider` for managing app-wide state.
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is open source and available under the [MIT License](LICENSE).
 
-## Deploy on Vercel
+## ✨ Acknowledgements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project was developed in **Antigravity** with the help of **Vibe Coding**.
