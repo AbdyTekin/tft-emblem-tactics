@@ -49,14 +49,14 @@ function MainLayout() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-gray-900 text-gray-100 font-sans">
+    <div className="flex min-h-screen lg:h-screen lg:overflow-hidden flex-col bg-gray-900 text-gray-100 font-sans">
       <Header />
 
       <main className="flex-1 min-h-0 flex flex-col">
-        <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-full min-h-0">
+        <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-full lg:min-h-0 h-auto">
 
           {/* Left Panel */}
-          <div className="lg:col-span-3 flex flex-col gap-6 h-full min-h-0 overflow-hidden">
+          <div className="lg:col-span-3 flex flex-col gap-6 lg:h-full lg:min-h-0 lg:overflow-hidden">
             <Controls
               level={level}
               setLevel={setLevel}
@@ -74,9 +74,9 @@ function MainLayout() {
           </div>
 
           {/* Right Panel */}
-          <div className="lg:col-span-9 h-full min-h-0">
-            <ScrollArea className="h-full pr-1">
-              <div className="flex flex-col gap-4">
+          <div className="lg:col-span-9 lg:h-full lg:min-h-0 h-auto">
+            <ScrollArea className="h-auto lg:h-full pr-1 [&>div]:!h-auto lg:[&>div]:!h-full">
+              <div className="flex flex-col gap-4 h-full">
                 <TeamRecommendations
                   teamRecommendations={teamRecommendations}
                   selectedEmblems={selectedEmblems}

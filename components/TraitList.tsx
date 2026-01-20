@@ -17,7 +17,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
     const { t } = useTFT();
 
     return (
-        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col flex-1 min-h-0">
+        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col lg:flex-1 lg:min-h-0 h-auto">
             <div className="flex items-center justify-between mb-4 px-2">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                     {t('traits') || 'Traits'}
@@ -31,7 +31,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                     </button>
                 )}
             </div>
-            <ScrollArea className="flex-1 min-h-0 pr-1">
+            <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto pr-1 [&>div]:!h-auto lg:[&>div]:!h-full">
                 <div className="space-y-1">
                     {availableTraits.map((trait) => {
                         const count = selectedEmblems.filter(e => e === trait).length;
