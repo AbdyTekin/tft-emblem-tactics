@@ -56,7 +56,7 @@ function MainLayout() {
         <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-full min-h-0">
 
           {/* Left Panel */}
-          <div className="lg:col-span-3 flex flex-col gap-4 h-full min-h-0 overflow-hidden">
+          <div className="lg:col-span-3 flex flex-col gap-6 h-full min-h-0 overflow-hidden">
             <Controls
               level={level}
               setLevel={setLevel}
