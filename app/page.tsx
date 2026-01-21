@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { LanguageProvider, useTFT } from '@/context/language-context';
 import { solveTeamComp, SolverStrategy } from '@/lib/solver';
 import { getEmblemTraits } from '@/lib/trait-rules';
@@ -17,19 +17,24 @@ function MainLayout() {
   const [level, setLevel] = useState<number>(8);
   const [strategy, setStrategy] = useState<SolverStrategy>('RegionRyze');
 
+  // Defer heavy calculation inputs to prevent UI blocking
+  const deferredSelectedEmblems = useDeferredValue(selectedEmblems);
+  const deferredLevel = useDeferredValue(level);
+  const deferredStrategy = useDeferredValue(strategy);
+
   const availableTraits = useMemo(() => {
     const traits = getEmblemTraits();
     return traits.sort();
   }, []);
 
   const teamRecommendations = useMemo(() => {
-    if (selectedEmblems.length === 0) return [];
+    if (deferredSelectedEmblems.length === 0) return [];
 
     const activeEmblems: Record<string, number> = {};
-    selectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
+    deferredSelectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
 
-    return solveTeamComp(champions, activeEmblems, level, strategy);
-  }, [champions, selectedEmblems, level, strategy]);
+    return solveTeamComp(champions, activeEmblems, deferredLevel, deferredStrategy);
+  }, [champions, deferredSelectedEmblems, deferredLevel, deferredStrategy]);
 
   const addEmblem = (trait: string) => {
     setSelectedEmblems(prev => [...prev, trait]);
@@ -79,8 +84,8 @@ function MainLayout() {
               <div className="flex flex-col gap-4 h-full">
                 <TeamRecommendations
                   teamRecommendations={teamRecommendations}
-                  selectedEmblems={selectedEmblems}
-                  level={level}
+                  selectedEmblems={deferredSelectedEmblems}
+                  level={deferredLevel}
                 />
               </div>
             </ScrollArea>
