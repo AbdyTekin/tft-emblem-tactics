@@ -1,7 +1,5 @@
 # TFT Emblem Tactics
 
-![TFT Emblem Tactics](https://tft-emblem-tactics.vercel.app/opengraph-image.png)
-
 A tool designed to help Teamfight Tactics players optimize their compositions based on collected emblems.
 
 [**Live Demo**](https://tft-emblem-tactics.vercel.app/)
