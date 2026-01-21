@@ -3,7 +3,7 @@
 import React from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import ScrollArea from '@/components/ScrollArea';
-import { useTFT } from '@/context/language-context';
+import { useTranslations } from 'next-intl';
 
 interface TraitListProps {
     availableTraits: string[];
@@ -14,20 +14,21 @@ interface TraitListProps {
 }
 
 export default function TraitList({ availableTraits, selectedEmblems, addEmblem, removeEmblem, resetEmblems }: TraitListProps) {
-    const { t } = useTFT();
+    const t = useTranslations();
+    const tTraits = useTranslations('Traits');
 
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col lg:flex-1 lg:min-h-0 h-auto">
             <div className="flex items-center justify-between mb-4 px-2">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                    {t('traits') || 'Traits'}
+                    {t('traits')}
                 </h2>
                 {selectedEmblems.length > 0 && (
                     <button
                         onClick={resetEmblems}
                         className="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase border border-red-500/30 px-2 py-0.5 rounded-full hover:bg-red-500/10"
                     >
-                        {t('reset') || 'RESET'}
+                        {t('reset')}
                     </button>
                 )}
             </div>
@@ -69,7 +70,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                                         />
                                     </div>
                                     <span className={`text-sm font-medium transition-colors ${isSelected ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'}`}>
-                                        {trait}
+                                        {tTraits(trait)}
                                     </span>
                                 </div>
 

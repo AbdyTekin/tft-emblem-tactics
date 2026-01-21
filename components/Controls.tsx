@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { SolverStrategy } from '@/lib/solver';
+import { useTranslations } from 'next-intl';
 
 interface ControlsProps {
     level: number;
@@ -11,11 +12,13 @@ interface ControlsProps {
 }
 
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
+    const t = useTranslations();
+
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-4">
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Level {level}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')} {level}</span>
                 </div>
                 <input
                     type="range"
@@ -29,13 +32,13 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
             </div>
             <div className="h-px bg-white/5 w-full" />
             <div className="flex flex-col gap-3">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Strategy</span>
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('strategy')}</span>
                 <div className="grid grid-cols-1 gap-2">
                     {[
                         {
                             id: 'RegionRyze',
-                            label: 'Region Ryze',
-                            desc: 'Prioritize regional traits',
+                            label: t('strategy_region_ryze'),
+                            desc: t('strategy_region_ryze_desc'),
                             icon: (
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -44,8 +47,8 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                         },
                         {
                             id: 'BronzeLife',
-                            label: 'Bronze for Life',
-                            desc: 'Maximize active traits count',
+                            label: t('strategy_bronze_life'),
+                            desc: t('strategy_bronze_life_desc'),
                             icon: (
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />

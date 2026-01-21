@@ -5,7 +5,7 @@
     "cost": 2,
     "traits": [
       "Yordle",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_tristana"
   },
@@ -15,7 +15,7 @@
     "cost": 1,
     "traits": [
       "Yordle",
-      "Sihir Üstadı"
+      "Arcanist"
     ],
     "id": "tft16_lulu"
   },
@@ -25,7 +25,7 @@
     "cost": 2,
     "traits": [
       "Yordle",
-      "Mesafeci"
+      "Longshot"
     ],
     "id": "tft16_teemo"
   },
@@ -35,7 +35,7 @@
     "cost": 1,
     "traits": [
       "Yordle",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_rumble"
   },
@@ -45,8 +45,8 @@
     "cost": 3,
     "traits": [
       "Bilgewater",
-      "Ezergeçer",
-      "Gardiyan"
+      "Juggernaut",
+      "Warden"
     ],
     "id": "tft16_nautilus"
   },
@@ -56,7 +56,7 @@
     "cost": 2,
     "traits": [
       "Bilgewater",
-      "Atik"
+      "Quickstriker"
     ],
     "id": "tft16_twistedfate"
   },
@@ -66,8 +66,8 @@
     "cost": 3,
     "traits": [
       "Bilgewater",
-      "Biçici",
-      "Hışımlı"
+      "Slayer",
+      "Vanquisher"
     ],
     "id": "tft16_gangplank"
   },
@@ -77,7 +77,7 @@
     "cost": 1,
     "traits": [
       "Bilgewater",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_illaoi"
   },
@@ -87,7 +87,7 @@
     "cost": 4,
     "traits": [
       "Bilgewater",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_missfortune"
   },
@@ -97,7 +97,7 @@
     "cost": 2,
     "traits": [
       "Noxus",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_sion"
   },
@@ -107,8 +107,8 @@
     "cost": 1,
     "traits": [
       "Noxus",
-      "Biçici",
-      "Ezergeçer"
+      "Slayer",
+      "Juggernaut"
     ],
     "id": "tft16_briar"
   },
@@ -118,7 +118,7 @@
     "cost": 3,
     "traits": [
       "Noxus",
-      "Atik"
+      "Quickstriker"
     ],
     "id": "tft16_draven"
   },
@@ -128,7 +128,7 @@
     "cost": 4,
     "traits": [
       "Noxus",
-      "Hışımlı"
+      "Vanquisher"
     ],
     "id": "tft16_ambessa"
   },
@@ -174,7 +174,7 @@
     "cost": 1,
     "traits": [
       "Demacia",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_jarvaniv"
   },
@@ -184,7 +184,7 @@
     "cost": 1,
     "traits": [
       "Demacia",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_sona"
   },
@@ -194,7 +194,7 @@
     "cost": 4,
     "traits": [
       "Demacia",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_garen"
   },
@@ -204,7 +204,7 @@
     "cost": 4,
     "traits": [
       "Demacia",
-      "Sihir Üstadı"
+      "Arcanist"
     ],
     "id": "tft16_lux"
   },
@@ -214,7 +214,7 @@
     "cost": 1,
     "traits": [
       "Freljord",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_anivia"
   },
@@ -224,7 +224,7 @@
     "cost": 2,
     "traits": [
       "Freljord",
-      "Atik"
+      "Quickstriker"
     ],
     "id": "tft16_ashe"
   },
@@ -234,7 +234,7 @@
     "cost": 4,
     "traits": [
       "Freljord",
-      "Gardiyan"
+      "Warden"
     ],
     "id": "tft16_braum"
   },
@@ -244,7 +244,7 @@
     "cost": 4,
     "traits": [
       "Freljord",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_lissandra"
   },
@@ -254,7 +254,7 @@
     "cost": 3,
     "traits": [
       "Ixtal",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_milio"
   },
@@ -264,8 +264,8 @@
     "cost": 2,
     "traits": [
       "Ixtal",
-      "Sihir Üstadı",
-      "Savunucu"
+      "Arcanist",
+      "Defender"
     ],
     "id": "tft16_neeko"
   },
@@ -275,7 +275,7 @@
     "cost": 3,
     "traits": [
       "Zaun",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_jinx"
   },
@@ -285,7 +285,7 @@
     "cost": 1,
     "traits": [
       "Piltover",
-      "Mesafeci"
+      "Longshot"
     ],
     "id": "tft16_caitlyn"
   },
@@ -296,7 +296,7 @@
     "traits": [
       "Piltover",
       "Zaun",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_vi"
   },
@@ -306,7 +306,7 @@
     "cost": 4,
     "traits": [
       "Piltover",
-      "Bozguncu"
+      "Disruptor"
     ],
     "id": "tft16_seraphine"
   },
@@ -316,7 +316,7 @@
     "cost": 2,
     "traits": [
       "Ionia",
-      "Biçici"
+      "Slayer"
     ],
     "id": "tft16_yasuo"
   },
@@ -326,7 +326,7 @@
     "cost": 3,
     "traits": [
       "Ionia",
-      "Sihir Üstadı"
+      "Arcanist"
     ],
     "id": "tft16_ahri"
   },
@@ -336,7 +336,7 @@
     "cost": 4,
     "traits": [
       "Ionia",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_wukong"
   },
@@ -346,7 +346,7 @@
     "cost": 1,
     "traits": [
       "Ionia",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_shen"
   },
@@ -355,8 +355,8 @@
     "name": "Malzahar",
     "cost": 3,
     "traits": [
-      "Hiçlik",
-      "Bozguncu"
+      "Void",
+      "Disruptor"
     ],
     "id": "tft16_malzahar"
   },
@@ -365,8 +365,8 @@
     "name": "Rek'Sai",
     "cost": 2,
     "traits": [
-      "Hiçlik",
-      "Hışımlı"
+      "Void",
+      "Vanquisher"
     ],
     "id": "tft16_reksai"
   },
@@ -375,8 +375,8 @@
     "name": "Cho'Gath",
     "cost": 2,
     "traits": [
-      "Hiçlik",
-      "Ezergeçer"
+      "Void",
+      "Juggernaut"
     ],
     "id": "tft16_chogath"
   },
@@ -385,9 +385,9 @@
     "name": "Kog'Maw",
     "cost": 1,
     "traits": [
-      "Hiçlik",
-      "Sihir Üstadı",
-      "Mesafeci"
+      "Void",
+      "Arcanist",
+      "Longshot"
     ],
     "id": "tft16_kogmaw"
   },
@@ -396,8 +396,8 @@
     "name": "Annie",
     "cost": 5,
     "traits": [
-      "Şeytan Çekici",
-      "Sihir Üstadı"
+      "Dark Child",
+      "Arcanist"
     ],
     "id": "tft16_annie"
   },
@@ -406,8 +406,8 @@
     "name": "Ornn",
     "cost": 5,
     "traits": [
-      "Demirci",
-      "Gardiyan"
+      "Blacksmith",
+      "Warden"
     ],
     "id": "tft16_ornn"
   },
@@ -416,8 +416,8 @@
     "name": "Kindred",
     "cost": 5,
     "traits": [
-      "Ebedi",
-      "Atik"
+      "Eternal",
+      "Quickstriker"
     ],
     "id": "tft16_kindred"
   },
@@ -427,8 +427,8 @@
     "cost": 5,
     "traits": [
       "Shurima",
-      "İmparator",
-      "Bozguncu"
+      "Emperor",
+      "Disruptor"
     ],
     "id": "tft16_azir"
   },
@@ -437,8 +437,8 @@
     "name": "Zilean",
     "cost": 5,
     "traits": [
-      "Zaman Bekçisi",
-      "Manabaz"
+      "Chronokeeper",
+      "Invoker"
     ],
     "id": "tft16_zilean"
   },
@@ -447,8 +447,8 @@
     "name": "Fiddlesticks",
     "cost": 5,
     "traits": [
-      "Hasatçı",
-      "Hışımlı"
+      "Harvester",
+      "Vanquisher"
     ],
     "id": "tft16_fiddlesticks"
   },
@@ -457,8 +457,8 @@
     "name": "Shyvana",
     "cost": 5,
     "traits": [
-      "Ejderkanı",
-      "Ezergeçer"
+      "Dragonborn",
+      "Juggernaut"
     ],
     "id": "tft16_shyvana"
   },
@@ -468,7 +468,7 @@
     "cost": 5,
     "traits": [
       "Demacia",
-      "Kahraman"
+      "Heroic"
     ],
     "id": "tft16_galio"
   },
@@ -478,8 +478,8 @@
     "cost": 5,
     "traits": [
       "Bilgewater",
-      "Obur",
-      "Kavgacı"
+      "Glutton",
+      "Bruiser"
     ],
     "id": "tft16_tahmkench"
   },
@@ -489,7 +489,7 @@
     "cost": 3,
     "traits": [
       "Freljord",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_sejuani"
   },
@@ -499,7 +499,7 @@
     "cost": 5,
     "traits": [
       "Ionia",
-      "Patron"
+      "The Boss"
     ],
     "id": "tft16_sett"
   },
@@ -517,9 +517,9 @@
     "name": "T-Hex",
     "cost": 5,
     "traits": [
-      "Hex-Meka",
+      "HexMech",
       "Piltover",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_thex"
   },
@@ -528,8 +528,8 @@
     "name": "Bel'Veth",
     "cost": 4,
     "traits": [
-      "Hiçlik",
-      "Biçici"
+      "Void",
+      "Slayer"
     ],
     "id": "tft16_belveth"
   },
@@ -539,7 +539,7 @@
     "cost": 4,
     "traits": [
       "Zaun",
-      "Ezergeçer"
+      "Juggernaut"
     ],
     "id": "tft16_singed"
   },
@@ -548,7 +548,7 @@
     "name": "Aurelion Sol",
     "cost": 5,
     "traits": [
-      "Yıldızların Hâkimi",
+      "Star Forger",
       "Targon"
     ],
     "id": "tft16_aurelionsol"
@@ -559,7 +559,7 @@
     "cost": 4,
     "traits": [
       "Yordle",
-      "Sihir Üstadı"
+      "Arcanist"
     ],
     "id": "tft16_veigar"
   },
@@ -568,8 +568,8 @@
     "name": "Baron Nashor",
     "cost": 5,
     "traits": [
-      "Hiçlik",
-      "Vadi Belası"
+      "Void",
+      "Riftscourge"
     ],
     "id": "tft16_baronnashor"
   },
@@ -579,7 +579,7 @@
     "cost": 3,
     "traits": [
       "Noxus",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_darius"
   },
@@ -589,7 +589,7 @@
     "cost": 4,
     "traits": [
       "Ionia",
-      "Biçici"
+      "Slayer"
     ],
     "id": "tft16_yone"
   },
@@ -599,7 +599,7 @@
     "cost": 4,
     "traits": [
       "Zaun",
-      "Atik"
+      "Quickstriker"
     ],
     "id": "tft16_warwick"
   },
@@ -620,7 +620,7 @@
     "traits": [
       "Demacia",
       "Yordle",
-      "Ezergeçer"
+      "Juggernaut"
     ],
     "id": "tft16_poppy"
   },
@@ -631,7 +631,7 @@
     "traits": [
       "Ionia",
       "Yordle",
-      "Savunucu"
+      "Defender"
     ],
     "id": "tft16_kennen"
   },
@@ -642,7 +642,7 @@
     "traits": [
       "Zaun",
       "Yordle",
-      "Mesafeci"
+      "Longshot"
     ],
     "id": "tft16_ziggs"
   },
@@ -652,8 +652,8 @@
     "cost": 5,
     "traits": [
       "Darkin",
-      "Dünyaların Sonu",
-      "Biçici"
+      "World Ender",
+      "Slayer"
     ],
     "id": "tft16_aatrox"
   },
@@ -663,7 +663,7 @@
     "cost": 5,
     "traits": [
       "Freljord",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_volibear"
   },
@@ -673,7 +673,7 @@
     "cost": 1,
     "traits": [
       "Ionia",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_jhin"
   },
@@ -682,9 +682,9 @@
     "name": "Sylas ",
     "cost": 5,
     "traits": [
-      "Zincirkıran",
-      "Sihir Üstadı",
-      "Savunucu"
+      "Chainbreaker",
+      "Arcanist",
+      "Defender"
     ],
     "id": "tft16_sylas"
   },
@@ -693,7 +693,7 @@
     "name": "Ryze ",
     "cost": 5,
     "traits": [
-      "Rün Büyücüsü"
+      "Rune Mage"
     ],
     "id": "tft16_ryze"
   },
@@ -703,7 +703,7 @@
     "cost": 4,
     "traits": [
       "Ixtal",
-      "Avcı"
+      "Huntress"
     ],
     "id": "tft16_nidalee"
   },
@@ -713,7 +713,7 @@
     "cost": 2,
     "traits": [
       "Freljord",
-      "Biçici"
+      "Slayer"
     ],
     "id": "tft16_tryndamere"
   },
@@ -722,8 +722,8 @@
     "name": "Vadi'nin Alameti ",
     "cost": 4,
     "traits": [
-      "Hiçlik",
-      "Kavgacı"
+      "Void",
+      "Bruiser"
     ],
     "id": "tft16_riftherald"
   },
@@ -733,7 +733,7 @@
     "cost": 5,
     "traits": [
       "Noxus",
-      "Bozguncu"
+      "Disruptor"
     ],
     "id": "tft16_mel"
   },
@@ -743,7 +743,7 @@
     "cost": 2,
     "traits": [
       "Bilgewater",
-      "Silahşor"
+      "Gunslinger"
     ],
     "id": "tft16_graves"
   },
@@ -770,9 +770,9 @@
     "name": "Kai'Sa ",
     "cost": 4,
     "traits": [
-      "Özümseyici",
-      "Hiçlik",
-      "Mesafeci"
+      "Assimilator",
+      "Void",
+      "Longshot"
     ],
     "id": "tft16_kaisa"
   },
@@ -800,7 +800,7 @@
     "cost": 5,
     "traits": [
       "Shurima",
-      "Yükselmiş"
+      "Ascendant"
     ],
     "id": "tft16_xerath"
   },
@@ -809,8 +809,8 @@
     "name": "Thresh ",
     "cost": 5,
     "traits": [
-      "Gölge Adalar",
-      "Gardiyan"
+      "Shadow Isles",
+      "Warden"
     ],
     "id": "tft16_thresh"
   },
@@ -819,8 +819,8 @@
     "name": "Gwen ",
     "cost": 3,
     "traits": [
-      "Gölge Adalar",
-      "Bozguncu"
+      "Shadow Isles",
+      "Disruptor"
     ],
     "id": "tft16_gwen"
   },
@@ -829,8 +829,8 @@
     "name": "Kalista ",
     "cost": 4,
     "traits": [
-      "Gölge Adalar",
-      "Hışımlı"
+      "Shadow Isles",
+      "Vanquisher"
     ],
     "id": "tft16_kalista"
   },
@@ -840,7 +840,7 @@
     "cost": 3,
     "traits": [
       "Noxus",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_leblanc"
   },
@@ -849,8 +849,8 @@
     "name": "Viego",
     "cost": 1,
     "traits": [
-      "Gölge Adalar",
-      "Atik"
+      "Shadow Isles",
+      "Quickstriker"
     ],
     "id": "tft16_viego"
   },
@@ -860,7 +860,7 @@
     "cost": 2,
     "traits": [
       "Zaun",
-      "Bozguncu"
+      "Disruptor"
     ],
     "id": "tft16_ekko"
   },
@@ -869,7 +869,7 @@
     "name": "Bard ",
     "cost": 2,
     "traits": [
-      "Bakıcı"
+      "Caretaker"
     ],
     "id": "tft16_bard"
   },
@@ -879,7 +879,7 @@
     "cost": 3,
     "traits": [
       "Demacia",
-      "Mesafeci"
+      "Longshot"
     ],
     "id": "tft16_vayne"
   },
@@ -889,7 +889,7 @@
     "cost": 4,
     "traits": [
       "Ionia",
-      "Atik"
+      "Quickstriker"
     ],
     "id": "tft16_yunara"
   },
@@ -899,8 +899,8 @@
     "cost": 4,
     "traits": [
       "Noxus",
-      "Sihir Üstadı",
-      "Ezergeçer"
+      "Arcanist",
+      "Juggernaut"
     ],
     "id": "tft16_swain"
   },
@@ -911,7 +911,7 @@
     "traits": [
       "Demacia",
       "Ionia",
-      "Gardiyan"
+      "Warden"
     ],
     "id": "tft16_xinzhao"
   },
@@ -920,8 +920,8 @@
     "name": "Yorick ",
     "cost": 2,
     "traits": [
-      "Gölge Adalar",
-      "Gardiyan"
+      "Shadow Isles",
+      "Warden"
     ],
     "id": "tft16_yorick"
   },
@@ -931,7 +931,7 @@
     "cost": 2,
     "traits": [
       "Piltover",
-      "Manabaz"
+      "Invoker"
     ],
     "id": "tft16_orianna"
   },
@@ -941,7 +941,7 @@
     "cost": 1,
     "traits": [
       "Ixtal",
-      "Biçici"
+      "Slayer"
     ],
     "id": "tft16_qiyana"
   },
@@ -951,7 +951,7 @@
     "cost": 3,
     "traits": [
       "Piltover",
-      "Gardiyan"
+      "Warden"
     ],
     "id": "tft16_loris"
   },
@@ -961,7 +961,7 @@
     "cost": 1,
     "traits": [
       "Zaun",
-      "Ezergeçer"
+      "Juggernaut"
     ],
     "id": "tft16_blitzcrank"
   },
@@ -971,7 +971,7 @@
     "cost": 3,
     "traits": [
       "Zaun",
-      "Kavgacı"
+      "Bruiser"
     ],
     "id": "tft16_drmundo"
   },
@@ -981,7 +981,7 @@
     "cost": 5,
     "traits": [
       "Darkin",
-      "Ölümsüz"
+      "Immortal"
     ],
     "id": "tft16_zaahen"
   },
@@ -990,8 +990,8 @@
     "name": "Lucian ve Senna",
     "cost": 5,
     "traits": [
-      "Ruhdaş",
-      "Silahşor"
+      "Soulbound",
+      "Gunslinger"
     ],
     "id": "tft16_lucian"
   },
@@ -1001,8 +1001,8 @@
     "cost": 3,
     "traits": [
       "Yordle",
-      "Kavgacı",
-      "Manabaz"
+      "Bruiser",
+      "Invoker"
     ],
     "id": "tft16_kobuko"
   }

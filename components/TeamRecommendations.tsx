@@ -4,6 +4,7 @@ import React from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
+import { useTranslations } from 'next-intl';
 
 // --- CONFIGURATION START ---
 
@@ -33,6 +34,9 @@ interface TeamRecommendationsProps {
 }
 
 export default function TeamRecommendations({ teamRecommendations, selectedEmblems, level }: TeamRecommendationsProps) {
+    const t = useTranslations();
+    const tTraits = useTranslations('Traits');
+
     if (selectedEmblems.length === 0) {
         return (
             <div className="rounded-xl border border-white/10 bg-gray-900/50 p-6 backdrop-blur-sm shadow-xl h-full min-h-[500px] flex flex-col items-center justify-center text-center">
@@ -41,9 +45,9 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                     </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-200">Ready to Build</h3>
+                <h3 className="text-2xl font-bold text-gray-200">{t('ready_to_build')}</h3>
                 <p className="text-gray-500 mt-2 max-w-md text-lg">
-                    Select your emblems from the sidebar. The solver will automatically generate the best possible {level}-unit team compositions.
+                    {t('select_emblems_msg', { level })}
                 </p>
             </div>
         );
@@ -119,7 +123,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                                 trait={name}
                                                 className="w-2 h-2"
                                             />
-                                            <span className="text-[12px] font-medium opacity-90 text-gray-300">{name}</span>
+                                            <span className="text-[12px] font-medium opacity-90 text-gray-300">{tTraits(name)}</span>
                                         </div>
                                     );
                                 })}
@@ -127,7 +131,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
 
                             {/* Score */}
                             <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
-                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Score</span>
+                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('score')}</span>
                                 <span className="text-xl font-black text-white tracking-tight">{team.score}</span>
                             </div>
                         </div>

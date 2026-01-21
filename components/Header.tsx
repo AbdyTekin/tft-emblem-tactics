@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { useTFT } from '@/context/language-context';
+import { useTranslations } from 'next-intl';
 
 export default function Header() {
     const { language, setLanguage } = useTFT();
+    const t = useTranslations();
 
     return (
         <header className="w-full border-b border-white/10 bg-black/20 backdrop-blur-md">
@@ -14,7 +16,7 @@ export default function Header() {
                         <span className="font-bold text-indigo-400">TFT</span>
                     </div>
                     <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                        {language === 'tr' ? 'TFT Takım Oluşturucu' : 'TFT Set 16 Gen'}
+                        {t('team_generator')}
                     </h1>
                 </div>
 
