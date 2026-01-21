@@ -10,14 +10,13 @@ A tool designed to help Teamfight Tactics players optimize their compositions ba
 - **Emblem Selector**: Easily add and remove emblems to see how they affect your potential synergies.
 - **Strategy Modes**: Choose between different solver strategies ('RegionRyze', 'BronzeLife') to tailor recommendations to your playstyle.
 - **Level Optimization**: Adjust player level (6-10) to discover optimal boards for different stages of the game.
-- **Multi-language Support**: Built-in architecture for supporting multiple languages.
+- **Multi-language Support**: i18n localization.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **UI Library**: React 19
 
 ## 🏃‍♂️ Getting Started
 
@@ -38,9 +37,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 📂 Project Structure
 
 - **`app/`**: Contains the Next.js App Router pages and layouts.
-- **`components/`**: Reusable UI components such as the Solver controls, Trait list, and Team recommendations.
+- **`components/`**: UI components such as the Solver controls, Trait list, and Team recommendations.
 - **`lib/`**: Core utility functions, including the team solver algorithm (`solver.ts`) and trait rules (`trait-rules.ts`).
 - **`context/`**: React Context providers, such as the `LanguageProvider` for managing app-wide state.
+- **`messages/`**: Language files for i18n localization.
+- **`scripts/`**: Utility scripts for data fetching and processing.
+- **`types/`**: TypeScript type definitions.
 
 ## 🤝 Contributing
 
