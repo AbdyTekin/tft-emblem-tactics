@@ -11,7 +11,7 @@ interface ControlsProps {
     setStrategy: (strategy: SolverStrategy) => void;
 }
 
-const AVAILABLE_LEVELS = [8, 9, 10];
+
 
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
     const t = useTranslations();
@@ -33,44 +33,53 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5">
             {/* Level Selection */}
             <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
-                    <span className="text-xs font-mono text-indigo-400">{level}</span>
-                </div>
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
 
-                <div className="grid grid-cols-3 gap-2">
-                    {AVAILABLE_LEVELS.map((lvl) => {
-                        const isSelected = level === lvl;
-                        const disabled = isLevelDisabled(lvl);
+                <div className="relative flex items-center justify-between gap-3 p-2">
+                    {/* Decrease Button */}
+                    <button
+                        onClick={() => {
+                            const prevLevel = level - 1;
+                            if (prevLevel >= 6 && !isLevelDisabled(prevLevel)) {
+                                setLevel(prevLevel);
+                            }
+                        }}
+                        disabled={level <= 6 || isLevelDisabled(level - 1)}
+                        className="cursor-pointer w-10 h-14 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
 
-                        return (
-                            <button
-                                key={lvl}
-                                onClick={() => !disabled && setLevel(lvl)}
-                                disabled={disabled}
-                                className={`
-                                    relative group flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300
-                                    ${isSelected
-                                        ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border-indigo-400 shadow-lg shadow-indigo-500/25 translate-y-0'
-                                        : disabled
-                                            ? 'bg-gray-800/20 text-gray-700 border-gray-800/50 cursor-not-allowed'
-                                            : 'bg-gray-800/40 text-gray-400 border-gray-700/50 hover:bg-gray-800 hover:border-gray-600 hover:text-gray-200 hover:-translate-y-0.5'
-                                    }
-                                `}
-                            >
-                                <span className={`text-lg font-bold ${isSelected ? 'scale-110' : ''} transition-transform`}>
-                                    {lvl}
-                                </span>
-                                {isSelected && (
-                                    <div className="absolute inset-0 rounded-xl bg-white/10 animate-pulse" />
-                                )}
-                            </button>
-                        );
-                    })}
+                    {/* Level Display */}
+                    <div className="flex-1 h-14 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.15)] flex items-center justify-center border border-indigo-500/50">
+                        <div className="absolute inset-0 bg-[url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-tft/global/default/tft_t11_subtexture_atlas_1.png')] opacity-10 mix-blend-overlay bg-cover" />
+
+                        <div className="relative flex flex-col items-center z-10">
+                            <span className="text-3xl font-bold text-indigo-100 leading-none tracking-tight drop-shadow-md">
+                                {level}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Increase Button */}
+                    <button
+                        onClick={() => {
+                            const nextLevel = level + 1;
+                            if (nextLevel <= 10 && !isLevelDisabled(nextLevel)) {
+                                setLevel(nextLevel);
+                            }
+                        }}
+                        disabled={level >= 10 || isLevelDisabled(level + 1)}
+                        className="cursor-pointer w-10 h-14 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-
-            <div className="h-px bg-white/5 w-full" />
 
             {/* Strategy Selection */}
             <div className="flex flex-col gap-3">
@@ -101,7 +110,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                         <button
                             key={option.id}
                             onClick={() => handleStrategyChange(option.id as SolverStrategy)}
-                            className={`relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
+                            className={`cursor-pointer relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
                                     ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] translate-x-1'
                                     : 'bg-black/20 border-white/5 hover:border-white/10 hover:bg-white/5 hover:translate-x-0.5'
