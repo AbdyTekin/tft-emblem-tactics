@@ -58,7 +58,7 @@ function MainLayout() {
       <Header />
 
       <main className="flex-1 min-h-0 flex flex-col">
-        <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-full lg:min-h-0 h-auto">
+        <div className="container mx-auto max-w-6xl p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-full lg:min-h-0 h-auto">
 
           {/* Left Panel */}
           <div className="lg:col-span-3 flex flex-col gap-6 lg:h-full lg:min-h-0 lg:overflow-hidden">

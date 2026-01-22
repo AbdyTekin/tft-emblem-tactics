@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
