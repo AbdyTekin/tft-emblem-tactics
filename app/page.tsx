@@ -15,7 +15,7 @@ function MainLayout() {
 
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
   const [level, setLevel] = useState<number>(8);
-  const [strategy, setStrategy] = useState<SolverStrategy>('RegionRyze');
+  const [strategy, setStrategy] = useState<SolverStrategy>('BronzeLife');
 
   // Defer heavy calculation inputs to prevent UI blocking
   const deferredSelectedEmblems = useDeferredValue(selectedEmblems);

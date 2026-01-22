@@ -11,26 +11,68 @@ interface ControlsProps {
     setStrategy: (strategy: SolverStrategy) => void;
 }
 
+const AVAILABLE_LEVELS = [8, 9, 10];
+
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
     const t = useTranslations();
 
+    const handleStrategyChange = (newStrategy: SolverStrategy) => {
+        setStrategy(newStrategy);
+        // Enforce level constraint: RegionRyze requires level 9 or 10
+        if (newStrategy === 'RegionRyze' && level < 9) {
+            setLevel(9);
+        }
+    };
+
+    const isLevelDisabled = (lvl: number) => {
+        if (strategy === 'RegionRyze' && lvl < 9) return true;
+        return false;
+    };
+
     return (
-        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
+        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5">
+            {/* Level Selection */}
+            <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')} {level}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
+                    <span className="text-xs font-mono text-indigo-400">{level}</span>
                 </div>
-                <input
-                    type="range"
-                    min="6"
-                    max="10"
-                    step="1"
-                    value={level}
-                    onChange={(e) => setLevel(Number(e.target.value))}
-                    className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition-all"
-                />
+
+                <div className="grid grid-cols-3 gap-2">
+                    {AVAILABLE_LEVELS.map((lvl) => {
+                        const isSelected = level === lvl;
+                        const disabled = isLevelDisabled(lvl);
+
+                        return (
+                            <button
+                                key={lvl}
+                                onClick={() => !disabled && setLevel(lvl)}
+                                disabled={disabled}
+                                className={`
+                                    relative group flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300
+                                    ${isSelected
+                                        ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border-indigo-400 shadow-lg shadow-indigo-500/25 translate-y-0'
+                                        : disabled
+                                            ? 'bg-gray-800/20 text-gray-700 border-gray-800/50 cursor-not-allowed'
+                                            : 'bg-gray-800/40 text-gray-400 border-gray-700/50 hover:bg-gray-800 hover:border-gray-600 hover:text-gray-200 hover:-translate-y-0.5'
+                                    }
+                                `}
+                            >
+                                <span className={`text-lg font-bold ${isSelected ? 'scale-110' : ''} transition-transform`}>
+                                    {lvl}
+                                </span>
+                                {isSelected && (
+                                    <div className="absolute inset-0 rounded-xl bg-white/10 animate-pulse" />
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
+
             <div className="h-px bg-white/5 w-full" />
+
+            {/* Strategy Selection */}
             <div className="flex flex-col gap-3">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('strategy')}</span>
                 <div className="grid grid-cols-1 gap-2">
@@ -58,7 +100,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     ].map((option) => (
                         <button
                             key={option.id}
-                            onClick={() => setStrategy(option.id as SolverStrategy)}
+                            onClick={() => handleStrategyChange(option.id as SolverStrategy)}
                             className={`relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
                                     ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] translate-x-1'
