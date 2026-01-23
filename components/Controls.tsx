@@ -35,7 +35,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
             <div className="flex flex-col gap-3">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
 
-                <div className="relative flex items-center justify-between gap-3 p-2">
+                <div className="relative flex items-center justify-between gap-3 px-5">
                     {/* Decrease Button */}
                     <button
                         onClick={() => {
@@ -45,7 +45,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                             }
                         }}
                         disabled={level <= 6 || isLevelDisabled(level - 1)}
-                        className="cursor-pointer w-10 h-14 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
+                        className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -53,7 +53,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     </button>
 
                     {/* Level Display */}
-                    <div className="flex-1 h-14 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.15)] flex items-center justify-center border border-indigo-500/50">
+                    <div className="flex-1 h-10 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.15)] flex items-center justify-center border border-indigo-500/50">
                         <div className="absolute inset-0 bg-[url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-tft/global/default/tft_t11_subtexture_atlas_1.png')] opacity-10 mix-blend-overlay bg-cover" />
 
                         <div className="relative flex flex-col items-center z-10">
@@ -72,7 +72,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                             }
                         }}
                         disabled={level >= 10 || isLevelDisabled(level + 1)}
-                        className="cursor-pointer w-10 h-14 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
+                        className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
