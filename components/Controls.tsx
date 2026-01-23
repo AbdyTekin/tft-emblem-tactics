@@ -57,7 +57,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                         <div className="absolute inset-0 bg-[url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-tft/global/default/tft_t11_subtexture_atlas_1.png')] opacity-10 mix-blend-overlay bg-cover" />
 
                         <div className="relative flex flex-col items-center z-10">
-                            <span className="text-3xl font-bold text-indigo-100 leading-none tracking-tight drop-shadow-md">
+                            <span className="text-2xl font-bold text-indigo-100 leading-none tracking-tight drop-shadow-md">
                                 {level}
                             </span>
                         </div>
@@ -113,7 +113,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                             className={`cursor-pointer relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
                                     ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] translate-x-1'
-                                    : 'bg-black/20 border-white/5 hover:border-white/10 hover:bg-white/5 hover:translate-x-0.5'
+                                    : 'bg-black/20 border-white/5 hover:border-white/7 hover:bg-white/2 hover:translate-x-0.5'
                                 }
               `}
                         >
