@@ -19,8 +19,8 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
 
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col lg:flex-1 lg:min-h-0 h-auto">
-            <div className="flex items-center justify-between mb-4 px-2">
-                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+            <div className="flex items-center justify-between mb-3 px-2">
+                <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
                     {t('traits')}
                 </h2>
                 {selectedEmblems.length > 0 && (
