@@ -132,9 +132,6 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                                     {option.desc}
                                 </span>
                             </div>
-                            {strategy === option.id && (
-                                <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,1)] animate-pulse" />
-                            )}
                         </button>
                     ))}
                 </div>
