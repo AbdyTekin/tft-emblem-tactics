@@ -72,7 +72,8 @@ function calculateScore(
             }
 
             // Strategy: BronzeLife (Count lowest breakpoint)
-            if (activeBreakpointIndex === 0) {
+            // Fix: Exclude Origin traits from BronzeLife count
+            if (activeBreakpointIndex === 0 && rule.type !== 'Origin') {
                 bronzeLifeCount++;
             }
 
@@ -87,10 +88,10 @@ function calculateScore(
         // "Maximize this count." -> Add heavy weight to the count
         score += bronzeLifeCount * 100;
         strategyValue = bronzeLifeCount;
-        strategyName = 'Active Bronze Traits';
+        strategyName = 'active_bronze_traits';
     } else if (strategy === 'RegionRyze') {
         strategyValue = regionTraitCount;
-        strategyName = 'Active Regional Traits';
+        strategyName = 'active_region_traits';
     }
 
     score -= difficultyPenalty;

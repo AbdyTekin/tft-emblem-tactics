@@ -132,7 +132,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                             <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
                                 {team.strategyName && (
                                     <>
-                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{team.strategyName}</span>
+                                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t(team.strategyName)}</span>
                                         <span className="text-sm font-bold text-yellow-500 mr-2">{team.strategyValue}</span>
                                         <div className="w-[1px] h-4 bg-white/10 mx-1"></div>
                                     </>

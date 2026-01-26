@@ -13,6 +13,8 @@
   "strategy_region_ryze_desc": "Maximize regional traits",
   "strategy_bronze_life": "BRONZE FOR LIFE",
   "strategy_bronze_life_desc": "Maximize bronze traits",
+  "active_region_traits": "ACTIVE REGIONS",
+  "active_bronze_traits": "ACTIVE BRONZE TRAITS",
   "Traits": {
     "Arcanist": "Arcanist",
     "Ascendant": "Ascendant",

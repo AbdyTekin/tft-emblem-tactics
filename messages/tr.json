@@ -13,6 +13,8 @@
   "strategy_region_ryze_desc": "Maksimum bölgesel özellik",
   "strategy_bronze_life": "BRONZDAN ŞAŞMA",
   "strategy_bronze_life_desc": "Maksimum bronz özellik",
+  "active_region_traits": "AKTİF BÖLGE",
+  "active_bronze_traits": "AKTİF BRONZ ÖZELLİK",
   "Traits": {
     "Arcanist": "Sihir Üstadı",
     "Ascendant": "Yükselmiş",
