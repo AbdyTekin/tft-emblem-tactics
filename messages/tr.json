@@ -5,7 +5,7 @@
   "cost": "BEDEL",
   "reset": "SIFIRLA",
   "ready_to_build": "Oluşturmaya Hazır",
-  "select_emblems_msg": "Yan menüden amblemlerinizi seçin. Algoritma, {level} birimlik takım kompozisyonlarını oluşturacaktır.",
+  "select_emblems_msg": "Yan menüden amblemlerini seç. Algoritma, {level} birimlik takım kompozisyonlarını oluşturacaktır.",
   "score": "PUAN",
   "level": "SEVİYE",
   "strategy": "STRATEJİ",
