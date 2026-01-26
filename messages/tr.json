@@ -10,9 +10,9 @@
   "level": "SEVİYE",
   "strategy": "STRATEJİ",
   "strategy_region_ryze": "BÖLGE RYZE",
-  "strategy_region_ryze_desc": "Bölgesel özellikleri maksimize et",
+  "strategy_region_ryze_desc": "Maksimum bölgesel özellik",
   "strategy_bronze_life": "BRONZDAN ŞAŞMA",
-  "strategy_bronze_life_desc": "Bronz özellik sayısını maksimize et",
+  "strategy_bronze_life_desc": "Maksimum bronz özellik",
   "Traits": {
     "Arcanist": "Sihir Üstadı",
     "Ascendant": "Yükselmiş",
