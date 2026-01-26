@@ -1,9 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import enChampions from '@/lib/set16-champions-en.json';
-import trChampions from '@/lib/set16-champions-tr.json';
+import enChampions from '@/lib/set16-champions.json';
 import enMessages from '@/messages/en.json';
 import trMessages from '@/messages/tr.json';
 import { Champion } from '@/types/tft';
@@ -26,7 +25,7 @@ const messages = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<Language>('en');
 
-    const champions = language === 'en' ? (enChampions as unknown as Champion[]) : (trChampions as unknown as Champion[]);
+    const champions = enChampions as unknown as Champion[];
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage, champions }}>

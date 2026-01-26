@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { SolverStrategy } from '@/lib/solver';
 import { useTranslations } from 'next-intl';
 

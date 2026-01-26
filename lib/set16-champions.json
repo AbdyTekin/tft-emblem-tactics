@@ -7,7 +7,9 @@
       "Yordle",
       "Gunslinger"
     ],
-    "id": "tft16_tristana"
+    "id": "tft16_tristana",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Lulu",
@@ -17,7 +19,9 @@
       "Yordle",
       "Arcanist"
     ],
-    "id": "tft16_lulu"
+    "id": "tft16_lulu",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Teemo",
@@ -27,7 +31,9 @@
       "Yordle",
       "Longshot"
     ],
-    "id": "tft16_teemo"
+    "id": "tft16_teemo",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Rumble",
@@ -37,7 +43,9 @@
       "Yordle",
       "Defender"
     ],
-    "id": "tft16_rumble"
+    "id": "tft16_rumble",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Nautilus",
@@ -48,7 +56,9 @@
       "Juggernaut",
       "Warden"
     ],
-    "id": "tft16_nautilus"
+    "id": "tft16_nautilus",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_TwistedFate",
@@ -58,7 +68,9 @@
       "Bilgewater",
       "Quickstriker"
     ],
-    "id": "tft16_twistedfate"
+    "id": "tft16_twistedfate",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Gangplank",
@@ -69,7 +81,9 @@
       "Slayer",
       "Vanquisher"
     ],
-    "id": "tft16_gangplank"
+    "id": "tft16_gangplank",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Illaoi",
@@ -79,7 +93,9 @@
       "Bilgewater",
       "Bruiser"
     ],
-    "id": "tft16_illaoi"
+    "id": "tft16_illaoi",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_MissFortune",
@@ -89,7 +105,9 @@
       "Bilgewater",
       "Gunslinger"
     ],
-    "id": "tft16_missfortune"
+    "id": "tft16_missfortune",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Sion",
@@ -99,7 +117,9 @@
       "Noxus",
       "Bruiser"
     ],
-    "id": "tft16_sion"
+    "id": "tft16_sion",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Briar",
@@ -110,7 +130,9 @@
       "Slayer",
       "Juggernaut"
     ],
-    "id": "tft16_briar"
+    "id": "tft16_briar",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Draven",
@@ -120,7 +142,9 @@
       "Noxus",
       "Quickstriker"
     ],
-    "id": "tft16_draven"
+    "id": "tft16_draven",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Ambessa",
@@ -130,7 +154,9 @@
       "Noxus",
       "Vanquisher"
     ],
-    "id": "tft16_ambessa"
+    "id": "tft16_ambessa",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Zoe",
@@ -139,7 +165,9 @@
     "traits": [
       "Targon"
     ],
-    "id": "tft16_zoe"
+    "id": "tft16_zoe",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Leona",
@@ -148,7 +176,9 @@
     "traits": [
       "Targon"
     ],
-    "id": "tft16_leona"
+    "id": "tft16_leona",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Aphelios",
@@ -157,7 +187,9 @@
     "traits": [
       "Targon"
     ],
-    "id": "tft16_aphelios"
+    "id": "tft16_aphelios",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Taric",
@@ -166,7 +198,9 @@
     "traits": [
       "Targon"
     ],
-    "id": "tft16_taric"
+    "id": "tft16_taric",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_JarvanIV",
@@ -176,7 +210,9 @@
       "Demacia",
       "Defender"
     ],
-    "id": "tft16_jarvaniv"
+    "id": "tft16_jarvaniv",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Sona",
@@ -186,7 +222,9 @@
       "Demacia",
       "Invoker"
     ],
-    "id": "tft16_sona"
+    "id": "tft16_sona",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Garen",
@@ -196,7 +234,9 @@
       "Demacia",
       "Defender"
     ],
-    "id": "tft16_garen"
+    "id": "tft16_garen",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Lux",
@@ -206,7 +246,9 @@
       "Demacia",
       "Arcanist"
     ],
-    "id": "tft16_lux"
+    "id": "tft16_lux",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Anivia",
@@ -216,7 +258,9 @@
       "Freljord",
       "Invoker"
     ],
-    "id": "tft16_anivia"
+    "id": "tft16_anivia",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Ashe",
@@ -226,7 +270,9 @@
       "Freljord",
       "Quickstriker"
     ],
-    "id": "tft16_ashe"
+    "id": "tft16_ashe",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Braum",
@@ -236,7 +282,9 @@
       "Freljord",
       "Warden"
     ],
-    "id": "tft16_braum"
+    "id": "tft16_braum",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Lissandra",
@@ -246,7 +294,9 @@
       "Freljord",
       "Invoker"
     ],
-    "id": "tft16_lissandra"
+    "id": "tft16_lissandra",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Milio",
@@ -256,7 +306,9 @@
       "Ixtal",
       "Invoker"
     ],
-    "id": "tft16_milio"
+    "id": "tft16_milio",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Neeko",
@@ -267,7 +319,9 @@
       "Arcanist",
       "Defender"
     ],
-    "id": "tft16_neeko"
+    "id": "tft16_neeko",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Jinx",
@@ -277,7 +331,9 @@
       "Zaun",
       "Gunslinger"
     ],
-    "id": "tft16_jinx"
+    "id": "tft16_jinx",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Caitlyn",
@@ -287,7 +343,9 @@
       "Piltover",
       "Longshot"
     ],
-    "id": "tft16_caitlyn"
+    "id": "tft16_caitlyn",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Vi",
@@ -298,7 +356,9 @@
       "Zaun",
       "Defender"
     ],
-    "id": "tft16_vi"
+    "id": "tft16_vi",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Seraphine",
@@ -308,7 +368,9 @@
       "Piltover",
       "Disruptor"
     ],
-    "id": "tft16_seraphine"
+    "id": "tft16_seraphine",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Yasuo",
@@ -318,7 +380,9 @@
       "Ionia",
       "Slayer"
     ],
-    "id": "tft16_yasuo"
+    "id": "tft16_yasuo",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Ahri",
@@ -328,7 +392,9 @@
       "Ionia",
       "Arcanist"
     ],
-    "id": "tft16_ahri"
+    "id": "tft16_ahri",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Wukong",
@@ -338,7 +404,9 @@
       "Ionia",
       "Bruiser"
     ],
-    "id": "tft16_wukong"
+    "id": "tft16_wukong",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Shen",
@@ -348,7 +416,9 @@
       "Ionia",
       "Bruiser"
     ],
-    "id": "tft16_shen"
+    "id": "tft16_shen",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Malzahar",
@@ -358,7 +428,9 @@
       "Void",
       "Disruptor"
     ],
-    "id": "tft16_malzahar"
+    "id": "tft16_malzahar",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_RekSai",
@@ -368,7 +440,9 @@
       "Void",
       "Vanquisher"
     ],
-    "id": "tft16_reksai"
+    "id": "tft16_reksai",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_ChoGath",
@@ -378,7 +452,9 @@
       "Void",
       "Juggernaut"
     ],
-    "id": "tft16_chogath"
+    "id": "tft16_chogath",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_KogMaw",
@@ -389,7 +465,9 @@
       "Arcanist",
       "Longshot"
     ],
-    "id": "tft16_kogmaw"
+    "id": "tft16_kogmaw",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Annie",
@@ -399,7 +477,9 @@
       "Dark Child",
       "Arcanist"
     ],
-    "id": "tft16_annie"
+    "id": "tft16_annie",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Ornn",
@@ -409,7 +489,9 @@
       "Blacksmith",
       "Warden"
     ],
-    "id": "tft16_ornn"
+    "id": "tft16_ornn",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Kindred",
@@ -419,7 +501,9 @@
       "Eternal",
       "Quickstriker"
     ],
-    "id": "tft16_kindred"
+    "id": "tft16_kindred",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Azir",
@@ -430,7 +514,9 @@
       "Emperor",
       "Disruptor"
     ],
-    "id": "tft16_azir"
+    "id": "tft16_azir",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Zilean",
@@ -440,7 +526,9 @@
       "Chronokeeper",
       "Invoker"
     ],
-    "id": "tft16_zilean"
+    "id": "tft16_zilean",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Fiddlesticks",
@@ -450,7 +538,9 @@
       "Harvester",
       "Vanquisher"
     ],
-    "id": "tft16_fiddlesticks"
+    "id": "tft16_fiddlesticks",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Shyvana",
@@ -460,7 +550,9 @@
       "Dragonborn",
       "Juggernaut"
     ],
-    "id": "tft16_shyvana"
+    "id": "tft16_shyvana",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Galio",
@@ -470,7 +562,9 @@
       "Demacia",
       "Heroic"
     ],
-    "id": "tft16_galio"
+    "id": "tft16_galio",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_TahmKench",
@@ -481,7 +575,9 @@
       "Glutton",
       "Bruiser"
     ],
-    "id": "tft16_tahmkench"
+    "id": "tft16_tahmkench",
+    "unlockLevel": 0,
+    "unlockDifficulty": 9
   },
   {
     "apiName": "TFT16_Sejuani",
@@ -491,7 +587,9 @@
       "Freljord",
       "Defender"
     ],
-    "id": "tft16_sejuani"
+    "id": "tft16_sejuani",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Sett",
@@ -501,7 +599,9 @@
       "Ionia",
       "The Boss"
     ],
-    "id": "tft16_sett"
+    "id": "tft16_sett",
+    "unlockLevel": 8,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_Brock",
@@ -510,7 +610,9 @@
     "traits": [
       "Ixtal"
     ],
-    "id": "tft16_brock"
+    "id": "tft16_brock",
+    "unlockLevel": 0,
+    "unlockDifficulty": 9
   },
   {
     "apiName": "TFT16_THex",
@@ -521,7 +623,9 @@
       "Piltover",
       "Gunslinger"
     ],
-    "id": "tft16_thex"
+    "id": "tft16_thex",
+    "unlockLevel": 0,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_BelVeth",
@@ -531,7 +635,9 @@
       "Void",
       "Slayer"
     ],
-    "id": "tft16_belveth"
+    "id": "tft16_belveth",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Singed",
@@ -541,7 +647,9 @@
       "Zaun",
       "Juggernaut"
     ],
-    "id": "tft16_singed"
+    "id": "tft16_singed",
+    "unlockLevel": 0,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_AurelionSol",
@@ -551,7 +659,9 @@
       "Star Forger",
       "Targon"
     ],
-    "id": "tft16_aurelionsol"
+    "id": "tft16_aurelionsol",
+    "unlockLevel": 0,
+    "unlockDifficulty": 9
   },
   {
     "apiName": "TFT16_Veigar",
@@ -561,7 +671,9 @@
       "Yordle",
       "Arcanist"
     ],
-    "id": "tft16_veigar"
+    "id": "tft16_veigar",
+    "unlockLevel": 7,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_BaronNashor",
@@ -571,7 +683,9 @@
       "Void",
       "Riftscourge"
     ],
-    "id": "tft16_baronnashor"
+    "id": "tft16_baronnashor",
+    "unlockLevel": 10,
+    "unlockDifficulty": 10
   },
   {
     "apiName": "TFT16_Darius",
@@ -581,7 +695,9 @@
       "Noxus",
       "Defender"
     ],
-    "id": "tft16_darius"
+    "id": "tft16_darius",
+    "unlockLevel": 0,
+    "unlockDifficulty": 2
   },
   {
     "apiName": "TFT16_Yone",
@@ -591,7 +707,9 @@
       "Ionia",
       "Slayer"
     ],
-    "id": "tft16_yone"
+    "id": "tft16_yone",
+    "unlockLevel": 0,
+    "unlockDifficulty": 9
   },
   {
     "apiName": "TFT16_Warwick",
@@ -601,7 +719,9 @@
       "Zaun",
       "Quickstriker"
     ],
-    "id": "tft16_warwick"
+    "id": "tft16_warwick",
+    "unlockLevel": 7,
+    "unlockDifficulty": 3
   },
   {
     "apiName": "TFT16_Fizz",
@@ -611,7 +731,9 @@
       "Bilgewater",
       "Yordle"
     ],
-    "id": "tft16_fizz"
+    "id": "tft16_fizz",
+    "unlockLevel": 7,
+    "unlockDifficulty": 4
   },
   {
     "apiName": "TFT16_Poppy",
@@ -622,7 +744,9 @@
       "Yordle",
       "Juggernaut"
     ],
-    "id": "tft16_poppy"
+    "id": "tft16_poppy",
+    "unlockLevel": 0,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_Kennen",
@@ -633,7 +757,9 @@
       "Yordle",
       "Defender"
     ],
-    "id": "tft16_kennen"
+    "id": "tft16_kennen",
+    "unlockLevel": 0,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_Ziggs",
@@ -644,7 +770,9 @@
       "Yordle",
       "Longshot"
     ],
-    "id": "tft16_ziggs"
+    "id": "tft16_ziggs",
+    "unlockLevel": 9,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_Aatrox",
@@ -655,7 +783,9 @@
       "World Ender",
       "Slayer"
     ],
-    "id": "tft16_aatrox"
+    "id": "tft16_aatrox",
+    "unlockLevel": 8,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Volibear",
@@ -665,7 +795,9 @@
       "Freljord",
       "Bruiser"
     ],
-    "id": "tft16_volibear"
+    "id": "tft16_volibear",
+    "unlockLevel": 8,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Jhin",
@@ -675,7 +807,9 @@
       "Ionia",
       "Gunslinger"
     ],
-    "id": "tft16_jhin"
+    "id": "tft16_jhin",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Sylas",
@@ -686,7 +820,9 @@
       "Arcanist",
       "Defender"
     ],
-    "id": "tft16_sylas"
+    "id": "tft16_sylas",
+    "unlockLevel": 0,
+    "unlockDifficulty": 10
   },
   {
     "apiName": "TFT16_Ryze",
@@ -695,7 +831,9 @@
     "traits": [
       "Rune Mage"
     ],
-    "id": "tft16_ryze"
+    "id": "tft16_ryze",
+    "unlockLevel": 9,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_Nidalee",
@@ -705,7 +843,9 @@
       "Ixtal",
       "Huntress"
     ],
-    "id": "tft16_nidalee"
+    "id": "tft16_nidalee",
+    "unlockLevel": 0,
+    "unlockDifficulty": 6
   },
   {
     "apiName": "TFT16_Tryndamere",
@@ -715,7 +855,9 @@
       "Freljord",
       "Slayer"
     ],
-    "id": "tft16_tryndamere"
+    "id": "tft16_tryndamere",
+    "unlockLevel": 0,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_RiftHerald",
@@ -725,7 +867,9 @@
       "Void",
       "Bruiser"
     ],
-    "id": "tft16_riftherald"
+    "id": "tft16_riftherald",
+    "unlockLevel": 0,
+    "unlockDifficulty": 6
   },
   {
     "apiName": "TFT16_Mel",
@@ -735,7 +879,9 @@
       "Noxus",
       "Disruptor"
     ],
-    "id": "tft16_mel"
+    "id": "tft16_mel",
+    "unlockLevel": 0,
+    "unlockDifficulty": 7
   },
   {
     "apiName": "TFT16_Graves",
@@ -745,7 +891,9 @@
       "Bilgewater",
       "Gunslinger"
     ],
-    "id": "tft16_graves"
+    "id": "tft16_graves",
+    "unlockLevel": 0,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_Skarner",
@@ -754,7 +902,9 @@
     "traits": [
       "Ixtal"
     ],
-    "id": "tft16_skarner"
+    "id": "tft16_skarner",
+    "unlockLevel": 7,
+    "unlockDifficulty": 3
   },
   {
     "apiName": "TFT16_Diana",
@@ -763,7 +913,9 @@
     "traits": [
       "Targon"
     ],
-    "id": "tft16_diana"
+    "id": "tft16_diana",
+    "unlockLevel": 6,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_Kaisa",
@@ -774,7 +926,9 @@
       "Void",
       "Longshot"
     ],
-    "id": "tft16_kaisa"
+    "id": "tft16_kaisa",
+    "unlockLevel": 7,
+    "unlockDifficulty": 2
   },
   {
     "apiName": "TFT16_Renekton",
@@ -783,7 +937,9 @@
     "traits": [
       "Shurima"
     ],
-    "id": "tft16_renekton"
+    "id": "tft16_renekton",
+    "unlockLevel": 0,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Nasus",
@@ -792,7 +948,9 @@
     "traits": [
       "Shurima"
     ],
-    "id": "tft16_nasus"
+    "id": "tft16_nasus",
+    "unlockLevel": 0,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Xerath",
@@ -802,7 +960,9 @@
       "Shurima",
       "Ascendant"
     ],
-    "id": "tft16_xerath"
+    "id": "tft16_xerath",
+    "unlockLevel": 0,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Thresh",
@@ -812,7 +972,9 @@
       "Shadow Isles",
       "Warden"
     ],
-    "id": "tft16_thresh"
+    "id": "tft16_thresh",
+    "unlockLevel": 0,
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Gwen",
@@ -822,7 +984,9 @@
       "Shadow Isles",
       "Disruptor"
     ],
-    "id": "tft16_gwen"
+    "id": "tft16_gwen",
+    "unlockLevel": 0,
+    "unlockDifficulty": 4
   },
   {
     "apiName": "TFT16_Kalista",
@@ -832,7 +996,9 @@
       "Shadow Isles",
       "Vanquisher"
     ],
-    "id": "tft16_kalista"
+    "id": "tft16_kalista",
+    "unlockLevel": 0,
+    "unlockDifficulty": 5
   },
   {
     "apiName": "TFT16_Leblanc",
@@ -842,7 +1008,9 @@
       "Noxus",
       "Invoker"
     ],
-    "id": "tft16_leblanc"
+    "id": "tft16_leblanc",
+    "unlockLevel": 0,
+    "unlockDifficulty": 2
   },
   {
     "apiName": "TFT16_Viego",
@@ -852,7 +1020,9 @@
       "Shadow Isles",
       "Quickstriker"
     ],
-    "id": "tft16_viego"
+    "id": "tft16_viego",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Ekko",
@@ -862,7 +1032,9 @@
       "Zaun",
       "Disruptor"
     ],
-    "id": "tft16_ekko"
+    "id": "tft16_ekko",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Bard",
@@ -871,7 +1043,9 @@
     "traits": [
       "Caretaker"
     ],
-    "id": "tft16_bard"
+    "id": "tft16_bard",
+    "unlockLevel": 0,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_Vayne",
@@ -881,7 +1055,9 @@
       "Demacia",
       "Longshot"
     ],
-    "id": "tft16_vayne"
+    "id": "tft16_vayne",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Yunara",
@@ -891,7 +1067,9 @@
       "Ionia",
       "Quickstriker"
     ],
-    "id": "tft16_yunara"
+    "id": "tft16_yunara",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Swain",
@@ -902,7 +1080,9 @@
       "Arcanist",
       "Juggernaut"
     ],
-    "id": "tft16_swain"
+    "id": "tft16_swain",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_XinZhao",
@@ -913,7 +1093,9 @@
       "Ionia",
       "Warden"
     ],
-    "id": "tft16_xinzhao"
+    "id": "tft16_xinzhao",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Yorick",
@@ -923,7 +1105,9 @@
       "Shadow Isles",
       "Warden"
     ],
-    "id": "tft16_yorick"
+    "id": "tft16_yorick",
+    "unlockLevel": 0,
+    "unlockDifficulty": 3
   },
   {
     "apiName": "TFT16_Orianna",
@@ -933,7 +1117,9 @@
       "Piltover",
       "Invoker"
     ],
-    "id": "tft16_orianna"
+    "id": "tft16_orianna",
+    "unlockLevel": 0,
+    "unlockDifficulty": 1
   },
   {
     "apiName": "TFT16_Qiyana",
@@ -943,7 +1129,9 @@
       "Ixtal",
       "Slayer"
     ],
-    "id": "tft16_qiyana"
+    "id": "tft16_qiyana",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Loris",
@@ -953,7 +1141,9 @@
       "Piltover",
       "Warden"
     ],
-    "id": "tft16_loris"
+    "id": "tft16_loris",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Blitzcrank",
@@ -963,7 +1153,9 @@
       "Zaun",
       "Juggernaut"
     ],
-    "id": "tft16_blitzcrank"
+    "id": "tft16_blitzcrank",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_DrMundo",
@@ -973,7 +1165,9 @@
       "Zaun",
       "Bruiser"
     ],
-    "id": "tft16_drmundo"
+    "id": "tft16_drmundo",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Zaahen",
@@ -983,7 +1177,9 @@
       "Darkin",
       "Immortal"
     ],
-    "id": "tft16_zaahen"
+    "id": "tft16_zaahen",
+    "unlockLevel": 0,
+    "unlockDifficulty": 9
   },
   {
     "apiName": "TFT16_Lucian",
@@ -993,7 +1189,9 @@
       "Soulbound",
       "Gunslinger"
     ],
-    "id": "tft16_lucian"
+    "id": "tft16_lucian",
+    "unlockLevel": 0,
+    "unlockDifficulty": 0
   },
   {
     "apiName": "TFT16_Kobuko",
@@ -1004,6 +1202,8 @@
       "Bruiser",
       "Invoker"
     ],
-    "id": "tft16_kobuko"
+    "id": "tft16_kobuko",
+    "unlockLevel": 7,
+    "unlockDifficulty": 4
   }
 ]

@@ -4,4 +4,6 @@ export interface Champion {
     cost: number;    // 1
     traits: string[]; // ["Yordle", "Arcanist"]
     id: string;      // "tft16_lulu"
+    unlockLevel?: number;
+    unlockDifficulty?: number;
 }

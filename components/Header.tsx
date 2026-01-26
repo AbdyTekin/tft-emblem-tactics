@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { useTFT } from '@/context/language-context';
 import { useTranslations } from 'next-intl';
 
