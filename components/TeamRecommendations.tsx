@@ -137,8 +137,8 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                         <div className="w-[1px] h-4 bg-white/10 mx-1"></div>
                                     </>
                                 )}
-                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('score')}</span>
-                                <span className="text-xl font-black text-white tracking-tight">{team.score}</span>
+                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('difficulty')}</span>
+                                <span className="text-xl font-black text-white tracking-tight">{team.difficulty}</span>
                             </div>
                         </div>
 
