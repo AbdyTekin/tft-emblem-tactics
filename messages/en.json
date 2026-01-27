@@ -6,7 +6,7 @@
   "reset": "RESET",
   "ready_to_build": "Ready to Build",
   "select_emblems_msg": "Select your emblems from the sidebar. The algorithm will generate the {level}-unit team compositions.",
-  "score": "SCORE",
+  "difficulty": "DIFFICULTY",
   "level": "LEVEL",
   "strategy": "STRATEGY",
   "strategy_region_ryze": "REGION RYZE",

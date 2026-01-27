@@ -6,7 +6,7 @@
   "reset": "SIFIRLA",
   "ready_to_build": "Oluşturmaya Hazır",
   "select_emblems_msg": "Yan menüden amblemlerini seç. Algoritma, {level} birimlik takım kompozisyonlarını oluşturacaktır.",
-  "score": "PUAN",
+  "difficulty": "ZORLUK",
   "level": "SEVİYE",
   "strategy": "STRATEJİ",
   "strategy_region_ryze": "BÖLGE RYZE",
