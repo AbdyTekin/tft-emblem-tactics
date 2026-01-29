@@ -10,7 +10,7 @@ export default function Header() {
     return (
         <header className="w-full border-b border-white/10 bg-black/20 backdrop-blur-md">
             <div className="container mx-auto max-w-7xl px-6 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 select-none">
                     <div className="size-8 rounded-lg bg-indigo-500/20 flex items-center justify-center border border-indigo-500/50">
                         <span className="font-bold text-indigo-400">TFT</span>
                     </div>
