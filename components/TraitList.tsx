@@ -51,9 +51,9 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                                     e.preventDefault();
                                     removeEmblem(trait, e);
                                 }}
-                                className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 group flex items-center justify-between border ${isSelected
-                                    ? 'bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)]'
-                                    : 'bg-white/5 hover:bg-white/10 border-white/5 hover:border-white/10'
+                                className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-200 group flex items-center justify-between border cursor-pointer ${isSelected
+                                    ? 'bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.2)] hover:bg-indigo-600/30'
+                                    : 'bg-white/5 hover:bg-indigo-500/20 border-white/5 hover:border-indigo-500/30'
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
