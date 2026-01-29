@@ -32,7 +32,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                     </button>
                 )}
             </div>
-            <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto pr-1 [&>div]:!h-auto lg:[&>div]:!h-full">
+            <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto [&>div]:!h-auto lg:[&>div]:!h-full">
                 <div className="space-y-1">
                     {availableTraits.map((trait) => {
                         const count = selectedEmblems.filter(e => e === trait).length;
