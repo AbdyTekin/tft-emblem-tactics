@@ -52,7 +52,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     </button>
 
                     {/* Level Display */}
-                    <div className="flex-1 h-10 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.15)] flex items-center justify-center border border-indigo-500/50">
+                    <div className="flex-1 h-10 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.1)] flex items-center justify-center border border-indigo-500/50">
                         <div className="absolute inset-0 bg-[url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-tft/global/default/tft_t11_subtexture_atlas_1.png')] opacity-10 mix-blend-overlay bg-cover" />
 
                         <div className="relative flex flex-col items-center z-10">
