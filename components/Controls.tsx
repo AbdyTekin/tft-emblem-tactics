@@ -111,7 +111,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                             onClick={() => handleStrategyChange(option.id as SolverStrategy)}
                             className={`cursor-pointer relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
-                                    ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.15)]'
+                                    ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)]'
                                     : 'bg-black/20 border-white/5 hover:border-white/7 hover:bg-white/2'
                                 }
               `}
