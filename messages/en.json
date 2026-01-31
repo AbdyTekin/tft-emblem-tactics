@@ -64,5 +64,9 @@
     "World Ender": "World Ender",
     "Yordle": "Yordle",
     "Zaun": "Zaun"
+  },
+  "metadata": {
+    "title": "TFT Emblem Tactics",
+    "description": "Optimize your TFT team comps with Emblem Tactics. Calculate the best combinations based on your emblems and strategies."
   }
 }

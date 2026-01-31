@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useDeferredValue } from 'react';
-import { LanguageProvider, useTFT } from '@/context/language-context';
+import { useTFT } from '@/context/language-context';
 import { solveTeamComp, SolverStrategy } from '@/lib/solver';
 import { getEmblemTraits } from '@/lib/trait-rules';
 import Header from '@/components/Header';
@@ -99,9 +99,5 @@ function MainLayout() {
 }
 
 export default function Page() {
-  return (
-    <LanguageProvider>
-      <MainLayout />
-    </LanguageProvider>
-  );
+  return <MainLayout />;
 }
