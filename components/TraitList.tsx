@@ -23,14 +23,16 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                 <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     {t('traits')}
                 </h2>
-                {selectedEmblems.length > 0 && (
-                    <button
-                        onClick={resetEmblems}
-                        className="text-[10px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase border border-red-500/30 px-2 py-0.5 rounded-full hover:bg-red-500/10"
-                    >
-                        {t('reset')}
-                    </button>
-                )}
+                <button
+                    onClick={resetEmblems}
+                    disabled={selectedEmblems.length === 0}
+                    className={`text-[11px] font-bold text-red-400 hover:text-red-300 transition-all uppercase border border-red-500/30 px-2 rounded-full hover:bg-red-500/10 cursor-pointer ${selectedEmblems.length > 0
+                        ? 'opacity-100 pointer-events-auto transform translate-y-0'
+                        : 'opacity-0 pointer-events-none transform -translate-y-1'
+                        }`}
+                >
+                    {t('reset')}
+                </button>
             </div>
             <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto [&>div]:!h-auto lg:[&>div]:!h-full">
                 <div className="space-y-1">
