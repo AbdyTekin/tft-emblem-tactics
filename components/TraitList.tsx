@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import TraitIcon from '@/components/TraitIcon';
 import ScrollArea from '@/components/ScrollArea';
 import { useTranslations } from 'next-intl';
 

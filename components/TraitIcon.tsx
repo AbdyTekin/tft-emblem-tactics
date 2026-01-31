@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const TraitIcon = ({ trait, className }: { trait: string, className?: string }) => {
     const normalizedTrait = trait.trim().toLowerCase().replace(/[^a-z0-9]/g, '');

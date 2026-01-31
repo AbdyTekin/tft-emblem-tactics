@@ -1,5 +1,5 @@
 import { Champion } from '@/types/tft';
-import { TRAIT_RULES, TraitRule } from '@/lib/trait-rules';
+import { TRAIT_RULES } from '@/lib/trait-rules';
 
 /**
  * Interface representing a generated team composition.

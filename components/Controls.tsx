@@ -10,8 +10,6 @@ interface ControlsProps {
     setStrategy: (strategy: SolverStrategy) => void;
 }
 
-
-
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
     const t = useTranslations();
 
