@@ -1,6 +1,7 @@
 "use client";
 
 import TraitIcon from '@/components/TraitIcon';
+import TeamSkeleton from '@/components/TeamSkeleton';
 import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 import { useTranslations } from 'next-intl';
@@ -30,11 +31,16 @@ interface TeamRecommendationsProps {
     teamRecommendations: TeamComp[];
     selectedEmblems: string[];
     level: number;
+    isGenerating: boolean;
 }
 
-export default function TeamRecommendations({ teamRecommendations, selectedEmblems, level }: TeamRecommendationsProps) {
+export default function TeamRecommendations({ teamRecommendations, selectedEmblems, level, isGenerating }: TeamRecommendationsProps) {
     const t = useTranslations();
     const tTraits = useTranslations('Traits');
+
+    if (isGenerating) {
+        return <TeamSkeleton />;
+    }
 
     if (selectedEmblems.length === 0) {
         return (

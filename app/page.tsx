@@ -86,6 +86,7 @@ function MainLayout() {
                   teamRecommendations={teamRecommendations}
                   selectedEmblems={deferredSelectedEmblems}
                   level={deferredLevel}
+                  isGenerating={selectedEmblems !== deferredSelectedEmblems || level !== deferredLevel || strategy !== deferredStrategy}
                 />
               </div>
             </ScrollArea>
