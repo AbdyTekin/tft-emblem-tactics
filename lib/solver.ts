@@ -1,10 +1,6 @@
 import { Champion } from '@/types/tft';
-import { TRAIT_RULES } from '@/lib/trait-rules';
+import { TRAIT_RULES, TraitRule } from '@/lib/trait-rules';
 
-/**
- * Interface representing a generated team composition.
- * Includes the list of champions, a difficulty score, active synergies, and strategy-specific metrics.
- */
 export interface TeamComp {
     champions: Champion[];
     difficulty: number;
@@ -13,93 +9,332 @@ export interface TeamComp {
     strategyName: string;
 }
 
-/**
- * Available solver strategies:
- * - 'RegionRyze': Prioritizes activating as many Region traits as possible.
- * - 'BronzeLife': Prioritizes activating as many "Bronze" (first tier) traits as possible.
- */
 export type SolverStrategy = 'RegionRyze' | 'BronzeLife';
 
+// Global safety counter to prevent infinite loops/browser crashes
+let RECURSION_COUNT = 0;
+const MAX_RECURSION_LIMIT = 50000;
+
 /**
- * Calculates the difficulty (score) of a specific team composition based on active traits and the selected strategy.
- * 
- * Logic Overview:
- * 1. Counts all traits provided by the champions + active emblems.
- * 2. Iterates through trait counts to determine active synergies (breakpoints).
- * 3. Base 'difficulty' is the total cost of champions.
- * 4. Adds points to 'difficulty' for every active synergy level.
- * 5. Applies Strategy-specific boosts:
- *    - RegionRyze: Counts active Region traits. Adds massive score boost per Region.
- *    - BronzeLife: Counts active Bronze-tier traits (excluding Targon). Adds massive score boost per Bronze trait.
- * 
- * @param champions The list of champions in the team
- * @param activeEmblems Map of active emblems (Trait Name -> Count)
- * @param strategy The current solving strategy
- * @returns Object containing the total difficulty, list of active synergies, and strategy metrics.
+ * Calculates the number of slots a champion takes.
+ * - Galio: 0 slots
+ * - Baron Nashor: 2 slots
+ * - Others: 1 slot
  */
-function calculateDifficulty(
+function getUnitSlots(champion: Champion): number {
+    if (champion.name === "Galio") return 0;
+    if (champion.name === "Baron Nashor") return 2;
+    return 1;
+}
+
+/**
+ * Calculates the total slots used by a list of champions.
+ */
+function calculateUsedSlots(team: Champion[]): number {
+    return team.reduce((acc, champ) => acc + getUnitSlots(champ), 0);
+}
+
+/**
+ * Helper to calculate current trait counts for a team + emblems.
+ * Handles Baron Nashor's special rule (+2 to Void).
+ */
+function calculateTraitCounts(
     champions: Champion[],
-    activeEmblems: Record<string, number>,
-    strategy: SolverStrategy
-): { difficulty: number; synergies: string[], strategyValue: number, strategyName: string } {
-    const traitCounts: Record<string, number> = { ...activeEmblems };
+    activeEmblems: Record<string, number>
+): Record<string, number> {
+    const counts: Record<string, number> = { ...activeEmblems };
 
-    let totalCost = 0;
-
-    // Sum up trait counts and total team cost
     for (const champ of champions) {
         for (const trait of champ.traits) {
-            traitCounts[trait] = (traitCounts[trait] || 0) + 1;
+            let increment = 1;
+            // distinct logic for Baron Nashor on Void trait
+            if (trait === 'Void' && champ.name === 'Baron Nashor') {
+                increment = 2;
+            }
+            counts[trait] = (counts[trait] || 0) + increment;
         }
-        totalCost += champ.cost;
     }
+    return counts;
+}
 
-    const activeSynergies: string[] = [];
-    let bronzeLifeCount = 0;
-    let regionTraitCount = 0;
+/**
+ * Determines candidates for the next slot based on the strategy and current team state.
+ */
+function getCandidates(
+    currentTeam: Champion[],
+    activeEmblems: Record<string, number>,
+    allChampions: Champion[],
+    strategy: SolverStrategy
+): Champion[] {
+    const traitCounts = calculateTraitCounts(currentTeam, activeEmblems);
 
-    // Base difficulty derived from total team cost (higher cost = generally better/harder to hit)
-    let difficulty = totalCost;
+    // Filter out champions already in the team (assuming unique units, though TFT allows duplicates usually we solve for unique)
+    // The prompt implies "pick unit", usually implies unique roster for solver.
+    const currentNames = new Set(currentTeam.map(c => c.name));
 
+    // Special Rule: Never pick Galio or Baron Nashor as CANDIDATE.
+    // They are only included if already selected/filtered.
+    const availablePool = allChampions.filter(c =>
+        !currentNames.has(c.name) &&
+        c.name !== "Galio" &&
+        c.name !== "Baron Nashor"
+    );
+
+    if (availablePool.length === 0) return [];
+
+    // --- STRATEGY LOGIC ---
+
+    // 1. Identify "Active but Not Opened" Traits
+    // "Active" here means count > 0. "Opened" means count >= next breakpoint?
+    // User phrasing: "active we have but not opened for example 1 piltover(first breakpoint at 2)"
+    // This implies: Count > 0 AND Count < Min_Breakpoint. OR Count is between breakpoints.
+    // Let's interpret "not opened" as: The current count does NOT hit a breakpoint, but IS > 0.
+    // OR: The user might mean "we have the trait (count>0), but we haven't hit the NEXT desired breakpoint".
+    // Given the example "1 piltover (first breakpoint at 2)", it strongly implies "Count > 0 but currently no bonus active".
+    // However, "1 noxus(first breakpoint at 3)" is also given.
+    // So logic: Find traits where logic: `count > 0` AND `!isAtBreakpoint(count)`.
+
+    const unbalancedTraits: string[] = [];
     for (const [trait, count] of Object.entries(traitCounts)) {
-        if (count === 0) continue;
-
+        if (count <= 0) continue;
         const rule = TRAIT_RULES[trait];
         if (!rule) continue;
 
-        // Determine if the trait is active and at which breakpoint
-        let activeBreakpointIndex = -1;
-        for (let i = 0; i < rule.breakpoints.length; i++) {
-            if (count >= rule.breakpoints[i]) {
-                activeBreakpointIndex = i;
-            } else {
-                break;
+        // Exclude Targon from the "Region/Class" logic if specifically requested?
+        // User said: "(don't include 'targon' region trait)" for Bronze Life active check.
+        // But for Region Ryze? "active we have but not opened" - doesn't exclude Targon explicitly there.
+        // But "if these 2 condition are don't met and we don't have 'Targon' trait" implies Targon is handled later.
+        // Let's follow strict rule:
+        // Region Ryze P1: "all champions that has region trait we have but not opened"
+        // Bronze Life P1: "all champions that has region or class trait we have but not opened"
+
+        let shouldCheck = false;
+        if (strategy === 'RegionRyze' && rule.type === 'Region') shouldCheck = true;
+        if (strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class')) {
+            if (trait !== 'Targon') shouldCheck = true;
+        }
+
+        if (shouldCheck) {
+            // Check if "Opened" (At a breakpoint)
+            let isOpened = false;
+            // Iterate breakpoints descending or check if exact match? 
+            // Usually "Opened" means count >= breakpoint[0].
+            // But the text says "1 piltover (first breakpoint at 2)".
+            // This implies "Not Opened" = "Count < First Breakpoint" OR "Count is strictly between breakpoints"?
+            // "if all of our traits are active" -> This usually means consistent/at breakpoint.
+            // So "Not Opened" = Not at a breakpoint.
+            // We want to fix traits that are "dangling".
+            // e.g. Have 1/3 Noxus. We want Noxus units.
+            // e.g. Have 4/5 Bilgewater. We want Bilgewater.
+            // e.g. Have 3/3 Noxus. We do NOT need Noxus (it is Actve/Opened).
+
+            // Check if current count hits any breakpoint exactly or exceeds max?
+            // Actually, usually > breakpoint is fine.
+            // Let's assume "Opened" means "Is currently providing a bonus".
+            // i.e. count >= breakpoints[0].
+            // BUT "1 piltover (BP 2)" -> Active=0.
+            // What if we have 2/3 Noxus? BP is 3. Active=0.
+            // Only non-active?
+            // "if all of our traits are active" (Condition 2) implies Condition 1 is for inactive traits.
+            // So: Traits where `count > 0` but `activeTier == -1`.
+
+            let activeTier = -1;
+            for (let i = 0; i < rule.breakpoints.length; i++) {
+                if (count >= rule.breakpoints[i]) activeTier = i;
+            }
+
+            // If activeTier is -1, it is DEFINITELY "not opened".
+            // What if we have 4/6 Noxus? ActiveTier = 0 (3-5).
+            // Is that "Active"? User says "if all of our traits are active".
+            // I will interpret "Active" as "At a breakpoint".
+            // But usually intermediate states (4/6) are considered "Active" (Tier 1).
+            // The prompt "1 piltover(first breakpoint at 2)" is the key.
+            // This is a case where Tier is NONE.
+
+            // Let's stick to: Priority is to activate traits that are currently providing NOTHING (Tier -1).
+            // Or does proper "Solver" logic want to reach NEXT breakpoint?
+            // "1 piltover" -> Needs +1.
+            // user: "all champions that has region trait we have but not opened"
+            // I will strictly prioritize traits with `count > 0` but `activeTier === -1`.
+
+            if (activeTier === -1) {
+                unbalancedTraits.push(trait);
+            }
+        }
+    }
+
+    // PRIORITY 1: Fix unbalanced/unopened traits
+    if (unbalancedTraits.length > 0) {
+        // Pick all champions that have at least one of these traits
+        const p1Candidates = availablePool.filter(c =>
+            c.traits.some(t => unbalancedTraits.includes(t))
+        );
+        if (p1Candidates.length > 0) return p1Candidates;
+    }
+
+    // PRIORITY 2: Expand with new distinct traits
+    // Condition: "if all of our traits are active" (implied by reaching here if P1 found nothing).
+    // "select all champions which has X distinct [type] traits we dont have"
+
+    const ourTraits = new Set(Object.keys(traitCounts).filter(t => traitCounts[t] > 0));
+    const p2Candidates = availablePool.filter(c => {
+        let distinctCount = 0;
+        for (const t of c.traits) {
+            if (ourTraits.has(t)) continue; // Already have this trait
+            const rule = TRAIT_RULES[t];
+            if (!rule) continue;
+
+            if (strategy === 'RegionRyze') {
+                if (rule.type === 'Region') distinctCount++;
+            } else if (strategy === 'BronzeLife') {
+                if (rule.type === 'Region' || rule.type === 'Class') {
+                    if (t !== 'Targon') distinctCount++;
+                }
             }
         }
 
-        if (activeBreakpointIndex !== -1) {
+        const threshold = strategy === 'RegionRyze' ? 2 : 3;
+        return distinctCount >= threshold;
+    });
+
+    if (p2Candidates.length > 0) return p2Candidates;
+
+    // PRIORITY 3: Targon Check
+    // "if these 2 condition are don't met and we don't have 'Targon' trait we will pick all targon characters"
+    if (!traitCounts['Targon'] || traitCounts['Targon'] === 0) {
+        const targonCandidates = availablePool.filter(c => c.traits.includes('Targon'));
+        // Note: Strategy BronzeLife P2 excludes Targon from counting, but P3 explicitly checks Targon presence.
+        if (targonCandidates.length > 0) return targonCandidates;
+    }
+
+    // PRIORITY 4: Completely New/Disjoint Units
+    // "pick all champions which don't have any of our active traits"
+    const p4Candidates = availablePool.filter(c => {
+        // Check if champion has ANY trait that we ALREADY have active
+        const hasOverlap = c.traits.some(t => ourTraits.has(t));
+        return !hasOverlap;
+    });
+
+    return p4Candidates;
+}
+
+
+/**
+ * Core recursive solver function.
+ */
+function buildTeamRecursively(
+    currentTeam: Champion[],
+    activeEmblems: Record<string, number>,
+    allChampions: Champion[],
+    strategy: SolverStrategy,
+    maxSlots: number,
+    results: TeamComp[]
+): void {
+    RECURSION_COUNT++;
+    if (RECURSION_COUNT > MAX_RECURSION_LIMIT) return;
+
+    const usedSlots = calculateUsedSlots(currentTeam);
+
+    // BASE CASE: Team is full or over capacity
+    // Note: If we are slightly over capacity due to a big unit (e.g. Baron adding 2 when we had 1 slot left),
+    // we should strictly check. 
+    // Usually solving for exactly N or <= N? 
+    // "every selected champion will reduce team size by 1... exceptions..."
+    // We want to fill the team.
+    if (usedSlots >= maxSlots) {
+        // If we exactly hit maxSlots (or exceeded it meaningfully? UI usually prevents adding if slots full,
+        // but solver should probably just stop when >= maxSlots).
+        // Calculate score and add to results.
+        const comp = createTeamComp(currentTeam, activeEmblems, strategy);
+        results.push(comp);
+        return;
+    }
+
+    // RECURSIVE STEP
+    const candidates = getCandidates(currentTeam, activeEmblems, allChampions, strategy);
+
+    // If no candidates found (Search exhausted or logic stuck), just return result as is?
+    // Or is it a dead end? 
+    // We should probably save what we have if it's "plausible" but maybe not if it's too small?
+    // Let's assume we try to fill. If we can't fill (candidates empty), we stop.
+    if (candidates.length === 0) {
+        // Maybe add "partial" team? For now, let's only add full teams if possible.
+        // But if we can't find candidates, we basically stuck.
+        // Let's not add partial teams to the specific result list unless it's close?
+        // Actually, "never pick... Galio... as candidate".
+        // If we have slots but no candidates match criteria, strictly speaking we have no valid next move.
+        return;
+    }
+
+    // Iterate through candidates.
+    // Optimization: If there are MANY candidates (e.g. Priority 4 might return 20 units),
+    // we might need to prune or branch carefully.
+    // DFS.
+
+    // Sort candidates to try "best" ones first?
+    // Cost is usually a good heuristic for "good" units.
+    const sortedCandidates = candidates.sort((a, b) => b.cost - a.cost);
+
+    for (const candidate of sortedCandidates) {
+        // Pruning: Do not add if it exceeds slot limit excessively?
+        // (e.g. 8/9 slots, add Baron (+2) -> 10/9. Is this allowed? In TFT usually no unless specific augment.)
+        // We will assume hard cap.
+        if (usedSlots + getUnitSlots(candidate) > maxSlots) continue;
+
+        currentTeam.push(candidate);
+        buildTeamRecursively(currentTeam, activeEmblems, allChampions, strategy, maxSlots, results);
+        currentTeam.pop();
+
+        if (RECURSION_COUNT > MAX_RECURSION_LIMIT) break;
+    }
+}
+
+function createTeamComp(
+    champions: Champion[],
+    activeEmblems: Record<string, number>,
+    strategy: SolverStrategy
+): TeamComp {
+    const traitCounts = calculateTraitCounts(champions, activeEmblems);
+    const activeSynergies: string[] = [];
+    let difficulty = 0;
+
+    // Scoring Logic
+    let regionCount = 0;
+    let bronzeCount = 0;
+    let totalCost = champions.reduce((sum, c) => sum + c.cost, 0);
+
+    // Base difficulty = cost (higher cost units -> harder/better)
+    difficulty += totalCost;
+
+    for (const [trait, count] of Object.entries(traitCounts)) {
+        if (count <= 0) continue;
+        const rule = TRAIT_RULES[trait];
+        if (!rule) continue;
+
+        let activeTier = -1;
+        for (let i = 0; i < rule.breakpoints.length; i++) {
+            if (count >= rule.breakpoints[i]) activeTier = i;
+        }
+
+        if (activeTier >= 0) {
             activeSynergies.push(`${trait} (${count})`);
+            difficulty += (activeTier + 1) * 10; // Bonus for active traits
 
-            // General difficulty bump for any active trait (avoids empty trait synergies)
-            difficulty += (activeBreakpointIndex + 1) * 5;
-
-            // --- STRATEGY SPECIFIC LOGIC ---
-
-            // Strategy: Region Ryze 
-            // Goal: Maximize the number of distinct Region-type traits active.
-            if (rule.type === 'Region') {
-                regionTraitCount++;
+            // Strategy Metrics
+            if (strategy === 'RegionRyze' && rule.type === 'Region') {
+                regionCount++;
             }
-
-            // Strategy: Bronze for Life
-            // Goal: Maximize the number of traits that are exactly/at least at their first ("Bronze") breakpoint.
-            // "Bronze" usually refers to the lowest tier of a trait (often 1 or 2 units).
-            // Logic: Filter for Region or Class traits (Origins often unique).
-            // Targon is excluded per specific user rule (often effectively a unique/gold trait).
-            if (trait !== 'Targon' && (rule.type === 'Region' || rule.type === 'Class')) {
-                if (activeBreakpointIndex >= 0) {
-                    bronzeLifeCount++;
-                }
+            if (strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class')) {
+                if (trait !== 'Targon') bronzeCount++;
+                // Wait, "active bronze trait"? 
+                // "if all of our traits are active check... 3 distinct... dont have"
+                // The strategy metric for sorting should probably reflect the *Goal*.
+                // RegionRyze Goal: Maximize Region traits? 
+                // No, the goal was "Region Ryze strategy" logic for building.
+                // The *result* should be judged by how well it fits.
+                // Assuming we want to maximize the "Strategy Value".
+                // RegionRyze Value = # of Active Region Traits?
+                // BronzeLife Value = # of Active Bronze (Tier 1+) Traits?
             }
         }
     }
@@ -107,169 +342,91 @@ function calculateDifficulty(
     let strategyValue = 0;
     let strategyName = '';
 
-    // Apply massive weight to the prioritized metric to ensure it dominates sorting.
-    // e.g., A team with 5 Regions (Score 5000+) will always beat a team with 4 Regions (Score 4000+),
-    // regardless of the secondary 'difficulty' score.
     if (strategy === 'RegionRyze') {
-        strategyValue = regionTraitCount;
-        strategyName = 'active_region_traits';
-        difficulty += regionTraitCount * 1000;
-    } else if (strategy === 'BronzeLife') {
-        strategyValue = bronzeLifeCount;
-        strategyName = 'active_bronze_traits';
-        difficulty += bronzeLifeCount * 1000;
+        strategyValue = regionCount;
+        strategyName = 'Active Regions';
+        difficulty += regionCount * 500;
+    } else {
+        strategyValue = bronzeCount;
+        strategyName = 'Active Class/Regions';
+        difficulty += bronzeCount * 500;
     }
 
-    return { difficulty, synergies: activeSynergies.sort(), strategyValue, strategyName };
+    // Penalize empty slots?
+    // The recursive solver stops when full, so assumed full.
+
+    return {
+        champions: [...champions],
+        difficulty,
+        activeSynergies: activeSynergies.sort(),
+        strategyValue,
+        strategyName
+    };
 }
 
-/**
- * Recursive Depth-First Search to generate combinations of champions.
- * 
- * @param pool The filtered list of candidate champions.
- * @param k The target team size (e.g., Level 8 = 8 champions).
- * @param start Current index in the pool to avoid duplicates/permutations (combinations only).
- * @param current Current array of selected champions.
- * @param results Accumulator for valid full teams.
- * @returns Array of champion arrays.
- */
-function getCombinations(
-    pool: Champion[],
-    k: number,
-    start: number = 0,
-    current: Champion[] = [],
-    results: Champion[][] = []
-): Champion[][] {
-    // Safety Break: Prevent browser freeze if combinations explode. 
-    // 50k is selected as a safe upper bound for main-thread JS execution (~50-100ms).
-    if (results.length > 50000) return results;
 
-    if (current.length === k) {
-        results.push([...current]);
-        return results;
-    }
-
-    for (let i = start; i < pool.length; i++) {
-        // Optimization: Pruning.
-        // If the remaining champs in pool are fewer than what we need to fill 'k', stop.
-        if (pool.length - i < k - current.length) break;
-
-        current.push(pool[i]);
-        getCombinations(pool, k, i + 1, current, results);
-        current.pop();
-    }
-    return results;
-}
-
-/**
- * Main Solver Function.
- * Generates optimal team compositions based on active champions (filtering), emblems, level, and strategy.
- * 
- * Process:
- * 1. Filter & Sort Pool: Selects the top ~20 most relevant champions from the total set (60+).
- *    Relevance is determined by cost and strategy alignment (e.g. has Region trait).
- * 2. Generate Combinations: Creates all valid teams of size 'level' from the reduced pool.
- * 3. Score Teams: Calculates difficulty/score for every generated team.
- * 4. Sort & Return: Returns the top 20 teams.
- * 
- * @param activeChampions The entire list of available champions in the set.
- * @param activeEmblems Map of currently selected emblems.
- * @param level User's player level (determines team size).
- * @param strategy The selected solving strategy.
- */
 export function solveTeamComp(
-    activeChampions: Champion[],
+    activeChampions: Champion[], // Full filtered pool (all available)
     activeEmblems: Record<string, number>,
-    level: number,
-    strategy: SolverStrategy = 'RegionRyze'
+    maxSlots: number, // "team size"
+    strategy: SolverStrategy = 'RegionRyze',
+    initialTeam: Champion[] = [] // "selected/filtered champions"
 ): TeamComp[] {
-    const emblemTraits = Object.keys(activeEmblems);
+    RECURSION_COUNT = 0;
+    const results: TeamComp[] = [];
 
-    // --- STEP 1: POOL SELECTION ---
-    // Instead of checking all C(60, 9) combinations (impossible), we select the "Best 20" champions
-    // that are most likely to form a good team for the requested strategy.
-    const poolCandidates = activeChampions.map(champ => {
-        let poolScore = 0;
+    // Filter `activeChampions` to remove Galio/Baron from 'candidates' pool?
+    // No, logic inside getCandidates handles exclusion.
+    // But we need to ensure `activeChampions` doesn't strictly exclude them if we want to support them 
+    // if the user *manually* selected them (passed in initialTeam).
+    // The prompt says: "never pick... Galio... as candidate... they will only be included when we have them on selected/filtered champions".
+    // This implies `initialTeam` contains them.
 
-        // Heuristic 1: High cost units are generally better
-        poolScore += champ.cost * 1.5;
-
-        // Heuristic 2: Strategy Alignment
-        if (strategy === 'RegionRyze') {
-            // Priority: Units with Region traits
-            const hasRegion = champ.traits.some(t => TRAIT_RULES[t]?.type === 'Region');
-            if (hasRegion) poolScore += 20;
-
-            // High Priority: Units that activate a Region we have an emblem for
-            const matchesEmblemRegion = champ.traits.some(t =>
-                activeEmblems[t] && TRAIT_RULES[t]?.type === 'Region'
-            );
-            if (matchesEmblemRegion) poolScore += 30;
-
-        } else if (strategy === 'BronzeLife') {
-            // Priority: Units with MANY traits (flexible activation)
-            poolScore += champ.traits.length * 10;
-
-            // Priority: Units matching our emblems
-            const matchesEmblem = champ.traits.some(t => activeEmblems[t]);
-            if (matchesEmblem) poolScore += 20;
-        }
-
-        // Heuristic 3: Generic Synergy
-        // Always good to pick units that match our emblems
-        champ.traits.forEach(t => {
-            if (activeEmblems[t]) {
-                poolScore += 10;
-            }
-        });
-
-        return { champ, poolScore };
-    });
-
-    // Sort by heuristic score
-    poolCandidates.sort((a, b) => b.poolScore - a.poolScore);
-
-    // Select Top N candidates.
-    // This is the most critical performance parameter.
-    // 20 candidates = ~160k combs for Choose 9 (High load) or ~180k for Choose 8.
-    // To ensure UI responsiveness, we reduce this pool size as Level increases.
-    const POOL_SIZE = 20;
-    const pool = poolCandidates.slice(0, POOL_SIZE).map(c => c.champ);
-
-    if (pool.length < level) {
-        return []; // Not enough champs to form a team
+    // 1. Validate Initial Team
+    const usedSlots = calculateUsedSlots(initialTeam);
+    if (usedSlots > maxSlots) {
+        // Already overfilled
+        return [createTeamComp(initialTeam, activeEmblems, strategy)];
     }
 
-    const combinations: Champion[][] = [];
+    // 2. Start Recursive Build
+    // We clone current team to avoid mutating passed array
+    buildTeamRecursively(
+        [...initialTeam],
+        activeEmblems,
+        activeChampions,
+        strategy,
+        maxSlots,
+        results
+    );
 
-    // --- STEP 2: DYNAMIC POOL SIZING ---
-    // Adjust pool size based on combinations complexity to keep execution under ~200ms.
-    // Combinations grow factorially.
-    // Level 9 with 20 pool = 167,960 checks (Heavy).
-    // Level 9 with 18 pool = 48,620 checks (Fast).
-    const safePoolSize = level >= 8 ? 18 : 20;
-    const searchPool = pool.slice(0, safePoolSize);
+    // 3. Sort & Return Top Results
+    // Sort by difficulty desc
+    results.sort((a, b) => b.difficulty - a.difficulty);
 
-    // Generate all valid teams
-    getCombinations(searchPool, level, 0, [], combinations);
+    // Prune duplicates (same comp, different order of selection)?
+    // Recursive candidates check `!currentNames.has`, so we avoid duplicates of same champion.
+    // But [A, B] vs [B, A] is possible if we aren't careful with set order?
+    // `getCandidates` picks from `allChampions` minus `currentTeam`.
+    // DFS: 
+    // 1. Pick A. Pool = {B,C}. Recurse -> Pick B. Team {A,B}.
+    // 2. Pick B. Pool = {A,C}. Recurse -> Pick A. Team {B,A}.
+    // This creates permutations. We want combinations.
+    // Fix: Enforce order?
+    // `sortedCandidates` helps, but we need to ensure we only pick "forward".
+    // Or just Map-deduplicate results at end.
+    // De-duping by sorted unique names is safer/easier than enforcing index logic with dynamic candidate lists.
 
-    // --- STEP 3: SCORING ---
-    const scoredTeams = combinations.map(team => {
-        const { difficulty, synergies, strategyValue, strategyName } = calculateDifficulty(team, activeEmblems, strategy);
-        return { champions: team, difficulty, activeSynergies: synergies, strategyValue, strategyName };
-    });
+    const uniqueResults: TeamComp[] = [];
+    const seenHashes = new Set<string>();
 
-    // --- STEP 4: FINAL RANKING ---
-    // Sort primarily by Strategy Value (e.g., number of Region traits),
-    // secondarily by general Difficulty (team value/synergy strength).
-    scoredTeams.sort((a, b) => {
-        if (b.difficulty !== a.difficulty) {
-            return b.difficulty - a.difficulty;
-            // Note: Difficulty includes (strategyValue * 1000), so this effectively sorts by strategy first.
+    for (const res of results) {
+        const hash = res.champions.map(c => c.name).sort().join('|');
+        if (!seenHashes.has(hash)) {
+            seenHashes.add(hash);
+            uniqueResults.push(res);
         }
-        return 0;
-    });
+    }
 
-    // Return tope 20 results for the UI
-    return scoredTeams.slice(0, 20);
+    return uniqueResults.slice(0, 20);
 }

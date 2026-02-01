@@ -1,0 +1,41 @@
+Running Solver Tests...
+
+--- TEST 1: Galio (0 Slots) ---
+
+=== Galio + 1 Slot ===
+Score: 19 | StrategyVal: 0 (Active Regions)
+Synergies: Heroic (1)
+Units: Galio, Garen
+
+--- TEST 2: Baron Nashor (2 Slots) ---
+
+=== Baron in 1 Slot (Should fail/overflow check?) ===
+Score: 525 | StrategyVal: 1 (Active Regions)
+Synergies: Riftscourge (1), Void (2)
+Units: Baron Nashor
+
+=== Baron in 2 Slots ===
+Score: 525 | StrategyVal: 1 (Active Regions)
+Synergies: Riftscourge (1), Void (2)
+Units: Baron Nashor
+
+--- TEST 3: Region Ryze (Unopened Trait) ---
+
+=== Region Ryze: Fix 1/2 Piltover ===
+Score: 527 | StrategyVal: 1 (Active Regions)
+Synergies: HexMech (1), Piltover (2)
+Units: Vi, T-Hex
+
+--- TEST 4: Region Ryze (Distinct Regions) ---
+
+=== Region Ryze: Empty Start (Best 1 Unit) ===
+Score: 5 | StrategyVal: 0 (Active Regions)
+Synergies: 
+Units: Ziggs 
+
+--- TEST 5: Bronze Life ---
+
+=== Bronze Life: Empty Start ===
+Score: 5 | StrategyVal: 0 (Active Class/Regions)
+Synergies: 
+Units: Ziggs 
