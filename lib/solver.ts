@@ -13,14 +13,8 @@ export type SolverStrategy = 'RegionRyze' | 'BronzeLife';
 
 // Global safety counter to prevent infinite loops/browser crashes
 let RECURSION_COUNT = 0;
-const MAX_RECURSION_LIMIT = 50000;
+const MAX_RECURSION_LIMIT = 100000;
 
-/**
- * Calculates the number of slots a champion takes.
- * - Galio: 0 slots
- * - Baron Nashor: 2 slots
- * - Others: 1 slot
- */
 function getUnitSlots(champion: Champion): number {
     if (champion.name === "Galio") return 0;
     if (champion.name === "Baron Nashor") return 2;
@@ -387,6 +381,12 @@ export function solveTeamComp(
     if (usedSlots > maxSlots) {
         // Already overfilled
         return [createTeamComp(initialTeam, activeEmblems, strategy)];
+    }
+
+    // if active champions is empty, add ryze to initial team
+    let ryze = activeChampions.find(c => c.name === "Ryze")!;
+    if (ryze && strategy === 'RegionRyze' && !initialTeam.includes(ryze)) {
+        initialTeam.push(ryze);
     }
 
     // 2. Start Recursive Build

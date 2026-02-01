@@ -564,7 +564,7 @@
     ],
     "id": "tft16_galio",
     "unlockLevel": 0,
-    "unlockDifficulty": 0
+    "unlockDifficulty": 10
   },
   {
     "apiName": "TFT16_TahmKench",
@@ -577,7 +577,7 @@
     ],
     "id": "tft16_tahmkench",
     "unlockLevel": 0,
-    "unlockDifficulty": 9
+    "unlockDifficulty": 8
   },
   {
     "apiName": "TFT16_Sejuani",
@@ -826,7 +826,7 @@
   },
   {
     "apiName": "TFT16_Ryze",
-    "name": "Ryze ",
+    "name": "Ryze",
     "cost": 5,
     "traits": [
       "Rune Mage"
