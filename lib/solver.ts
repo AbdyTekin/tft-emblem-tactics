@@ -344,11 +344,11 @@ function createTeamComp(
 
     if (strategy === 'RegionRyze') {
         strategyValue = regionCount;
-        strategyName = 'Active Regions';
+        strategyName = 'region';
         difficulty += regionCount * 500;
     } else {
         strategyValue = bronzeCount;
-        strategyName = 'Active Class/Regions';
+        strategyName = 'bronzeTrait';
         difficulty += bronzeCount * 500;
     }
 
