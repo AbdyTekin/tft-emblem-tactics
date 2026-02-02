@@ -383,7 +383,6 @@ export function solveTeamComp(
         return [createTeamComp(initialTeam, activeEmblems, strategy)];
     }
 
-    // if active champions is empty, add ryze to initial team
     let ryze = activeChampions.find(c => c.name === "Ryze")!;
     if (ryze && strategy === 'RegionRyze' && !initialTeam.includes(ryze)) {
         initialTeam.push(ryze);
