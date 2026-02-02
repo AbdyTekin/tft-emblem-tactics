@@ -11,7 +11,6 @@ export interface TeamComp {
 
 export type SolverStrategy = 'RegionRyze' | 'BronzeLife';
 
-// Global safety counter to prevent infinite loops/browser crashes
 let RECURSION_COUNT = 0;
 const MAX_RECURSION_LIMIT = 100000;
 
@@ -21,17 +20,10 @@ function getUnitSlots(champion: Champion): number {
     return 1;
 }
 
-/**
- * Calculates the total slots used by a list of champions.
- */
 function calculateUsedSlots(team: Champion[]): number {
     return team.reduce((acc, champ) => acc + getUnitSlots(champ), 0);
 }
 
-/**
- * Helper to calculate current trait counts for a team + emblems.
- * Handles Baron Nashor's special rule (+2 to Void).
- */
 function calculateTraitCounts(
     champions: Champion[],
     activeEmblems: Record<string, number>
@@ -62,12 +54,7 @@ function getCandidates(
 ): Champion[] {
     const traitCounts = calculateTraitCounts(currentTeam, activeEmblems);
 
-    // Filter out champions already in the team (assuming unique units, though TFT allows duplicates usually we solve for unique)
-    // The prompt implies "pick unit", usually implies unique roster for solver.
     const currentNames = new Set(currentTeam.map(c => c.name));
-
-    // Special Rule: Never pick Galio or Baron Nashor as CANDIDATE.
-    // They are only included if already selected/filtered.
     const availablePool = allChampions.filter(c =>
         !currentNames.has(c.name) &&
         c.name !== "Galio" &&
@@ -77,16 +64,7 @@ function getCandidates(
     if (availablePool.length === 0) return [];
 
     // --- STRATEGY LOGIC ---
-
-    // 1. Identify "Active but Not Opened" Traits
-    // "Active" here means count > 0. "Opened" means count >= next breakpoint?
-    // User phrasing: "active we have but not opened for example 1 piltover(first breakpoint at 2)"
-    // This implies: Count > 0 AND Count < Min_Breakpoint. OR Count is between breakpoints.
-    // Let's interpret "not opened" as: The current count does NOT hit a breakpoint, but IS > 0.
-    // OR: The user might mean "we have the trait (count>0), but we haven't hit the NEXT desired breakpoint".
-    // Given the example "1 piltover (first breakpoint at 2)", it strongly implies "Count > 0 but currently no bonus active".
-    // However, "1 noxus(first breakpoint at 3)" is also given.
-    // So logic: Find traits where logic: `count > 0` AND `!isAtBreakpoint(count)`.
+    // Find traits where logic: `count > 0` AND `!isAtBreakpoint(count)`.
 
     const unbalancedTraits: string[] = [];
     for (const [trait, count] of Object.entries(traitCounts)) {
