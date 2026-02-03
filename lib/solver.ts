@@ -66,80 +66,34 @@ function getCandidates(
     // --- STRATEGY LOGIC ---
     // Find traits where logic: `count > 0` AND `!isAtBreakpoint(count)`.
 
-    const unbalancedTraits: string[] = [];
+    const openableTraits: string[] = [];
     for (const [trait, count] of Object.entries(traitCounts)) {
         if (count <= 0) continue;
         const rule = TRAIT_RULES[trait];
         if (!rule) continue;
 
-        // Exclude Targon from the "Region/Class" logic if specifically requested?
-        // User said: "(don't include 'targon' region trait)" for Bronze Life active check.
-        // But for Region Ryze? "active we have but not opened" - doesn't exclude Targon explicitly there.
-        // But "if these 2 condition are don't met and we don't have 'Targon' trait" implies Targon is handled later.
-        // Let's follow strict rule:
         // Region Ryze P1: "all champions that has region trait we have but not opened"
         // Bronze Life P1: "all champions that has region or class trait we have but not opened"
 
-        let shouldCheck = false;
-        if (strategy === 'RegionRyze' && rule.type === 'Region') shouldCheck = true;
-        if (strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class')) {
-            if (trait !== 'Targon') shouldCheck = true;
-        }
+        let canBreakpointCheck = false;
+        if (strategy === 'RegionRyze' && rule.type === 'Region') canBreakpointCheck = true;
+        if (strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class') && trait !== 'Targon') canBreakpointCheck = true;
 
-        if (shouldCheck) {
-            // Check if "Opened" (At a breakpoint)
-            let isOpened = false;
-            // Iterate breakpoints descending or check if exact match? 
-            // Usually "Opened" means count >= breakpoint[0].
-            // But the text says "1 piltover (first breakpoint at 2)".
-            // This implies "Not Opened" = "Count < First Breakpoint" OR "Count is strictly between breakpoints"?
-            // "if all of our traits are active" -> This usually means consistent/at breakpoint.
-            // So "Not Opened" = Not at a breakpoint.
-            // We want to fix traits that are "dangling".
-            // e.g. Have 1/3 Noxus. We want Noxus units.
-            // e.g. Have 4/5 Bilgewater. We want Bilgewater.
-            // e.g. Have 3/3 Noxus. We do NOT need Noxus (it is Actve/Opened).
-
-            // Check if current count hits any breakpoint exactly or exceeds max?
-            // Actually, usually > breakpoint is fine.
-            // Let's assume "Opened" means "Is currently providing a bonus".
-            // i.e. count >= breakpoints[0].
-            // BUT "1 piltover (BP 2)" -> Active=0.
-            // What if we have 2/3 Noxus? BP is 3. Active=0.
-            // Only non-active?
-            // "if all of our traits are active" (Condition 2) implies Condition 1 is for inactive traits.
-            // So: Traits where `count > 0` but `activeTier == -1`.
-
+        if (canBreakpointCheck) {
             let activeTier = -1;
             for (let i = 0; i < rule.breakpoints.length; i++) {
                 if (count >= rule.breakpoints[i]) activeTier = i;
-            }
-
-            // If activeTier is -1, it is DEFINITELY "not opened".
-            // What if we have 4/6 Noxus? ActiveTier = 0 (3-5).
-            // Is that "Active"? User says "if all of our traits are active".
-            // I will interpret "Active" as "At a breakpoint".
-            // But usually intermediate states (4/6) are considered "Active" (Tier 1).
-            // The prompt "1 piltover(first breakpoint at 2)" is the key.
-            // This is a case where Tier is NONE.
-
-            // Let's stick to: Priority is to activate traits that are currently providing NOTHING (Tier -1).
-            // Or does proper "Solver" logic want to reach NEXT breakpoint?
-            // "1 piltover" -> Needs +1.
-            // user: "all champions that has region trait we have but not opened"
-            // I will strictly prioritize traits with `count > 0` but `activeTier === -1`.
-
-            if (activeTier === -1) {
-                unbalancedTraits.push(trait);
+                else {
+                    if (activeTier === -1) openableTraits.push(trait);
+                    break;
+                }
             }
         }
     }
 
-    // PRIORITY 1: Fix unbalanced/unopened traits
-    if (unbalancedTraits.length > 0) {
-        // Pick all champions that have at least one of these traits
+    if (openableTraits.length > 0) {
         const p1Candidates = availablePool.filter(c =>
-            c.traits.some(t => unbalancedTraits.includes(t))
+            c.traits.some(t => openableTraits.includes(t))
         );
         if (p1Candidates.length > 0) return p1Candidates;
     }
