@@ -63,17 +63,12 @@ function getCandidates(
 
     if (availablePool.length === 0) return [];
 
-    // --- STRATEGY LOGIC ---
-    // Find traits where logic: `count > 0` AND `!isAtBreakpoint(count)`.
-
+    // CONDITION 1
     const openableTraits: string[] = [];
     for (const [trait, count] of Object.entries(traitCounts)) {
         if (count <= 0) continue;
         const rule = TRAIT_RULES[trait];
         if (!rule) continue;
-
-        // Region Ryze P1: "all champions that has region trait we have but not opened"
-        // Bronze Life P1: "all champions that has region or class trait we have but not opened"
 
         let canBreakpointCheck = false;
         if (strategy === 'RegionRyze' && rule.type === 'Region') canBreakpointCheck = true;
@@ -98,24 +93,19 @@ function getCandidates(
         if (p1Candidates.length > 0) return p1Candidates;
     }
 
-    // PRIORITY 2: Expand with new distinct traits
-    // Condition: "if all of our traits are active" (implied by reaching here if P1 found nothing).
-    // "select all champions which has X distinct [type] traits we dont have"
-
+    // CONDITION 2
     const ourTraits = new Set(Object.keys(traitCounts).filter(t => traitCounts[t] > 0));
     const p2Candidates = availablePool.filter(c => {
         let distinctCount = 0;
         for (const t of c.traits) {
-            if (ourTraits.has(t)) continue; // Already have this trait
+            if (ourTraits.has(t)) continue;
             const rule = TRAIT_RULES[t];
             if (!rule) continue;
 
             if (strategy === 'RegionRyze') {
                 if (rule.type === 'Region') distinctCount++;
             } else if (strategy === 'BronzeLife') {
-                if (rule.type === 'Region' || rule.type === 'Class') {
-                    if (t !== 'Targon') distinctCount++;
-                }
+                if ((rule.type === 'Region' || rule.type === 'Class') && t !== 'Targon') distinctCount++;
             }
         }
 
@@ -125,18 +115,8 @@ function getCandidates(
 
     if (p2Candidates.length > 0) return p2Candidates;
 
-    // PRIORITY 3: Targon Check
-    // "if these 2 condition are don't met and we don't have 'Targon' trait we will pick all targon characters"
-    if (!traitCounts['Targon'] || traitCounts['Targon'] === 0) {
-        const targonCandidates = availablePool.filter(c => c.traits.includes('Targon'));
-        // Note: Strategy BronzeLife P2 excludes Targon from counting, but P3 explicitly checks Targon presence.
-        if (targonCandidates.length > 0) return targonCandidates;
-    }
-
-    // PRIORITY 4: Completely New/Disjoint Units
-    // "pick all champions which don't have any of our active traits"
+    // CONDITION 3
     const p4Candidates = availablePool.filter(c => {
-        // Check if champion has ANY trait that we ALREADY have active
         const hasOverlap = c.traits.some(t => ourTraits.has(t));
         return !hasOverlap;
     });
