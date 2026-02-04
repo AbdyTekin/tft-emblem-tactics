@@ -33,7 +33,6 @@ function calculateTraitCounts(
     for (const champ of champions) {
         for (const trait of champ.traits) {
             let increment = 1;
-            // distinct logic for Baron Nashor on Void trait
             if (trait === 'Void' && champ.name === 'Baron Nashor') {
                 increment = 2;
             }
@@ -43,9 +42,6 @@ function calculateTraitCounts(
     return counts;
 }
 
-/**
- * Determines candidates for the next slot based on the strategy and current team state.
- */
 function getCandidates(
     currentTeam: Champion[],
     activeEmblems: Record<string, number>,
@@ -63,32 +59,34 @@ function getCandidates(
 
     if (availablePool.length === 0) return [];
 
-    // CONDITION 1
     const openableTraits: string[] = [];
+    const openedTraits: string[] = [];
     for (const [trait, count] of Object.entries(traitCounts)) {
         if (count <= 0) continue;
         const rule = TRAIT_RULES[trait];
         if (!rule) continue;
 
-        let canBreakpointCheck = false;
-        if (strategy === 'RegionRyze' && rule.type === 'Region') canBreakpointCheck = true;
-        if (strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class') && trait !== 'Targon') canBreakpointCheck = true;
-
-        if (canBreakpointCheck) {
+        let checkBreakpoint = false;
+        const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
+        const bronzeLifeCheck = strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class') && trait !== 'Targon';
+        if (regionRyzeCheck || bronzeLifeCheck) checkBreakpoint = true;
+        if (checkBreakpoint) {
             let activeTier = -1;
             for (let i = 0; i < rule.breakpoints.length; i++) {
                 if (count >= rule.breakpoints[i]) activeTier = i;
                 else {
                     if (activeTier === -1) openableTraits.push(trait);
+                    else openedTraits.push(trait);
                     break;
                 }
             }
         }
     }
 
+    // CONDITION 1
     if (openableTraits.length > 0) {
         const p1Candidates = availablePool.filter(c =>
-            c.traits.some(t => openableTraits.includes(t))
+            c.traits.some(t => openableTraits.includes(t) && !openedTraits.includes(t))
         );
         if (p1Candidates.length > 0) return p1Candidates;
     }
@@ -124,10 +122,6 @@ function getCandidates(
     return p4Candidates;
 }
 
-
-/**
- * Core recursive solver function.
- */
 function buildTeamRecursively(
     currentTeam: Champion[],
     activeEmblems: Record<string, number>,

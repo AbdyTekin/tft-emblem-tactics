@@ -23,7 +23,7 @@ const messages = {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguage] = useState<Language>('en');
+    const [language, setLanguage] = useState<Language>('tr');
 
     const champions = enChampions as unknown as Champion[];
 
