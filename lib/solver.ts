@@ -68,7 +68,7 @@ function getCandidates(
 
         let checkBreakpoint = false;
         const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
-        const bronzeLifeCheck = strategy === 'BronzeLife' && (rule.type === 'Region' || rule.type === 'Class') && trait !== 'Targon';
+        const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Origin' && trait !== 'Targon';
         if (regionRyzeCheck || bronzeLifeCheck) checkBreakpoint = true;
         if (checkBreakpoint) {
             let activeTier = -1;
@@ -86,25 +86,22 @@ function getCandidates(
     // CONDITION 1
     if (openableTraits.length > 0) {
         const p1Candidates = availablePool.filter(c =>
-            c.traits.some(t => openableTraits.includes(t) && !openedTraits.includes(t))
+            c.traits.some(t => openableTraits.includes(t))
         );
         if (p1Candidates.length > 0) return p1Candidates;
     }
 
     // CONDITION 2
-    const ourTraits = new Set(Object.keys(traitCounts).filter(t => traitCounts[t] > 0));
     const p2Candidates = availablePool.filter(c => {
         let distinctCount = 0;
         for (const t of c.traits) {
-            if (ourTraits.has(t)) continue;
+            if (openedTraits.includes(t)) return false;
             const rule = TRAIT_RULES[t];
             if (!rule) continue;
 
-            if (strategy === 'RegionRyze') {
-                if (rule.type === 'Region') distinctCount++;
-            } else if (strategy === 'BronzeLife') {
-                if ((rule.type === 'Region' || rule.type === 'Class') && t !== 'Targon') distinctCount++;
-            }
+            const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
+            const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Origin' && t !== 'Targon';
+            if (regionRyzeCheck || bronzeLifeCheck) distinctCount++;
         }
 
         const threshold = strategy === 'RegionRyze' ? 2 : 3;
@@ -115,7 +112,7 @@ function getCandidates(
 
     // CONDITION 3
     const p4Candidates = availablePool.filter(c => {
-        const hasOverlap = c.traits.some(t => ourTraits.has(t));
+        const hasOverlap = c.traits.some(t => openedTraits.includes(t));
         return !hasOverlap;
     });
 
@@ -125,7 +122,7 @@ function getCandidates(
 function buildTeamRecursively(
     currentTeam: Champion[],
     activeEmblems: Record<string, number>,
-    allChampions: Champion[],
+    activeChampions: Champion[],
     strategy: SolverStrategy,
     maxSlots: number,
     results: TeamComp[]
@@ -151,7 +148,7 @@ function buildTeamRecursively(
     }
 
     // RECURSIVE STEP
-    const candidates = getCandidates(currentTeam, activeEmblems, allChampions, strategy);
+    const candidates = getCandidates(currentTeam, activeEmblems, activeChampions, strategy);
 
     // If no candidates found (Search exhausted or logic stuck), just return result as is?
     // Or is it a dead end? 
@@ -182,7 +179,7 @@ function buildTeamRecursively(
         if (usedSlots + getUnitSlots(candidate) > maxSlots) continue;
 
         currentTeam.push(candidate);
-        buildTeamRecursively(currentTeam, activeEmblems, allChampions, strategy, maxSlots, results);
+        buildTeamRecursively(currentTeam, activeEmblems, activeChampions, strategy, maxSlots, results);
         currentTeam.pop();
 
         if (RECURSION_COUNT > MAX_RECURSION_LIMIT) break;
