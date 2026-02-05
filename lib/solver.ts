@@ -86,7 +86,7 @@ function getCandidates(
     // CONDITION 1
     if (openableTraits.length > 0) {
         const p1Candidates = availablePool.filter(c =>
-            c.traits.some(t => openableTraits.includes(t))
+            c.traits.some(t => openableTraits.includes(t) || (strategy === 'RegionRyze' && t === 'Targon' && !openedTraits.includes('Targon')))
         );
         if (p1Candidates.length > 0) return p1Candidates;
     }
