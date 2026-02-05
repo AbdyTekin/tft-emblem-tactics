@@ -106,7 +106,7 @@
       "Gunslinger"
     ],
     "id": "tft16_missfortune",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -155,7 +155,7 @@
       "Vanquisher"
     ],
     "id": "tft16_ambessa",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -199,7 +199,7 @@
       "Targon"
     ],
     "id": "tft16_taric",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -235,7 +235,7 @@
       "Defender"
     ],
     "id": "tft16_garen",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -247,7 +247,7 @@
       "Arcanist"
     ],
     "id": "tft16_lux",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -283,7 +283,7 @@
       "Warden"
     ],
     "id": "tft16_braum",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -295,7 +295,7 @@
       "Invoker"
     ],
     "id": "tft16_lissandra",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -369,7 +369,7 @@
       "Disruptor"
     ],
     "id": "tft16_seraphine",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -405,7 +405,7 @@
       "Bruiser"
     ],
     "id": "tft16_wukong",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -478,7 +478,7 @@
       "Arcanist"
     ],
     "id": "tft16_annie",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -490,7 +490,7 @@
       "Warden"
     ],
     "id": "tft16_ornn",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -502,7 +502,7 @@
       "Quickstriker"
     ],
     "id": "tft16_kindred",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -515,7 +515,7 @@
       "Disruptor"
     ],
     "id": "tft16_azir",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -527,7 +527,7 @@
       "Invoker"
     ],
     "id": "tft16_zilean",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -539,7 +539,7 @@
       "Vanquisher"
     ],
     "id": "tft16_fiddlesticks",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -551,7 +551,7 @@
       "Juggernaut"
     ],
     "id": "tft16_shyvana",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {
@@ -636,7 +636,7 @@
       "Slayer"
     ],
     "id": "tft16_belveth",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -821,7 +821,7 @@
       "Defender"
     ],
     "id": "tft16_sylas",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 10
   },
   {
@@ -938,7 +938,7 @@
       "Shurima"
     ],
     "id": "tft16_renekton",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 8
   },
   {
@@ -949,7 +949,7 @@
       "Shurima"
     ],
     "id": "tft16_nasus",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 8
   },
   {
@@ -961,7 +961,7 @@
       "Ascendant"
     ],
     "id": "tft16_xerath",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 8
   },
   {
@@ -1068,7 +1068,7 @@
       "Quickstriker"
     ],
     "id": "tft16_yunara",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -1081,7 +1081,7 @@
       "Juggernaut"
     ],
     "id": "tft16_swain",
-    "unlockLevel": 0,
+    "unlockLevel": 5,
     "unlockDifficulty": 0
   },
   {
@@ -1190,7 +1190,7 @@
       "Gunslinger"
     ],
     "id": "tft16_lucian",
-    "unlockLevel": 0,
+    "unlockLevel": 7,
     "unlockDifficulty": 0
   },
   {

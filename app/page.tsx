@@ -33,7 +33,7 @@ function MainLayout() {
     const activeEmblems: Record<string, number> = {};
     deferredSelectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
 
-    return solveTeamComp(champions, activeEmblems, deferredLevel, deferredStrategy);
+    return solveTeamComp(champions.filter(c => c.unlockLevel <= deferredLevel), activeEmblems, deferredLevel, deferredStrategy);
   }, [champions, deferredSelectedEmblems, deferredLevel, deferredStrategy]);
 
   const addEmblem = (trait: string) => {

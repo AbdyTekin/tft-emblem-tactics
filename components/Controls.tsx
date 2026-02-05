@@ -13,19 +13,6 @@ interface ControlsProps {
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
     const t = useTranslations();
 
-    const handleStrategyChange = (newStrategy: SolverStrategy) => {
-        setStrategy(newStrategy);
-        // Enforce level constraint: RegionRyze requires level 9 or 10
-        if (newStrategy === 'RegionRyze' && level < 9) {
-            setLevel(9);
-        }
-    };
-
-    const isLevelDisabled = (lvl: number) => {
-        if (strategy === 'RegionRyze' && lvl < 9) return true;
-        return false;
-    };
-
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5">
             {/* Level Selection */}
@@ -37,11 +24,11 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     <button
                         onClick={() => {
                             const prevLevel = level - 1;
-                            if (prevLevel >= 6 && !isLevelDisabled(prevLevel)) {
+                            if (prevLevel >= 4) {
                                 setLevel(prevLevel);
                             }
                         }}
-                        disabled={level <= 6 || isLevelDisabled(level - 1)}
+                        disabled={level <= 4}
                         className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,11 +51,11 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     <button
                         onClick={() => {
                             const nextLevel = level + 1;
-                            if (nextLevel <= 10 && !isLevelDisabled(nextLevel)) {
+                            if (nextLevel <= 10) {
                                 setLevel(nextLevel);
                             }
                         }}
-                        disabled={level >= 10 || isLevelDisabled(level + 1)}
+                        disabled={level >= 10}
                         className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,7 +93,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     ].map((option) => (
                         <button
                             key={option.id}
-                            onClick={() => handleStrategyChange(option.id as SolverStrategy)}
+                            onClick={() => setStrategy(option.id as SolverStrategy)}
                             className={`cursor-pointer relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
                                     ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)]'
