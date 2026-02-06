@@ -51,10 +51,12 @@ function getCandidates(
     const traitCounts = calculateTraitCounts(currentTeam, activeEmblems);
 
     const currentNames = new Set(currentTeam.map(c => c.name));
+
     const availablePool = allChampions.filter(c =>
         !currentNames.has(c.name) &&
         c.name !== "Galio" &&
-        c.name !== "Baron Nashor"
+        c.name !== "Baron Nashor" &&
+        (!currentTeam.some(c => c.traits.includes('Targon')) || !c.traits.includes('Targon'))
     );
 
     if (availablePool.length === 0) return [];
