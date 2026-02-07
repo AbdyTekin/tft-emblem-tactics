@@ -42,13 +42,28 @@ function calculateTraitCounts(
     return counts;
 }
 
+function updateTraitCounts(
+    counts: Record<string, number>,
+    champion: Champion,
+    direction: 1 | -1
+): void {
+    for (const trait of champion.traits) {
+        let increment = 1;
+        if (trait === 'Void' && champion.name === 'Baron Nashor') {
+            increment = 2;
+        }
+        counts[trait] = (counts[trait] || 0) + increment * direction;
+    }
+}
+
 function getCandidates(
     currentTeam: Champion[],
-    activeEmblems: Record<string, number>,
+    traitCounts: Record<string, number>,
     allChampions: Champion[],
     strategy: SolverStrategy
 ): Champion[] {
-    const traitCounts = calculateTraitCounts(currentTeam, activeEmblems);
+    // Derived from passed traitCounts, no recalculation needed
+
 
     const currentNames = new Set(currentTeam.map(c => c.name));
 
@@ -56,7 +71,7 @@ function getCandidates(
         !currentNames.has(c.name) &&
         c.name !== "Galio" &&
         c.name !== "Baron Nashor" &&
-        (!currentTeam.some(c => c.traits.includes('Targon')) || !c.traits.includes('Targon'))
+        !(currentTeam.some(c => c.traits.includes('Targon')) && c.traits.includes('Targon'))
     );
 
     if (availablePool.length === 0) return [];
@@ -121,6 +136,7 @@ function getCandidates(
 
 function buildTeamRecursively(
     currentTeam: Champion[],
+    traitCounts: Record<string, number>,
     activeEmblems: Record<string, number>,
     activeChampions: Champion[],
     strategy: SolverStrategy,
@@ -138,7 +154,7 @@ function buildTeamRecursively(
     }
 
     // RECURSIVE STEP
-    const candidates = getCandidates(currentTeam, activeEmblems, activeChampions, strategy);
+    const candidates = getCandidates(currentTeam, traitCounts, activeChampions, strategy);
 
     if (candidates.length === 0) return;
 
@@ -148,7 +164,11 @@ function buildTeamRecursively(
         if (usedSlots + getUnitSlots(candidate) > maxSlots) continue;
 
         currentTeam.push(candidate);
-        buildTeamRecursively(currentTeam, activeEmblems, activeChampions, strategy, maxSlots, results);
+        updateTraitCounts(traitCounts, candidate, 1);
+
+        buildTeamRecursively(currentTeam, traitCounts, activeEmblems, activeChampions, strategy, maxSlots, results);
+
+        updateTraitCounts(traitCounts, candidate, -1);
         currentTeam.pop();
 
         if (RECURSION_COUNT > MAX_RECURSION_LIMIT) break;
@@ -235,8 +255,12 @@ export function solveTeamComp(
     }
 
     // 2. Start Recursive Build
+    const startTraitCounts = calculateTraitCounts(initialTeam, activeEmblems);
+
+    // 2. Start Recursive Build
     buildTeamRecursively(
         [...initialTeam],
+        startTraitCounts,
         activeEmblems,
         activeChampions,
         strategy,
