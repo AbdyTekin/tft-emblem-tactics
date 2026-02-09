@@ -242,24 +242,27 @@ export function solveTeamComp(
     RECURSION_COUNT = 0;
     const results: TeamComp[] = [];
 
+    // 0. Clone Initial Team to prevent mutation of props
+    const currentTeam = [...initialTeam];
+
     // 1. Validate Initial Team
-    const usedSlots = calculateUsedSlots(initialTeam);
+    const usedSlots = calculateUsedSlots(currentTeam);
     if (usedSlots > maxSlots) {
         // Already overfilled
-        return [createTeamComp(initialTeam, activeEmblems, strategy)];
+        return [createTeamComp(currentTeam, activeEmblems, strategy)];
     }
 
     let ryze = activeChampions.find(c => c.name === "Ryze")!;
-    if (ryze && strategy === 'RegionRyze' && !initialTeam.includes(ryze)) {
-        initialTeam.push(ryze);
+    if (ryze && strategy === 'RegionRyze' && !currentTeam.some(c => c.name === "Ryze")) {
+        currentTeam.push(ryze);
     }
 
     // 2. Start Recursive Build
-    const startTraitCounts = calculateTraitCounts(initialTeam, activeEmblems);
+    const startTraitCounts = calculateTraitCounts(currentTeam, activeEmblems);
 
     // 2. Start Recursive Build
     buildTeamRecursively(
-        [...initialTeam],
+        [...currentTeam],
         startTraitCounts,
         activeEmblems,
         activeChampions,
