@@ -16,7 +16,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5">
             {/* Level Selection */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
 
                 <div className="relative flex items-center justify-between gap-3 px-5">
@@ -66,7 +66,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
             </div>
 
             {/* Strategy Selection */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('strategy')}</span>
                 <div className="grid grid-cols-1 gap-2">
                     {[
