@@ -34,7 +34,9 @@ function MainLayout() {
   const teamRecommendations = useMemo(() => {
     // If no emblems and no team selected, maybe return empty? 
     // Or just run solver with empty inputs (might be expensive if no constraints).
-    if (deferredSelectedEmblems.length === 0 && deferredInitialTeam.length === 0) return [];
+    // If no emblems are selected, do not generate a team, even if initialTeam is set.
+    // User requirement: "our team generation shouldn't retrigger on champion select/filter when there is no selected emblem"
+    if (deferredSelectedEmblems.length === 0) return [];
 
     const activeEmblems: Record<string, number> = {};
     deferredSelectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
@@ -104,7 +106,7 @@ function MainLayout() {
                   teamRecommendations={teamRecommendations}
                   selectedEmblems={deferredSelectedEmblems}
                   level={deferredLevel}
-                  isGenerating={selectedEmblems !== deferredSelectedEmblems || level !== deferredLevel || strategy !== deferredStrategy || initialTeam !== deferredInitialTeam}
+                  isGenerating={selectedEmblems.length > 0 && (selectedEmblems !== deferredSelectedEmblems || level !== deferredLevel || strategy !== deferredStrategy || initialTeam !== deferredInitialTeam)}
                 />
               </div>
             </ScrollArea>
