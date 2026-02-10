@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTFT } from '@/context/language-context';
 import { Champion } from '@/types/tft';
-import ScrollArea from '@/components/ScrollArea';
 import HorizontalScrollArea from '@/components/HorizontalScrollArea';
 import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
@@ -15,6 +14,79 @@ interface ChampionSelectorProps {
     currentLevel: number;
 }
 
+function usePopupPosition(
+    isOpen: boolean,
+    buttonRef: React.RefObject<HTMLButtonElement | null>,
+    containerRef: React.RefObject<HTMLDivElement | null>
+) {
+    const [style, setStyle] = useState<React.CSSProperties>({ visibility: 'hidden' });
+
+    const updatePosition = useCallback(() => {
+        if (!isOpen || !buttonRef.current || !containerRef.current) return;
+
+        const rect = buttonRef.current.getBoundingClientRect();
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const width = containerRect.width;
+
+        let top = rect.bottom + 8;
+        let left = containerRect.left;
+
+        if (typeof window !== 'undefined') {
+            if (left + width > window.innerWidth) {
+                left = window.innerWidth - width - 10;
+            }
+            left = Math.max(10, left);
+
+            // If popup would go below viewport, position above the button
+            const popupMaxHeight = 350; // max-h-[300px] + header ~50px
+            if (top + popupMaxHeight > window.innerHeight) {
+                const aboveTop = rect.top - popupMaxHeight - 8;
+                if (aboveTop > 0) {
+                    top = aboveTop;
+                }
+            }
+        }
+
+        setStyle({
+            top: `${top}px`,
+            left: `${left}px`,
+            width: `${width}px`,
+            position: 'fixed',
+            zIndex: 50,
+            visibility: 'visible',
+        });
+    }, [isOpen, buttonRef, containerRef]);
+
+    // Compute position synchronously before paint to avoid flash
+    useLayoutEffect(() => {
+        if (isOpen) {
+            updatePosition();
+        } else {
+            setStyle({ visibility: 'hidden' });
+        }
+    }, [isOpen, updatePosition]);
+
+    // Continuously update position on scroll (any ancestor) and resize
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const onScrollOrResize = () => {
+            updatePosition();
+        };
+
+        // Listen on window scroll + resize, and use capture to catch any scrollable ancestor
+        window.addEventListener('scroll', onScrollOrResize, true);
+        window.addEventListener('resize', onScrollOrResize);
+
+        return () => {
+            window.removeEventListener('scroll', onScrollOrResize, true);
+            window.removeEventListener('resize', onScrollOrResize);
+        };
+    }, [isOpen, updatePosition]);
+
+    return style;
+}
+
 export default function ChampionSelector({ initialTeam, setInitialTeam, currentLevel }: ChampionSelectorProps) {
     const { champions } = useTFT();
     const t = useTranslations();
@@ -23,44 +95,80 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
 
-    // Position state for the popup
     const containerRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
-    const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({});
-    const [popupWidth, setPopupWidth] = useState(380);
+
+    const popupStyle = usePopupPosition(isOpen, buttonRef, containerRef);
+
+    // Custom scrollbar state for popup
+    const popupScrollRef = useRef<HTMLDivElement>(null);
+    const [thumbHeight, setThumbHeight] = useState(0);
+    const [thumbTop, setThumbTop] = useState(0);
+    const [isScrollHovering, setIsScrollHovering] = useState(false);
+    const [isScrollDragging, setIsScrollDragging] = useState(false);
+    const dragStartY = useRef(0);
+    const dragStartScrollTop = useRef(0);
+
+    const handlePopupScroll = useCallback(() => {
+        if (!popupScrollRef.current) return;
+        const { scrollTop, scrollHeight, clientHeight } = popupScrollRef.current;
+
+        if (scrollHeight <= clientHeight) {
+            setThumbHeight(0);
+            return;
+        }
+
+        const newThumbHeight = Math.max((clientHeight / scrollHeight) * clientHeight, 20);
+        const maxTop = clientHeight - newThumbHeight;
+        const scrollRatio = scrollTop / (scrollHeight - clientHeight);
+
+        setThumbHeight(newThumbHeight);
+        setThumbTop(scrollRatio * maxTop);
+    }, []);
+
+    const handleScrollDragStart = (e: React.MouseEvent) => {
+        if (!popupScrollRef.current) return;
+        setIsScrollDragging(true);
+        dragStartY.current = e.clientY;
+        dragStartScrollTop.current = popupScrollRef.current.scrollTop;
+        e.preventDefault();
+    };
+
+    useEffect(() => {
+        const handleDragMove = (e: MouseEvent) => {
+            if (!isScrollDragging || !popupScrollRef.current) return;
+
+            const deltaY = e.clientY - dragStartY.current;
+            const { scrollHeight, clientHeight } = popupScrollRef.current;
+            const maxScrollTop = scrollHeight - clientHeight;
+
+            const maxThumbTop = clientHeight - thumbHeight;
+            if (maxThumbTop <= 0) return;
+
+            const scrollRatio = deltaY / maxThumbTop;
+            const scrollAmount = scrollRatio * maxScrollTop;
+
+            popupScrollRef.current.scrollTop = dragStartScrollTop.current + scrollAmount;
+        };
+
+        const handleDragEnd = () => {
+            setIsScrollDragging(false);
+        };
+
+        if (isScrollDragging) {
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('mouseup', handleDragEnd);
+        }
+
+        return () => {
+            document.removeEventListener('mousemove', handleDragMove);
+            document.removeEventListener('mouseup', handleDragEnd);
+        };
+    }, [isScrollDragging, thumbHeight]);
 
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    // Update popup position
-    useEffect(() => {
-        if (isOpen && buttonRef.current && containerRef.current) {
-            const rect = buttonRef.current.getBoundingClientRect();
-            const containerRect = containerRef.current.getBoundingClientRect();
-
-            const width = containerRect.width;
-            setPopupWidth(width);
-
-            let top = rect.bottom + 8;
-            let left = containerRect.left;
-
-            if (typeof window !== 'undefined') {
-                if (left + width > window.innerWidth) {
-                    left = window.innerWidth - width - 10;
-                }
-                left = Math.max(10, left);
-            }
-
-            setPopupStyle({
-                top: `${top}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                position: 'fixed',
-                zIndex: 50
-            });
-        }
-    }, [isOpen]);
 
     const filteredChampions = useMemo(() => {
         return champions.filter(c => {
@@ -69,6 +177,24 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
             return true;
         }).sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
     }, [champions, search, filterCost]);
+
+    // Observe popup scroll area for resize and scroll
+    useEffect(() => {
+        if (!isOpen) return;
+        const element = popupScrollRef.current;
+        if (!element) return;
+
+        handlePopupScroll();
+
+        const observer = new ResizeObserver(handlePopupScroll);
+        observer.observe(element);
+        element.addEventListener('scroll', handlePopupScroll);
+
+        return () => {
+            observer.disconnect();
+            element.removeEventListener('scroll', handlePopupScroll);
+        };
+    }, [isOpen, handlePopupScroll, filteredChampions]);
 
     const handleToggleChampion = (champion: Champion) => {
         const exists = initialTeam.find(c => c.name === champion.name);
@@ -88,7 +214,6 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     };
 
     const renderChampionCard = (champ: Champion, isSelected: boolean, onClick: () => void) => {
-        // Image URL using apiName
         const imageUrl = `https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName.toLowerCase()}_square.tft_set16.png`;
         const costColorObj = costColors[champ.cost as keyof typeof costColors] || 'border-gray-500 text-gray-400';
         const bgCostColor = costColorObj.split(' ')[1].replace('text-', 'bg-');
@@ -232,18 +357,52 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                             </div>
                         </div>
 
-                        <ScrollArea className="max-h-[300px] pr-2 -mr-2 [&>div]:!h-auto bg-gray-950/30">
-                            <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
-                                {filteredChampions.map(champ => {
-                                    const isSelected = initialTeam.some(c => c.name === champ.name);
-                                    return (
-                                        <div key={champ.name} className="w-full">
-                                            {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
-                                        </div>
-                                    );
-                                })}
+                        {/* Custom scrollable area with custom scrollbar */}
+                        <div
+                            className="relative overflow-visible bg-gray-950/30"
+                            onMouseEnter={() => setIsScrollHovering(true)}
+                            onMouseLeave={() => setIsScrollHovering(false)}
+                        >
+                            <div
+                                ref={popupScrollRef}
+                                className="max-h-[203px] overflow-y-auto"
+                                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                            >
+                                <style jsx>{`
+                                    div::-webkit-scrollbar {
+                                        display: none;
+                                    }
+                                `}</style>
+                                <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
+                                    {filteredChampions.map(champ => {
+                                        const isSelected = initialTeam.some(c => c.name === champ.name);
+                                        return (
+                                            <div key={champ.name} className="w-full">
+                                                {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </ScrollArea>
+
+                            {/* Custom scrollbar thumb — 50% overflows right edge, clipped by popup's overflow-hidden */}
+                            {thumbHeight > 0 && (
+                                <div
+                                    className={`absolute right-[-6px] top-0 w-3 h-full transition-opacity duration-200 ${isScrollHovering || isScrollDragging ? 'opacity-100' : 'opacity-0'
+                                        }`}
+                                >
+                                    <div
+                                        className={`w-full bg-white/20 rounded-full cursor-pointer hover:bg-white/30 active:bg-white/40 transition-colors ${isScrollDragging ? 'bg-white/40' : ''}`}
+                                        style={{
+                                            height: `${thumbHeight}px`,
+                                            transform: `translateY(${thumbTop}px)`,
+                                            transition: isScrollDragging ? 'none' : 'transform 0.05s linear'
+                                        }}
+                                        onMouseDown={handleScrollDragStart}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>,
                 document.body
