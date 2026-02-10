@@ -118,7 +118,7 @@ export default function ScrollArea({ children, className = '' }: ScrollAreaProps
             {/* Scrollbar Track/Thumb */}
             {thumbHeight > 0 && (
                 <div
-                    className={`absolute right-[-15px] top-0 w-3.5 h-full transition-opacity duration-200 ${isHovering || isDragging ? 'opacity-100' : 'opacity-0'
+                    className={`absolute right-[-15px] top-0 w-3 h-full transition-opacity duration-200 ${isHovering || isDragging ? 'opacity-100' : 'opacity-0'
                         }`}
                 >
                     <div

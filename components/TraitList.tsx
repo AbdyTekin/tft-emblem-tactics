@@ -34,8 +34,8 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                     {t('reset')}
                 </button>
             </div>
-            <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto [&>div]:!h-auto lg:[&>div]:!h-full">
-                <div className="grid grid-cols-5 gap-2 pr-1 pb-4">
+            <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto -mr-2 pr-2 [&>div]:!h-auto lg:[&>div]:!h-full">
+                <div className="grid grid-cols-5 gap-2 pb-4">
                     {availableTraits.map((trait) => {
                         const count = selectedEmblems.filter(e => e === trait).length;
                         const isSelected = count > 0;
