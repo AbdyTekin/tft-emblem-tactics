@@ -144,7 +144,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                 <button
                                     onClick={() => handleToggleChampion(champ)}
                                     className={`
-                                        relative aspect-square rounded-lg overflow-hidden border transition-all group w-full
+                                        relative aspect-square rounded-lg overflow-hidden border transition-all group w-full cursor-pointer
                                         ${isSelected
                                             ? 'border-indigo-500 ring-1 ring-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)]'
                                             : 'border-white/10 hover:border-white/30 hover:bg-white/5'
