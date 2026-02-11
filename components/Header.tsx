@@ -21,15 +21,15 @@ export default function Header() {
 
                 <button
                     onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
-                    className="relative inline-flex h-10 w-20 cursor-pointer items-center rounded-full bg-gray-800 border border-white/10 transition-colors ring-2 ring-gray-800 ring-offset-[1.5px] ring-offset-gray-900"
+                    className="relative inline-flex h-8 w-16 cursor-pointer items-center rounded-full bg-gray-800 border border-white/10 transition-colors ring-1 ring-gray-800 ring-offset-[1px] ring-offset-gray-900"
                 >
                     <span className="sr-only">Toggle Language</span>
                     <span
-                        className={`${language === 'tr' ? 'translate-x-[43px]' : 'translate-x-1'
-                            } inline-block h-8 w-8 transform rounded-full bg-indigo-500 transition-transform shadow-lg`}
+                        className={`${language === 'tr' ? 'translate-x-[33px]' : 'translate-x-[5px]'
+                            } inline-block h-6 w-6 transform rounded-full bg-indigo-500 transition-transform shadow-lg`}
                     />
-                    <span className={`absolute left-3 text-xs font-medium ${language === 'en' ? 'text-white' : 'text-gray-500'}`}>EN</span>
-                    <span className={`absolute right-3 text-xs font-medium ${language === 'tr' ? 'text-white' : 'text-gray-500'}`}>TR</span>
+                    <span className={`absolute left-2.5 text-xs font-medium ${language === 'en' ? 'text-white' : 'text-gray-500'}`}>EN</span>
+                    <span className={`absolute right-2.5 text-xs font-medium ${language === 'tr' ? 'text-white' : 'text-gray-500'}`}>TR</span>
                 </button>
             </div>
         </header>
