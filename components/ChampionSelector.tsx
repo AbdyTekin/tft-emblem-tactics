@@ -350,7 +350,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                 <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)}>
                     {/* Content Container */}
                     <div
-                        className="bg-gray-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+                        className="bg-gray-900 border border-white/10 rounded-xl shadow-2xl overflow-visible flex flex-col"
                         style={popupStyle}
                         onClick={e => e.stopPropagation()}
                     >
@@ -380,7 +380,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                 <div ref={traitDropdownRef} className="relative">
                                     <button
                                         onClick={() => { setIsTraitDropdownOpen(!isTraitDropdownOpen); setIsCostDropdownOpen(false); }}
-                                        className={`h-[30px] flex items-center gap-1.5 px-2 rounded-lg border text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${filterTrait
+                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${filterTrait
                                             ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300'
                                             : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
                                             }`}
@@ -391,20 +391,15 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                                 <span>{tTraits(filterTrait)}</span>
                                             </>
                                         ) : (
-                                            <>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                                                </svg>
-                                                <span>{t('filter_trait')}</span>
-                                            </>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                                            </svg>
                                         )}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-0.5 opacity-50">
-                                            <polyline points="6 9 12 15 18 9" />
-                                        </svg>
+
                                     </button>
                                     {isTraitDropdownOpen && (
                                         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 bg-gray-900 border border-white/10 rounded-lg shadow-2xl z-[60] overflow-hidden">
-                                            <div className="max-h-[200px] overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+                                            <div className="max-h-[200px] overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent' }}>
                                                 {/* Clear option */}
                                                 <button
                                                     onClick={() => { setFilterTrait(null); setIsTraitDropdownOpen(false); }}
@@ -448,10 +443,17 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                 <div ref={costDropdownRef} className="relative">
                                     <button
                                         onClick={() => { setIsCostDropdownOpen(!isCostDropdownOpen); setIsTraitDropdownOpen(false); }}
-                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${filterCost !== null
-                                            ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300'
-                                            : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
-                                            }`}
+                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${(() => {
+                                            if (filterCost === null) return 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300';
+                                            const costBtnStyles: Record<number, string> = {
+                                                1: 'bg-gray-900/40 border-gray-500/50 text-gray-400',
+                                                2: 'bg-green-900/30 border-green-500/50 text-green-400',
+                                                3: 'bg-blue-900/30 border-blue-500/50 text-blue-400',
+                                                4: 'bg-purple-900/30 border-purple-500/50 text-purple-400',
+                                                5: 'bg-yellow-900/30 border-yellow-500/50 text-yellow-400',
+                                            };
+                                            return costBtnStyles[filterCost] || '';
+                                        })()}`}
                                     >
                                         <div
                                             className="w-4 h-4 bg-current"
@@ -467,20 +469,16 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                             }}
                                         />
                                         {filterCost !== null && <span>{filterCost}</span>}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-0.5 opacity-50">
-                                            <polyline points="6 9 12 15 18 9" />
-                                        </svg>
                                     </button>
                                     {isCostDropdownOpen && (
-                                        <div className="absolute top-full right-0 mt-1 w-24 bg-gray-900 border border-white/10 rounded-lg shadow-2xl z-[60] overflow-hidden">
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-10 bg-gray-900 border border-white/10 rounded-lg shadow-2xl z-[60] overflow-hidden">
                                             {/* Clear option */}
                                             <button
                                                 onClick={() => { setFilterCost(null); setIsCostDropdownOpen(false); }}
-                                                className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterCost === null ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                className={`w-full flex items-center justify-center px-1 py-1.5 text-xs transition-colors cursor-pointer ${filterCost === null ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                                                     }`}
                                             >
-                                                <img src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png" alt="Gold" className="w-3.5 h-3.5" />
-                                                <span>—</span>
+                                                <span>-</span>
                                             </button>
                                             {[1, 2, 3, 4, 5].map(cost => {
                                                 const costColorMap: Record<number, string> = {
@@ -490,15 +488,21 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                                     4: 'text-purple-400',
                                                     5: 'text-yellow-400',
                                                 };
+                                                const activeBgMap: Record<number, string> = {
+                                                    1: 'bg-gray-800/50',
+                                                    2: 'bg-green-900/30',
+                                                    3: 'bg-blue-900/30',
+                                                    4: 'bg-purple-900/30',
+                                                    5: 'bg-yellow-900/30',
+                                                };
                                                 return (
                                                     <button
                                                         key={cost}
                                                         onClick={() => { setFilterCost(filterCost === cost ? null : cost); setIsCostDropdownOpen(false); }}
-                                                        className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterCost === cost ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                        className={`w-full flex items-center justify-center px-2 py-1.5 text-xs font-bold transition-colors cursor-pointer ${filterCost === cost ? `${activeBgMap[cost]} ${costColorMap[cost]}` : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                                                             }`}
                                                     >
-                                                        <img src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png" alt="Gold" className="w-3.5 h-3.5" />
-                                                        <span className={`font-bold ${costColorMap[cost]}`}>{cost}</span>
+                                                        <span className={costColorMap[cost]}>{cost}</span>
                                                     </button>
                                                 );
                                             })}
@@ -508,51 +512,54 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                             </div>
                         </div>
 
-                        {/* Custom scrollable area with custom scrollbar */}
-                        <div
-                            className="relative overflow-visible bg-gray-950/30"
-                            onMouseEnter={() => setIsScrollHovering(true)}
-                            onMouseLeave={() => setIsScrollHovering(false)}
-                        >
+                        {/* Wrapper clips the custom scrollbar thumb at 50% */}
+                        <div className="overflow-hidden rounded-b-xl">
+                            {/* Custom scrollable area with custom scrollbar */}
                             <div
-                                ref={popupScrollRef}
-                                className="max-h-[203px] overflow-y-auto"
-                                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                                className="relative overflow-visible bg-gray-950/30"
+                                onMouseEnter={() => setIsScrollHovering(true)}
+                                onMouseLeave={() => setIsScrollHovering(false)}
                             >
-                                <style jsx>{`
+                                <div
+                                    ref={popupScrollRef}
+                                    className="max-h-[203px] overflow-y-auto"
+                                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                                >
+                                    <style jsx>{`
                                     div::-webkit-scrollbar {
                                         display: none;
                                     }
                                 `}</style>
-                                <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
-                                    {filteredChampions.map(champ => {
-                                        const isSelected = initialTeam.some(c => c.name === champ.name);
-                                        return (
-                                            <div key={champ.name} className="w-full">
-                                                {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
-                                            </div>
-                                        );
-                                    })}
+                                    <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
+                                        {filteredChampions.map(champ => {
+                                            const isSelected = initialTeam.some(c => c.name === champ.name);
+                                            return (
+                                                <div key={champ.name} className="w-full">
+                                                    {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Custom scrollbar thumb — 50% overflows right edge, clipped by popup's overflow-hidden */}
-                            {thumbHeight > 0 && (
-                                <div
-                                    className={`absolute right-[-6px] top-0 w-3 h-full transition-opacity duration-200 ${isScrollHovering || isScrollDragging ? 'opacity-100' : 'opacity-0'
-                                        }`}
-                                >
+                                {/* Custom scrollbar thumb — 50% overflows right edge, clipped by popup's overflow-hidden */}
+                                {thumbHeight > 0 && (
                                     <div
-                                        className={`w-full bg-white/20 rounded-full cursor-pointer hover:bg-white/30 active:bg-white/40 transition-colors ${isScrollDragging ? 'bg-white/40' : ''}`}
-                                        style={{
-                                            height: `${thumbHeight}px`,
-                                            transform: `translateY(${thumbTop}px)`,
-                                            transition: isScrollDragging ? 'none' : 'transform 0.05s linear'
-                                        }}
-                                        onMouseDown={handleScrollDragStart}
-                                    />
-                                </div>
-                            )}
+                                        className={`absolute right-[-6px] top-0 w-3 h-full transition-opacity duration-200 ${isScrollHovering || isScrollDragging ? 'opacity-100' : 'opacity-0'
+                                            }`}
+                                    >
+                                        <div
+                                            className={`w-full bg-white/20 rounded-full cursor-pointer hover:bg-white/30 active:bg-white/40 transition-colors ${isScrollDragging ? 'bg-white/40' : ''}`}
+                                            style={{
+                                                height: `${thumbHeight}px`,
+                                                transform: `translateY(${thumbTop}px)`,
+                                                transition: isScrollDragging ? 'none' : 'transform 0.05s linear'
+                                            }}
+                                            onMouseDown={handleScrollDragStart}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>,
