@@ -272,8 +272,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                         <button
                             ref={buttonRef}
                             onClick={() => setIsOpen(!isOpen)}
-                            className={`w-full aspect-square rounded-lg border border-white/10 flex items-center justify-center transition-all cursor-pointer
-                                ${isOpen ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50' : 'hover:bg-white/5 text-gray-400 hover:text-white hover:border-white/30'}
+                            className={`w-full aspect-square rounded-lg border flex items-center justify-center transition-all duration-300 cursor-pointer
+                                ${isOpen ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)] text-indigo-400' : 'bg-black/20 border-white/5 hover:border-white/7 hover:bg-white/2 text-gray-400 hover:text-gray-300'}
                             `}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
