@@ -7,6 +7,8 @@ import { Champion } from '@/types/tft';
 import HorizontalScrollArea from '@/components/HorizontalScrollArea';
 import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
+import { TRAIT_RULES } from '@/lib/trait-rules';
+import TraitIcon from '@/components/TraitIcon';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
@@ -90,9 +92,15 @@ function usePopupPosition(
 export default function ChampionSelector({ initialTeam, setInitialTeam, currentLevel }: ChampionSelectorProps) {
     const { champions } = useTFT();
     const t = useTranslations();
+    const tTraits = useTranslations('Traits');
     const [search, setSearch] = useState("");
     const [filterCost, setFilterCost] = useState<number | null>(null);
+    const [filterTrait, setFilterTrait] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [isCostDropdownOpen, setIsCostDropdownOpen] = useState(false);
+    const [isTraitDropdownOpen, setIsTraitDropdownOpen] = useState(false);
+    const costDropdownRef = useRef<HTMLDivElement>(null);
+    const traitDropdownRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -170,13 +178,60 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
         setMounted(true);
     }, []);
 
+    // Derive Region/Class traits for the trait dropdown
+    const regionClassTraits = useMemo(() => {
+        const regions: string[] = [];
+        const classes: string[] = [];
+        for (const [name, rule] of Object.entries(TRAIT_RULES)) {
+            if (rule.type === 'Region') regions.push(name);
+            else if (rule.type === 'Class') classes.push(name);
+        }
+        regions.sort((a, b) => a.localeCompare(b));
+        classes.sort((a, b) => a.localeCompare(b));
+        return { regions, classes };
+    }, []);
+
+    // Build a set of Region/Class trait names for search matching
+    const regionClassTraitNames = useMemo(() => {
+        return new Set([...regionClassTraits.regions, ...regionClassTraits.classes]);
+    }, [regionClassTraits]);
+
     const filteredChampions = useMemo(() => {
         return champions.filter(c => {
-            if (search && !c.name.toLowerCase().includes(search.toLowerCase())) return false;
+            // Search: match name OR Region/Class trait names (translated)
+            if (search) {
+                const q = search.toLowerCase();
+                const nameMatch = c.name.toLowerCase().includes(q);
+                const traitMatch = c.traits.some(trait => {
+                    if (!regionClassTraitNames.has(trait)) return false;
+                    // Match against both the raw key and the translated name
+                    try {
+                        return trait.toLowerCase().includes(q) || tTraits(trait).toLowerCase().includes(q);
+                    } catch {
+                        return trait.toLowerCase().includes(q);
+                    }
+                });
+                if (!nameMatch && !traitMatch) return false;
+            }
             if (filterCost !== null && c.cost !== filterCost) return false;
+            if (filterTrait !== null && !c.traits.includes(filterTrait)) return false;
             return true;
         }).sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
-    }, [champions, search, filterCost]);
+    }, [champions, search, filterCost, filterTrait, regionClassTraitNames, tTraits]);
+
+    // Close cost/trait dropdowns on outside click
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (costDropdownRef.current && !costDropdownRef.current.contains(e.target as Node)) {
+                setIsCostDropdownOpen(false);
+            }
+            if (traitDropdownRef.current && !traitDropdownRef.current.contains(e.target as Node)) {
+                setIsTraitDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // Observe popup scroll area for resize and scroll
     useEffect(() => {
@@ -300,7 +355,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="p-3 border-b border-white/10 bg-gray-950/30">
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 items-center">
+                                {/* Search Input */}
                                 <div className="relative flex-1">
                                     <input
                                         type="text"
@@ -319,40 +375,135 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                         </button>
                                     )}
                                 </div>
-                                <div className="flex gap-0.5 items-center">
-                                    {[1, 2, 3, 4, 5].map(cost => {
-                                        const isActive = filterCost === cost;
-                                        const baseClass = "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded border transition-all cursor-pointer";
 
-                                        let colorClass = "";
-                                        if (isActive) {
-                                            switch (cost) {
-                                                case 1: colorClass = "bg-gray-800 border-gray-500 text-gray-400 shadow-[0_0_10px_rgba(0,0,0,0.5)]"; break;
-                                                case 2: colorClass = "bg-gray-800 border-green-500 text-green-400 shadow-[0_0_10px_rgba(0,0,0,0.5)]"; break;
-                                                case 3: colorClass = "bg-gray-800 border-blue-500 text-blue-400 shadow-[0_0_10px_rgba(0,0,0,0.5)]"; break;
-                                                case 4: colorClass = "bg-gray-800 border-purple-500 text-purple-400 shadow-[0_0_10px_rgba(0,0,0,0.5)]"; break;
-                                                case 5: colorClass = "bg-gray-800 border-yellow-500 text-yellow-400 shadow-[0_0_10px_rgba(0,0,0,0.5)]"; break;
-                                            }
-                                        } else {
-                                            switch (cost) {
-                                                case 1: colorClass = "bg-gray-900 border-gray-500/20 text-gray-500/40 hover:bg-gray-500/10 hover:border-gray-500/50 hover:text-gray-400"; break;
-                                                case 2: colorClass = "bg-gray-900 border-green-500/20 text-green-500/40 hover:bg-green-500/10 hover:border-green-500/50 hover:text-green-400"; break;
-                                                case 3: colorClass = "bg-gray-900 border-blue-500/20 text-blue-500/40 hover:bg-blue-500/10 hover:border-blue-500/50 hover:text-blue-400"; break;
-                                                case 4: colorClass = "bg-gray-900 border-purple-500/20 text-purple-500/40 hover:bg-purple-500/10 hover:border-purple-500/50 hover:text-purple-400"; break;
-                                                case 5: colorClass = "bg-gray-900 border-yellow-500/20 text-yellow-500/40 hover:bg-yellow-500/10 hover:border-yellow-500/50 hover:text-yellow-400"; break;
-                                            }
-                                        }
+                                {/* Trait Filter Dropdown */}
+                                <div ref={traitDropdownRef} className="relative">
+                                    <button
+                                        onClick={() => { setIsTraitDropdownOpen(!isTraitDropdownOpen); setIsCostDropdownOpen(false); }}
+                                        className={`h-[30px] flex items-center gap-1.5 px-2 rounded-lg border text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${filterTrait
+                                            ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300'
+                                            : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
+                                            }`}
+                                    >
+                                        {filterTrait ? (
+                                            <>
+                                                <TraitIcon trait={filterTrait} className="w-3.5 h-3.5" />
+                                                <span>{tTraits(filterTrait)}</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                                                </svg>
+                                                <span>{t('filter_trait')}</span>
+                                            </>
+                                        )}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-0.5 opacity-50">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </button>
+                                    {isTraitDropdownOpen && (
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 bg-gray-900 border border-white/10 rounded-lg shadow-2xl z-[60] overflow-hidden">
+                                            <div className="max-h-[200px] overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+                                                {/* Clear option */}
+                                                <button
+                                                    onClick={() => { setFilterTrait(null); setIsTraitDropdownOpen(false); }}
+                                                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterTrait === null ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                        }`}
+                                                >
+                                                    <span>{t('all_traits')}</span>
+                                                </button>
+                                                {/* Regions */}
+                                                <div className="px-3 py-1 text-[9px] font-bold text-gray-600 uppercase tracking-wider border-t border-white/5">{t('regions')}</div>
+                                                {regionClassTraits.regions.map(trait => (
+                                                    <button
+                                                        key={trait}
+                                                        onClick={() => { setFilterTrait(filterTrait === trait ? null : trait); setIsTraitDropdownOpen(false); }}
+                                                        className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterTrait === trait ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                            }`}
+                                                    >
+                                                        <TraitIcon trait={trait} className="w-3.5 h-3.5" />
+                                                        <span>{tTraits(trait)}</span>
+                                                    </button>
+                                                ))}
+                                                {/* Classes */}
+                                                <div className="px-3 py-1 text-[9px] font-bold text-gray-600 uppercase tracking-wider border-t border-white/5">{t('classes')}</div>
+                                                {regionClassTraits.classes.map(trait => (
+                                                    <button
+                                                        key={trait}
+                                                        onClick={() => { setFilterTrait(filterTrait === trait ? null : trait); setIsTraitDropdownOpen(false); }}
+                                                        className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterTrait === trait ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                            }`}
+                                                    >
+                                                        <TraitIcon trait={trait} className="w-3.5 h-3.5" />
+                                                        <span>{tTraits(trait)}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
-                                        return (
+                                {/* Cost Filter Dropdown */}
+                                <div ref={costDropdownRef} className="relative">
+                                    <button
+                                        onClick={() => { setIsCostDropdownOpen(!isCostDropdownOpen); setIsTraitDropdownOpen(false); }}
+                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${filterCost !== null
+                                            ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300'
+                                            : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
+                                            }`}
+                                    >
+                                        <div
+                                            className="w-4 h-4 bg-current"
+                                            style={{
+                                                maskImage: 'url(https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png)',
+                                                WebkitMaskImage: 'url(https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png)',
+                                                maskSize: 'contain',
+                                                WebkitMaskSize: 'contain',
+                                                maskRepeat: 'no-repeat',
+                                                WebkitMaskRepeat: 'no-repeat',
+                                                maskPosition: 'center',
+                                                WebkitMaskPosition: 'center',
+                                            }}
+                                        />
+                                        {filterCost !== null && <span>{filterCost}</span>}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-0.5 opacity-50">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </button>
+                                    {isCostDropdownOpen && (
+                                        <div className="absolute top-full right-0 mt-1 w-24 bg-gray-900 border border-white/10 rounded-lg shadow-2xl z-[60] overflow-hidden">
+                                            {/* Clear option */}
                                             <button
-                                                key={cost}
-                                                onClick={() => setFilterCost(isActive ? null : cost)}
-                                                className={`${baseClass} ${colorClass}`}
+                                                onClick={() => { setFilterCost(null); setIsCostDropdownOpen(false); }}
+                                                className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterCost === null ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                    }`}
                                             >
-                                                {cost}
+                                                <img src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png" alt="Gold" className="w-3.5 h-3.5" />
+                                                <span>—</span>
                                             </button>
-                                        );
-                                    })}
+                                            {[1, 2, 3, 4, 5].map(cost => {
+                                                const costColorMap: Record<number, string> = {
+                                                    1: 'text-gray-400',
+                                                    2: 'text-green-400',
+                                                    3: 'text-blue-400',
+                                                    4: 'text-purple-400',
+                                                    5: 'text-yellow-400',
+                                                };
+                                                return (
+                                                    <button
+                                                        key={cost}
+                                                        onClick={() => { setFilterCost(filterCost === cost ? null : cost); setIsCostDropdownOpen(false); }}
+                                                        className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs transition-colors cursor-pointer ${filterCost === cost ? 'bg-indigo-900/30 text-indigo-300' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                            }`}
+                                                    >
+                                                        <img src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png" alt="Gold" className="w-3.5 h-3.5" />
+                                                        <span className={`font-bold ${costColorMap[cost]}`}>{cost}</span>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
