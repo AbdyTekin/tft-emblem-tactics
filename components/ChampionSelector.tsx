@@ -30,8 +30,8 @@ function usePopupPosition(
         const containerRect = containerRef.current.getBoundingClientRect();
         const width = containerRect.width;
 
-        let top = rect.bottom + 8;
         let left = containerRect.left;
+        let flipAbove = false;
 
         if (typeof window !== 'undefined') {
             if (left + width > window.innerWidth) {
@@ -41,22 +41,34 @@ function usePopupPosition(
 
             // If popup would go below viewport, position above the button
             const popupMaxHeight = 350; // max-h-[300px] + header ~50px
-            if (top + popupMaxHeight > window.innerHeight) {
-                const aboveTop = rect.top - popupMaxHeight - 8;
-                if (aboveTop > 0) {
-                    top = aboveTop;
+            if (rect.bottom + 8 + popupMaxHeight > window.innerHeight) {
+                // Only flip if there's reasonable space above
+                if (rect.top > 100) {
+                    flipAbove = true;
                 }
             }
         }
 
-        setStyle({
-            top: `${top}px`,
-            left: `${left}px`,
-            width: `${width}px`,
-            position: 'fixed',
-            zIndex: 50,
-            visibility: 'visible',
-        });
+        if (flipAbove) {
+            // Anchor the popup's bottom edge just above the button's top
+            setStyle({
+                bottom: `${window.innerHeight - rect.top + 8}px`,
+                left: `${left}px`,
+                width: `${width}px`,
+                position: 'fixed',
+                zIndex: 50,
+                visibility: 'visible',
+            });
+        } else {
+            setStyle({
+                top: `${rect.bottom + 8}px`,
+                left: `${left}px`,
+                width: `${width}px`,
+                position: 'fixed',
+                zIndex: 50,
+                visibility: 'visible',
+            });
+        }
     }, [isOpen, buttonRef, containerRef]);
 
     // Compute position synchronously before paint to avoid flash
