@@ -22,6 +22,8 @@
   "active_bronze_traits": "ACTIVE BRONZE TRAITS",
   "region": "REGION",
   "bronzeTrait": "BRONZE TRAIT",
+  "team_code": "TEAM CODE",
+  "copied": "COPIED!",
   "Traits": {
     "Arcanist": "Arcanist",
     "Ascendant": "Ascendant",

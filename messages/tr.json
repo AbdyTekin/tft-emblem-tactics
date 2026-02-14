@@ -22,6 +22,8 @@
   "active_bronze_traits": "AKTİF BRONZ ÖZELLİK",
   "region": "BÖLGE",
   "bronzeTrait": "BRONZ ÖZELLİK",
+  "team_code": "TAKIM KODU",
+  "copied": "KOPYALANDI!",
   "Traits": {
     "Arcanist": "Sihir Üstadı",
     "Ascendant": "Yükselmiş",

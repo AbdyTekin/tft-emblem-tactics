@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import TeamSkeleton from '@/components/TeamSkeleton';
 import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
+import { generateTeamCode } from '@/lib/team-code';
 import { useTranslations } from 'next-intl';
 
 // --- CONFIGURATION START ---
@@ -37,6 +39,26 @@ interface TeamRecommendationsProps {
 export default function TeamRecommendations({ teamRecommendations, selectedEmblems, level, isGenerating }: TeamRecommendationsProps) {
     const t = useTranslations();
     const tTraits = useTranslations('Traits');
+    const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+
+    const handleCopyTeamCode = async (team: TeamComp, idx: number) => {
+        const code = generateTeamCode(team.champions);
+        try {
+            await navigator.clipboard.writeText(code);
+            setCopiedIdx(idx);
+            setTimeout(() => setCopiedIdx(null), 2000);
+        } catch {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            setCopiedIdx(idx);
+            setTimeout(() => setCopiedIdx(null), 2000);
+        }
+    };
 
     if (isGenerating) {
         return <TeamSkeleton />;
@@ -181,6 +203,35 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* Team Code Button */}
+                        <div className="mt-3 flex justify-end">
+                            <button
+                                onClick={() => handleCopyTeamCode(team, idx)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border ${copiedIdx === idx
+                                        ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
+                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:text-indigo-300'
+                                    }`}
+                            >
+                                {copiedIdx === idx ? (
+                                    <>
+                                        {/* Checkmark Icon */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+                                        {t('copied')}
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* Clipboard Icon */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                                        </svg>
+                                        {t('team_code')}
+                                    </>
+                                )}
+                            </button>
                         </div>
                     </div>
                 </div>
