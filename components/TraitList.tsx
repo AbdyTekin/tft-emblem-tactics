@@ -18,7 +18,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
     const tTraits = useTranslations('Traits');
 
     return (
-        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col lg:flex-1 lg:min-h-[95px] h-auto z-10 relative">
+        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 flex flex-col lg:flex-1 lg:min-h-[95px] h-auto z-10 relative">
             <div className="flex items-center justify-between mb-1.5">
                 <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     {t('traits')}
@@ -35,7 +35,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                 </button>
             </div>
             <ScrollArea className="lg:flex-1 lg:min-h-0 h-auto -mr-2 pr-2 [&>div]:!h-auto lg:[&>div]:!h-full">
-                <div className="grid grid-cols-5 gap-1.5 pb-4">
+                <div className="grid grid-cols-5 gap-1.5">
                     {availableTraits.map((trait) => {
                         const count = selectedEmblems.filter(e => e === trait).length;
                         const isSelected = count > 0;

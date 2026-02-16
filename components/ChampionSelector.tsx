@@ -314,7 +314,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     };
 
     return (
-        <div ref={containerRef} className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col overflow-hidden">
+        <div ref={containerRef} className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col overflow-hidden flex-shrink-0">
             <div className="flex flex-col gap-1.5 mb-1.5">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">

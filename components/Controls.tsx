@@ -14,7 +14,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
     const t = useTranslations();
 
     return (
-        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5">
+        <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 backdrop-blur-sm shadow-xl flex flex-col gap-5 flex-shrink-0">
             {/* Level Selection */}
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('level')}</span>
