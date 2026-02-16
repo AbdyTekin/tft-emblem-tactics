@@ -76,7 +76,7 @@ function MainLayout() {
 
           {/* Left Panel */}
           <div className="lg:col-span-3 lg:h-full lg:min-h-0 flex items-start lg:items-center justify-center">
-            <div className="flex flex-col gap-6 w-full lg:max-h-full lg:min-h-0 lg:overflow-hidden">
+            <div className="flex flex-col gap-6 w-full lg:h-full lg:min-h-0 lg:overflow-hidden justify-center">
               <Controls
                 level={level}
                 setLevel={setLevel}
