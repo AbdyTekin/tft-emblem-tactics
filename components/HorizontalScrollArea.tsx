@@ -13,6 +13,7 @@ export default function HorizontalScrollArea({ children, className = '' }: Horiz
     const [thumbLeft, setThumbLeft] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const dragStartX = useRef(0);
     const dragStartScrollLeft = useRef(0);
 
@@ -98,8 +99,13 @@ export default function HorizontalScrollArea({ children, className = '' }: Horiz
     return (
         <div
             className={`relative overflow-visible ${className}`}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            onMouseEnter={() => {
+                if (hoverTimeout.current) { clearTimeout(hoverTimeout.current); hoverTimeout.current = null; }
+                setIsHovering(true);
+            }}
+            onMouseLeave={() => {
+                hoverTimeout.current = setTimeout(() => setIsHovering(false), 150);
+            }}
         >
             <div
                 ref={scrollRef}
@@ -114,6 +120,9 @@ export default function HorizontalScrollArea({ children, className = '' }: Horiz
                 `}</style>
                 {children}
             </div>
+
+            {/* Invisible hover-extension zone below the content to bridge gap to scrollbar */}
+            <div className="absolute left-0 right-0 top-full h-[34px]" style={{ pointerEvents: 'auto' }} />
 
             {/* Scrollbar Track/Thumb */}
             {thumbWidth > 0 && (

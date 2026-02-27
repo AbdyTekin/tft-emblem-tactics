@@ -334,7 +334,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
             </div>
 
             <HorizontalScrollArea className="flex-1 min-h-0 w-full">
-                <div className="flex gap-1.5 items-center w-full">
+                <div className="flex gap-1.5 items-center w-full py-1">
                     <div className="flex-shrink-0" style={{ width: 'calc((100% - 1.5rem) / 5)' }}>
                         <button
                             ref={buttonRef}
@@ -355,6 +355,9 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                             {renderChampionCard(champ, true, () => handleToggleChampion(champ))}
                         </div>
                     ))}
+
+                    {/* Invisible spacer for last element's right outline */}
+                    {initialTeam.length > 4 && <div className="flex-shrink-0 self-stretch w-0.5" aria-hidden="true" />}
                 </div>
             </HorizontalScrollArea>
 
