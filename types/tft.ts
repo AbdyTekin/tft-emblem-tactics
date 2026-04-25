@@ -1,9 +1,7 @@
 export interface Champion {
-    apiName: string; // "TFT16_Lulu"
+    apiName: string; // "TFT17_Lulu"
     name: string;    // "Lulu"
     cost: number;    // 1
-    traits: string[]; // ["Yordle", "Arcanist"]
-    id: string;      // "tft16_lulu"
-    unlockLevel: number;
-    unlockDifficulty: number;
+    traits: string[]; // ["Stargazer", "Replicator"]
+    id: string;      // "tft17_lulu"
 }

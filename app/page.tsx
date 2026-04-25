@@ -42,7 +42,7 @@ function MainLayout() {
     deferredSelectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
 
     return solveTeamComp(
-      champions.filter(c => c.unlockLevel <= deferredLevel),
+      champions,
       activeEmblems,
       deferredLevel,
       deferredStrategy,

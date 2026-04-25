@@ -1,0 +1,639 @@
+[
+  {
+    "apiName": "TFT17_Aatrox",
+    "name": "Aatrox",
+    "cost": 1,
+    "traits": [
+      "NOVA",
+      "Bastion"
+    ],
+    "id": "tft17_aatrox"
+  },
+  {
+    "apiName": "TFT17_Briar",
+    "name": "Briar",
+    "cost": 1,
+    "traits": [
+      "Anima",
+      "Primordian",
+      "Rogue"
+    ],
+    "id": "tft17_briar"
+  },
+  {
+    "apiName": "TFT17_Caitlyn",
+    "name": "Caitlyn",
+    "cost": 1,
+    "traits": [
+      "NOVA",
+      "Fateweaver"
+    ],
+    "id": "tft17_caitlyn"
+  },
+  {
+    "apiName": "TFT17_Chogath",
+    "name": "Cho'Gath",
+    "cost": 1,
+    "traits": [
+      "Dark Star",
+      "Brawler"
+    ],
+    "id": "tft17_chogath"
+  },
+  {
+    "apiName": "TFT17_Ezreal",
+    "name": "Ezreal",
+    "cost": 1,
+    "traits": [
+      "Timebreaker",
+      "Sniper"
+    ],
+    "id": "tft17_ezreal"
+  },
+  {
+    "apiName": "TFT17_Leona",
+    "name": "Leona",
+    "cost": 1,
+    "traits": [
+      "Arbiter",
+      "Vanguard"
+    ],
+    "id": "tft17_leona"
+  },
+  {
+    "apiName": "TFT17_Lissandra",
+    "name": "Lissandra",
+    "cost": 1,
+    "traits": [
+      "Dark Star",
+      "Shepherd",
+      "Replicator"
+    ],
+    "id": "tft17_lissandra"
+  },
+  {
+    "apiName": "TFT17_Nasus",
+    "name": "Nasus",
+    "cost": 1,
+    "traits": [
+      "Space Groove",
+      "Vanguard"
+    ],
+    "id": "tft17_nasus"
+  },
+  {
+    "apiName": "TFT17_Poppy",
+    "name": "Poppy",
+    "cost": 1,
+    "traits": [
+      "Meeple",
+      "Bastion"
+    ],
+    "id": "tft17_poppy"
+  },
+  {
+    "apiName": "TFT17_RekSai",
+    "name": "Rek'Sai",
+    "cost": 1,
+    "traits": [
+      "Primordian",
+      "Brawler"
+    ],
+    "id": "tft17_reksai"
+  },
+  {
+    "apiName": "TFT17_Talon",
+    "name": "Talon",
+    "cost": 1,
+    "traits": [
+      "Stargazer",
+      "Rogue"
+    ],
+    "id": "tft17_talon"
+  },
+  {
+    "apiName": "TFT17_Teemo",
+    "name": "Teemo",
+    "cost": 1,
+    "traits": [
+      "Space Groove",
+      "Shepherd"
+    ],
+    "id": "tft17_teemo"
+  },
+  {
+    "apiName": "TFT17_TwistedFate",
+    "name": "Twisted Fate",
+    "cost": 1,
+    "traits": [
+      "Stargazer",
+      "Fateweaver"
+    ],
+    "id": "tft17_twistedfate"
+  },
+  {
+    "apiName": "TFT17_Veigar",
+    "name": "Veigar",
+    "cost": 1,
+    "traits": [
+      "Meeple",
+      "Replicator"
+    ],
+    "id": "tft17_veigar"
+  },
+  {
+    "apiName": "TFT17_Akali",
+    "name": "Akali",
+    "cost": 2,
+    "traits": [
+      "NOVA",
+      "Marauder"
+    ],
+    "id": "tft17_akali"
+  },
+  {
+    "apiName": "TFT17_Belveth",
+    "name": "Bel'Veth",
+    "cost": 2,
+    "traits": [
+      "Primordian",
+      "Challenger",
+      "Marauder"
+    ],
+    "id": "tft17_belveth"
+  },
+  {
+    "apiName": "TFT17_Gnar",
+    "name": "Gnar",
+    "cost": 2,
+    "traits": [
+      "Meeple",
+      "Sniper"
+    ],
+    "id": "tft17_gnar"
+  },
+  {
+    "apiName": "TFT17_Gragas",
+    "name": "Gragas",
+    "cost": 2,
+    "traits": [
+      "Psionic",
+      "Brawler"
+    ],
+    "id": "tft17_gragas"
+  },
+  {
+    "apiName": "TFT17_Gwen",
+    "name": "Gwen",
+    "cost": 2,
+    "traits": [
+      "Space Groove",
+      "Rogue"
+    ],
+    "id": "tft17_gwen"
+  },
+  {
+    "apiName": "TFT17_Jax",
+    "name": "Jax",
+    "cost": 2,
+    "traits": [
+      "Stargazer",
+      "Bastion"
+    ],
+    "id": "tft17_jax"
+  },
+  {
+    "apiName": "TFT17_Jinx",
+    "name": "Jinx",
+    "cost": 2,
+    "traits": [
+      "Anima",
+      "Challenger"
+    ],
+    "id": "tft17_jinx"
+  },
+  {
+    "apiName": "TFT17_IvernMinion",
+    "name": "Meepsie",
+    "cost": 2,
+    "traits": [
+      "Meeple",
+      "Shepherd",
+      "Voyager"
+    ],
+    "id": "tft17_ivernminion"
+  },
+  {
+    "apiName": "TFT17_Milio",
+    "name": "Milio",
+    "cost": 2,
+    "traits": [
+      "Timebreaker",
+      "Fateweaver"
+    ],
+    "id": "tft17_milio"
+  },
+  {
+    "apiName": "TFT17_Mordekaiser",
+    "name": "Mordekaiser",
+    "cost": 2,
+    "traits": [
+      "Dark Star",
+      "Conduit",
+      "Vanguard"
+    ],
+    "id": "tft17_mordekaiser"
+  },
+  {
+    "apiName": "TFT17_Pantheon",
+    "name": "Pantheon",
+    "cost": 2,
+    "traits": [
+      "Timebreaker",
+      "Brawler",
+      "Replicator"
+    ],
+    "id": "tft17_pantheon"
+  },
+  {
+    "apiName": "TFT17_Pyke",
+    "name": "Pyke",
+    "cost": 2,
+    "traits": [
+      "Psionic",
+      "Voyager"
+    ],
+    "id": "tft17_pyke"
+  },
+  {
+    "apiName": "TFT17_Zoe",
+    "name": "Zoe",
+    "cost": 2,
+    "traits": [
+      "Arbiter",
+      "Conduit"
+    ],
+    "id": "tft17_zoe"
+  },
+  {
+    "apiName": "TFT17_Aurora",
+    "name": "Aurora",
+    "cost": 3,
+    "traits": [
+      "Anima",
+      "Voyager"
+    ],
+    "id": "tft17_aurora"
+  },
+  {
+    "apiName": "TFT17_Diana",
+    "name": "Diana",
+    "cost": 3,
+    "traits": [
+      "Arbiter",
+      "Challenger"
+    ],
+    "id": "tft17_diana"
+  },
+  {
+    "apiName": "TFT17_Fizz",
+    "name": "Fizz",
+    "cost": 3,
+    "traits": [
+      "Meeple",
+      "Rogue"
+    ],
+    "id": "tft17_fizz"
+  },
+  {
+    "apiName": "TFT17_Illaoi",
+    "name": "Illaoi",
+    "cost": 3,
+    "traits": [
+      "Anima",
+      "Vanguard",
+      "Shepherd"
+    ],
+    "id": "tft17_illaoi"
+  },
+  {
+    "apiName": "TFT17_Kaisa",
+    "name": "Kai'Sa",
+    "cost": 3,
+    "traits": [
+      "Dark Star",
+      "Rogue"
+    ],
+    "id": "tft17_kaisa"
+  },
+  {
+    "apiName": "TFT17_Lulu",
+    "name": "Lulu",
+    "cost": 3,
+    "traits": [
+      "Stargazer",
+      "Replicator"
+    ],
+    "id": "tft17_lulu"
+  },
+  {
+    "apiName": "TFT17_Maokai",
+    "name": "Maokai",
+    "cost": 3,
+    "traits": [
+      "NOVA",
+      "Brawler"
+    ],
+    "id": "tft17_maokai"
+  },
+  {
+    "apiName": "TFT17_MissFortune",
+    "name": "Miss Fortune",
+    "cost": 3,
+    "traits": [
+      "Gun Goddess",
+      "Choose Trait"
+    ],
+    "id": "tft17_missfortune"
+  },
+  {
+    "apiName": "TFT17_Ornn",
+    "name": "Ornn",
+    "cost": 3,
+    "traits": [
+      "Space Groove",
+      "Bastion"
+    ],
+    "id": "tft17_ornn"
+  },
+  {
+    "apiName": "TFT17_Rhaast",
+    "name": "Rhaast",
+    "cost": 3,
+    "traits": [
+      "Redeemer"
+    ],
+    "id": "tft17_rhaast"
+  },
+  {
+    "apiName": "TFT17_Samira",
+    "name": "Samira",
+    "cost": 3,
+    "traits": [
+      "Space Groove",
+      "Sniper"
+    ],
+    "id": "tft17_samira"
+  },
+  {
+    "apiName": "TFT17_Urgot",
+    "name": "Urgot",
+    "cost": 3,
+    "traits": [
+      "Mecha",
+      "Brawler",
+      "Marauder"
+    ],
+    "id": "tft17_urgot"
+  },
+  {
+    "apiName": "TFT17_Viktor",
+    "name": "Viktor",
+    "cost": 3,
+    "traits": [
+      "Psionic",
+      "Conduit"
+    ],
+    "id": "tft17_viktor"
+  },
+  {
+    "apiName": "TFT17_AurelionSol",
+    "name": "Aurelion Sol",
+    "cost": 4,
+    "traits": [
+      "Mecha",
+      "Conduit"
+    ],
+    "id": "tft17_aurelionsol"
+  },
+  {
+    "apiName": "TFT17_Corki",
+    "name": "Corki",
+    "cost": 4,
+    "traits": [
+      "Meeple",
+      "Fateweaver"
+    ],
+    "id": "tft17_corki"
+  },
+  {
+    "apiName": "TFT17_Karma",
+    "name": "Karma",
+    "cost": 4,
+    "traits": [
+      "Dark Star",
+      "Voyager"
+    ],
+    "id": "tft17_karma"
+  },
+  {
+    "apiName": "TFT17_Kindred",
+    "name": "Kindred",
+    "cost": 4,
+    "traits": [
+      "NOVA",
+      "Challenger"
+    ],
+    "id": "tft17_kindred"
+  },
+  {
+    "apiName": "TFT17_Leblanc",
+    "name": "LeBlanc",
+    "cost": 4,
+    "traits": [
+      "Arbiter",
+      "Shepherd"
+    ],
+    "id": "tft17_leblanc"
+  },
+  {
+    "apiName": "TFT17_MasterYi",
+    "name": "Master Yi",
+    "cost": 4,
+    "traits": [
+      "Psionic",
+      "Marauder"
+    ],
+    "id": "tft17_masteryi"
+  },
+  {
+    "apiName": "TFT17_Nami",
+    "name": "Nami",
+    "cost": 4,
+    "traits": [
+      "Space Groove",
+      "Replicator"
+    ],
+    "id": "tft17_nami"
+  },
+  {
+    "apiName": "TFT17_Nunu",
+    "name": "Nunu & Willump",
+    "cost": 4,
+    "traits": [
+      "Stargazer",
+      "Vanguard"
+    ],
+    "id": "tft17_nunu"
+  },
+  {
+    "apiName": "TFT17_Rammus",
+    "name": "Rammus",
+    "cost": 4,
+    "traits": [
+      "Meeple",
+      "Bastion"
+    ],
+    "id": "tft17_rammus"
+  },
+  {
+    "apiName": "TFT17_Riven",
+    "name": "Riven",
+    "cost": 4,
+    "traits": [
+      "Timebreaker",
+      "Rogue"
+    ],
+    "id": "tft17_riven"
+  },
+  {
+    "apiName": "TFT17_TahmKench",
+    "name": "Tahm Kench",
+    "cost": 4,
+    "traits": [
+      "Oracle",
+      "Brawler"
+    ],
+    "id": "tft17_tahmkench"
+  },
+  {
+    "apiName": "TFT17_Galio",
+    "name": "The Mighty Mech",
+    "cost": 4,
+    "traits": [
+      "Mecha",
+      "Voyager"
+    ],
+    "id": "tft17_galio"
+  },
+  {
+    "apiName": "TFT17_Xayah",
+    "name": "Xayah",
+    "cost": 4,
+    "traits": [
+      "Stargazer",
+      "Sniper"
+    ],
+    "id": "tft17_xayah"
+  },
+  {
+    "apiName": "TFT17_Bard",
+    "name": "Bard",
+    "cost": 5,
+    "traits": [
+      "Meeple",
+      "Conduit"
+    ],
+    "id": "tft17_bard"
+  },
+  {
+    "apiName": "TFT17_Blitzcrank",
+    "name": "Blitzcrank",
+    "cost": 5,
+    "traits": [
+      "Party Animal",
+      "Space Groove",
+      "Vanguard"
+    ],
+    "id": "tft17_blitzcrank"
+  },
+  {
+    "apiName": "TFT17_Fiora",
+    "name": "Fiora",
+    "cost": 5,
+    "traits": [
+      "Divine Duelist",
+      "Anima",
+      "Marauder"
+    ],
+    "id": "tft17_fiora"
+  },
+  {
+    "apiName": "TFT17_Graves",
+    "name": "Graves",
+    "cost": 5,
+    "traits": [
+      "Factory New"
+    ],
+    "id": "tft17_graves"
+  },
+  {
+    "apiName": "TFT17_Jhin",
+    "name": "Jhin",
+    "cost": 5,
+    "traits": [
+      "Dark Star",
+      "Eradicator",
+      "Sniper"
+    ],
+    "id": "tft17_jhin"
+  },
+  {
+    "apiName": "TFT17_Morgana",
+    "name": "Morgana",
+    "cost": 5,
+    "traits": [
+      "Dark Lady"
+    ],
+    "id": "tft17_morgana"
+  },
+  {
+    "apiName": "TFT17_Shen",
+    "name": "Shen",
+    "cost": 5,
+    "traits": [
+      "Bulwark",
+      "Bastion"
+    ],
+    "id": "tft17_shen"
+  },
+  {
+    "apiName": "TFT17_Sona",
+    "name": "Sona",
+    "cost": 5,
+    "traits": [
+      "Commander",
+      "Psionic",
+      "Shepherd"
+    ],
+    "id": "tft17_sona"
+  },
+  {
+    "apiName": "TFT17_Vex",
+    "name": "Vex",
+    "cost": 5,
+    "traits": [
+      "Doomer"
+    ],
+    "id": "tft17_vex"
+  },
+  {
+    "apiName": "TFT17_Zed",
+    "name": "Zed",
+    "cost": 5,
+    "traits": [
+      "Galaxy Hunter"
+    ],
+    "id": "tft17_zed"
+  }
+]

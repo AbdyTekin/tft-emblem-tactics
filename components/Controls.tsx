@@ -38,7 +38,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
 
                     {/* Level Display */}
                     <div className="flex-1 h-10 relative group overflow-hidden rounded-xl bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 shadow-[0_0_10px_rgba(99,102,241,0.1)] flex items-center justify-center border border-indigo-500/50">
-                        <div className="absolute inset-0 bg-[url('https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-tft/global/default/tft_t11_subtexture_atlas_1.png')] opacity-10 mix-blend-overlay bg-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-10 mix-blend-overlay" />
 
                         <div className="relative flex flex-col items-center z-10">
                             <span className="text-2xl font-bold text-indigo-100 leading-none tracking-tight drop-shadow-md">
@@ -71,9 +71,9 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                 <div className="grid grid-cols-1 gap-2">
                     {[
                         {
-                            id: 'RegionRyze',
-                            label: t('strategy_region_ryze'),
-                            desc: t('strategy_region_ryze_desc'),
+                            id: 'OriginMax',
+                            label: t('strategy_origin_max'),
+                            desc: t('strategy_origin_max_desc'),
                             icon: (
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

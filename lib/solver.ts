@@ -9,20 +9,10 @@ export interface TeamComp {
     strategyName: string;
 }
 
-export type SolverStrategy = 'RegionRyze' | 'BronzeLife';
+export type SolverStrategy = 'OriginMax' | 'BronzeLife';
 
 let RECURSION_COUNT = 0;
 const MAX_RECURSION_LIMIT = 100000;
-
-function getUnitSlots(champion: Champion): number {
-    if (champion.name === "Galio") return 0;
-    if (champion.name === "Baron Nashor") return 2;
-    return 1;
-}
-
-function calculateUsedSlots(team: Champion[]): number {
-    return team.reduce((acc, champ) => acc + getUnitSlots(champ), 0);
-}
 
 function calculateTraitCounts(
     champions: Champion[],
@@ -32,11 +22,7 @@ function calculateTraitCounts(
 
     for (const champ of champions) {
         for (const trait of champ.traits) {
-            let increment = 1;
-            if (trait === 'Void' && champ.name === 'Baron Nashor') {
-                increment = 2;
-            }
-            counts[trait] = (counts[trait] || 0) + increment;
+            counts[trait] = (counts[trait] || 0) + 1;
         }
     }
     return counts;
@@ -48,11 +34,7 @@ function updateTraitCounts(
     direction: 1 | -1
 ): void {
     for (const trait of champion.traits) {
-        let increment = 1;
-        if (trait === 'Void' && champion.name === 'Baron Nashor') {
-            increment = 2;
-        }
-        counts[trait] = (counts[trait] || 0) + increment * direction;
+        counts[trait] = (counts[trait] || 0) + direction;
     }
 }
 
@@ -62,16 +44,10 @@ function getCandidates(
     allChampions: Champion[],
     strategy: SolverStrategy
 ): Champion[] {
-    // Derived from passed traitCounts, no recalculation needed
-
-
     const currentNames = new Set(currentTeam.map(c => c.name));
 
     const availablePool = allChampions.filter(c =>
-        !currentNames.has(c.name) &&
-        c.name !== "Galio" &&
-        c.name !== "Baron Nashor" &&
-        !(currentTeam.some(c => c.traits.includes('Targon')) && c.traits.includes('Targon'))
+        !currentNames.has(c.name)
     );
 
     if (availablePool.length === 0) return [];
@@ -84,9 +60,9 @@ function getCandidates(
         if (!rule) continue;
 
         let checkBreakpoint = false;
-        const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
-        const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Origin' && trait !== 'Targon';
-        if (regionRyzeCheck || bronzeLifeCheck) checkBreakpoint = true;
+        const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
+        const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
+        if (originMaxCheck || bronzeLifeCheck) checkBreakpoint = true;
         if (checkBreakpoint) {
             let activeTier = -1;
             for (let i = 0; i < rule.breakpoints.length; i++) {
@@ -104,7 +80,7 @@ function getCandidates(
     let candidates: Champion[] = [];
     if (Object.keys(openableTraits).length > 0) {
         candidates = availablePool.filter(c =>
-            c.traits.some(t => (openableTraits[t] || (strategy === 'RegionRyze' && t === 'Targon')) && !openedTraits[t])
+            c.traits.some(t => openableTraits[t] && !openedTraits[t])
         );
     }
     else {
@@ -114,13 +90,13 @@ function getCandidates(
                 const rule = TRAIT_RULES[t];
                 if (!rule) continue;
 
-                const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
-                const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Origin' && t !== 'Targon';
+                const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
+                const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
                 if (bronzeLifeCheck && openedTraits[t] <= rule.breakpoints[0]) return false;
-                if (regionRyzeCheck || bronzeLifeCheck) distinctCount++;
+                if (originMaxCheck || bronzeLifeCheck) distinctCount++;
             }
 
-            const threshold = strategy === 'RegionRyze' ? 2 : 3;
+            const threshold = strategy === 'OriginMax' ? 2 : 3;
             return distinctCount >= threshold;
         });
 
@@ -146,7 +122,7 @@ function buildTeamRecursively(
     RECURSION_COUNT++;
     if (RECURSION_COUNT > MAX_RECURSION_LIMIT) return;
 
-    const usedSlots = calculateUsedSlots(currentTeam);
+    const usedSlots = currentTeam.length;
     if (usedSlots >= maxSlots) {
         const comp = createTeamComp(currentTeam, activeEmblems, strategy);
         results.push(comp);
@@ -161,8 +137,6 @@ function buildTeamRecursively(
     const sortedCandidates = candidates.sort((a, b) => b.cost - a.cost);
 
     for (const candidate of sortedCandidates) {
-        if (usedSlots + getUnitSlots(candidate) > maxSlots) continue;
-
         currentTeam.push(candidate);
         updateTraitCounts(traitCounts, candidate, 1);
 
@@ -183,7 +157,7 @@ function createTeamComp(
     const traitCounts = calculateTraitCounts(champions, activeEmblems);
     const activeSynergies: string[] = [];
     let difficulty = 0;
-    let regionCount = 0;
+    let originCount = 0;
     let bronzeCount = 0;
     let totalCost = champions.reduce((sum, c) => sum + c.cost, 0);
     difficulty += totalCost;
@@ -203,9 +177,9 @@ function createTeamComp(
             difficulty += (activeTier + 1) * 10; // Bonus for active traits
 
             // Strategy Metrics
-            const regionRyzeCheck = strategy === 'RegionRyze' && rule.type === 'Region';
-            const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Origin' && trait !== 'Targon';
-            if (regionRyzeCheck) regionCount++;
+            const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
+            const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
+            if (originMaxCheck) originCount++;
             if (bronzeLifeCheck && count <= rule.breakpoints[0]) bronzeCount++;
         }
     }
@@ -213,10 +187,10 @@ function createTeamComp(
     let strategyValue = 0;
     let strategyName = '';
 
-    if (strategy === 'RegionRyze') {
-        strategyValue = regionCount;
-        strategyName = 'region';
-        difficulty += regionCount * 1000;
+    if (strategy === 'OriginMax') {
+        strategyValue = originCount;
+        strategyName = 'origin';
+        difficulty += originCount * 1000;
     } else {
         strategyValue = bronzeCount;
         strategyName = 'bronzeTrait';
@@ -236,7 +210,7 @@ export function solveTeamComp(
     activeChampions: Champion[], // Full filtered pool (all available)
     activeEmblems: Record<string, number>,
     maxSlots: number, // "team size"
-    strategy: SolverStrategy = 'RegionRyze',
+    strategy: SolverStrategy = 'OriginMax',
     initialTeam: Champion[] = [] // selected/filtered champions
 ): TeamComp[] {
     RECURSION_COUNT = 0;
@@ -246,21 +220,15 @@ export function solveTeamComp(
     const currentTeam = [...initialTeam];
 
     // 1. Validate Initial Team
-    const usedSlots = calculateUsedSlots(currentTeam);
+    const usedSlots = currentTeam.length;
     if (usedSlots > maxSlots) {
         // Already overfilled
         return [createTeamComp(currentTeam, activeEmblems, strategy)];
     }
 
-    let ryze = activeChampions.find(c => c.name === "Ryze")!;
-    if (ryze && strategy === 'RegionRyze' && !currentTeam.some(c => c.name === "Ryze")) {
-        currentTeam.push(ryze);
-    }
-
     // 2. Start Recursive Build
     const startTraitCounts = calculateTraitCounts(currentTeam, activeEmblems);
 
-    // 2. Start Recursive Build
     buildTeamRecursively(
         [...currentTeam],
         startTraitCounts,

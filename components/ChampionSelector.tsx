@@ -192,20 +192,20 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
 
     // Derive Region/Class traits for the trait dropdown
     const regionClassTraits = useMemo(() => {
-        const regions: string[] = [];
+        const origins: string[] = [];
         const classes: string[] = [];
         for (const [name, rule] of Object.entries(TRAIT_RULES)) {
-            if (rule.type === 'Region') regions.push(name);
+            if (rule.type === 'Origin') origins.push(name);
             else if (rule.type === 'Class') classes.push(name);
         }
-        regions.sort((a, b) => a.localeCompare(b));
+        origins.sort((a, b) => a.localeCompare(b));
         classes.sort((a, b) => a.localeCompare(b));
-        return { regions, classes };
+        return { origins, classes };
     }, []);
 
     // Build a set of Region/Class trait names for search matching
     const regionClassTraitNames = useMemo(() => {
-        return new Set([...regionClassTraits.regions, ...regionClassTraits.classes]);
+        return new Set([...regionClassTraits.origins, ...regionClassTraits.classes]);
     }, [regionClassTraits]);
 
     const filteredChampions = useMemo(() => {
@@ -281,7 +281,12 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     };
 
     const renderChampionCard = (champ: Champion, isSelected: boolean, onClick: () => void) => {
-        const imageUrl = `https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName.toLowerCase()}_square.tft_set16.png`;
+        const champApiNameLower = champ.apiName.toLowerCase();
+        let imageName = `${champApiNameLower}_square.tft_set17.png`;
+        if (champ.apiName === 'TFT17_Rhaast') {
+            imageName = 'tft17_kayn_slay_square.tft_set17.png';
+        }
+        const imageUrl = `https://raw.communitydragon.org/latest/game/assets/characters/${champApiNameLower}/hud/${imageName}`;
         const costColorObj = costColors[champ.cost as keyof typeof costColors] || 'border-gray-500 text-gray-400';
         const bgCostColor = costColorObj.split(' ')[1].replace('text-', 'bg-');
 
@@ -424,8 +429,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                                     <span>{t('all_traits')}</span>
                                                 </button>
                                                 {/* Regions */}
-                                                <div className="px-3 py-1 text-[9px] font-bold text-gray-600 uppercase tracking-wider border-t border-white/5">{t('regions')}</div>
-                                                {regionClassTraits.regions.map(trait => (
+                                                <div className="px-3 py-1 text-[9px] font-bold text-gray-600 uppercase tracking-wider border-t border-white/5">{t('origins')}</div>
+                                                {regionClassTraits.origins.map(trait => (
                                                     <button
                                                         key={trait}
                                                         onClick={() => { setFilterTrait(filterTrait === trait ? null : trait); setIsTraitDropdownOpen(false); }}

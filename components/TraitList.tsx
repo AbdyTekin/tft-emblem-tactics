@@ -40,9 +40,13 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                         const count = selectedEmblems.filter(e => e === trait).length;
                         const isSelected = count > 0;
 
-                        // Construct Image URL
-                        const normalizedName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
-                        const imageUrl = `https://raw.communitydragon.org/16.1/game/assets/maps/particles/tft/item_icons/traits/spatula/set16/tft16_emblem_${normalizedName}.tft_set16.png`;
+                        // Handle Riot's internal emblem naming inconsistencies
+                        let emblemName = trait.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        if (emblemName === 'anima') emblemName = 'animatech';
+                        if (emblemName === 'psionic') emblemName = 'psyops';
+                        if (emblemName === 'shepherd') emblemName = 'sheperd';
+
+                        const imageUrl = `https://raw.communitydragon.org/latest/game/assets/maps/particles/tft/item_icons/traits/spatula/set17/tft17_emblem_${emblemName}.tft_set17.png`;
 
                         return (
                             <HoverCard key={trait} trigger={

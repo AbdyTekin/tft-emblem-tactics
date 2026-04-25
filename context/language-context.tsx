@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import enChampions from '@/lib/set16-champions.json';
+import enChampions from '@/lib/set17-champions.json';
 import enMessages from '@/messages/en.json';
 import trMessages from '@/messages/tr.json';
 import { Champion } from '@/types/tft';
