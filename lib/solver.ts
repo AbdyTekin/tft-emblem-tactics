@@ -9,7 +9,7 @@ export interface TeamComp {
     strategyName: string;
 }
 
-export type SolverStrategy = 'OriginMax' | 'BronzeLife';
+export type SolverStrategy = 'Vertical' | 'BronzeLife';
 
 let RECURSION_COUNT = 0;
 const MAX_RECURSION_LIMIT = 100000;
@@ -42,7 +42,8 @@ function getCandidates(
     currentTeam: Champion[],
     traitCounts: Record<string, number>,
     allChampions: Champion[],
-    strategy: SolverStrategy
+    strategy: SolverStrategy,
+    selectedEmblems: string[]
 ): Champion[] {
     const currentNames = new Set(currentTeam.map(c => c.name));
 
@@ -52,6 +53,76 @@ function getCandidates(
 
     if (availablePool.length === 0) return [];
 
+    if (strategy === 'Vertical') {
+        // Vertical priority: Try to upgrade the earliest possible selected emblem
+        for (const emblemTrait of selectedEmblems) {
+            const count = traitCounts[emblemTrait] || 0;
+            const rule = TRAIT_RULES[emblemTrait];
+            if (!rule) continue;
+
+            // Check if we can still upgrade this trait
+            const isCapped = count >= rule.breakpoints[rule.breakpoints.length - 1];
+            if (!isCapped) {
+                // Find candidates that have this trait
+                const candidates = availablePool.filter(c => c.traits.includes(emblemTrait));
+                if (candidates.length > 0) {
+                    return candidates;
+                }
+            }
+        }
+
+        // Fallback if no selected emblem traits can be upgraded with available pool
+        // Prioritize champions that bring in NEW origin/class traits or add to currently openable origin/class traits
+        
+        const activeNonUniqueTraits = new Set<string>();
+        const openableNonUniqueTraits = new Set<string>();
+
+        for (const [trait, count] of Object.entries(traitCounts)) {
+            if (count <= 0) continue;
+            const rule = TRAIT_RULES[trait];
+            if (!rule || rule.type === 'Unique') continue;
+            
+            if (count >= rule.breakpoints[0]) {
+                activeNonUniqueTraits.add(trait);
+            } else {
+                openableNonUniqueTraits.add(trait);
+            }
+        }
+
+        // 1. Try to activate an openable trait
+        if (openableNonUniqueTraits.size > 0) {
+            let candidates = availablePool.filter(c => 
+                c.traits.some(t => openableNonUniqueTraits.has(t))
+            );
+            if (candidates.length > 0) return candidates;
+        }
+
+        // 2. Try to introduce multiple NEW non-unique traits
+        let candidates = availablePool.filter(c => {
+            let newTraitsCount = 0;
+            for (const t of c.traits) {
+                const rule = TRAIT_RULES[t];
+                if (!rule || rule.type === 'Unique') continue;
+                if (!activeNonUniqueTraits.has(t)) newTraitsCount++;
+            }
+            return newTraitsCount >= 2;
+        });
+        if (candidates.length > 0) return candidates;
+
+        // 3. Try to introduce at least 1 NEW non-unique trait
+        candidates = availablePool.filter(c => {
+            return c.traits.some(t => {
+                const rule = TRAIT_RULES[t];
+                if (!rule || rule.type === 'Unique') return false;
+                return !activeNonUniqueTraits.has(t);
+            });
+        });
+        if (candidates.length > 0) return candidates;
+
+        // If no opened traits can be upgraded, return all available champions
+        return availablePool;
+    }
+
     const openableTraits: Record<string, number> = {};
     const openedTraits: Record<string, number> = {};
     for (const [trait, count] of Object.entries(traitCounts)) {
@@ -60,9 +131,8 @@ function getCandidates(
         if (!rule) continue;
 
         let checkBreakpoint = false;
-        const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
         const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
-        if (originMaxCheck || bronzeLifeCheck) checkBreakpoint = true;
+        if (bronzeLifeCheck) checkBreakpoint = true;
         if (checkBreakpoint) {
             let activeTier = -1;
             for (let i = 0; i < rule.breakpoints.length; i++) {
@@ -76,7 +146,7 @@ function getCandidates(
         }
     }
 
-    // Candidate Logic
+    // Candidate Logic for BronzeLife
     let candidates: Champion[] = [];
     if (Object.keys(openableTraits).length > 0) {
         candidates = availablePool.filter(c =>
@@ -90,13 +160,12 @@ function getCandidates(
                 const rule = TRAIT_RULES[t];
                 if (!rule) continue;
 
-                const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
                 const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
                 if (bronzeLifeCheck && openedTraits[t] <= rule.breakpoints[0]) return false;
-                if (originMaxCheck || bronzeLifeCheck) distinctCount++;
+                if (bronzeLifeCheck) distinctCount++;
             }
 
-            const threshold = strategy === 'OriginMax' ? 2 : 3;
+            const threshold = 3;
             return distinctCount >= threshold;
         });
 
@@ -117,20 +186,21 @@ function buildTeamRecursively(
     activeChampions: Champion[],
     strategy: SolverStrategy,
     maxSlots: number,
-    results: TeamComp[]
+    results: TeamComp[],
+    selectedEmblems: string[]
 ): void {
     RECURSION_COUNT++;
     if (RECURSION_COUNT > MAX_RECURSION_LIMIT) return;
 
     const usedSlots = currentTeam.length;
     if (usedSlots >= maxSlots) {
-        const comp = createTeamComp(currentTeam, activeEmblems, strategy);
+        const comp = createTeamComp(currentTeam, activeEmblems, strategy, selectedEmblems);
         results.push(comp);
         return;
     }
 
     // RECURSIVE STEP
-    const candidates = getCandidates(currentTeam, traitCounts, activeChampions, strategy);
+    const candidates = getCandidates(currentTeam, traitCounts, activeChampions, strategy, selectedEmblems);
 
     if (candidates.length === 0) return;
 
@@ -140,7 +210,7 @@ function buildTeamRecursively(
         currentTeam.push(candidate);
         updateTraitCounts(traitCounts, candidate, 1);
 
-        buildTeamRecursively(currentTeam, traitCounts, activeEmblems, activeChampions, strategy, maxSlots, results);
+        buildTeamRecursively(currentTeam, traitCounts, activeEmblems, activeChampions, strategy, maxSlots, results, selectedEmblems);
 
         updateTraitCounts(traitCounts, candidate, -1);
         currentTeam.pop();
@@ -152,7 +222,8 @@ function buildTeamRecursively(
 function createTeamComp(
     champions: Champion[],
     activeEmblems: Record<string, number>,
-    strategy: SolverStrategy
+    strategy: SolverStrategy,
+    selectedEmblems: string[]
 ): TeamComp {
     const traitCounts = calculateTraitCounts(champions, activeEmblems);
     const activeSynergies: string[] = [];
@@ -177,9 +248,7 @@ function createTeamComp(
             difficulty += (activeTier + 1) * 10; // Bonus for active traits
 
             // Strategy Metrics
-            const originMaxCheck = strategy === 'OriginMax' && rule.type === 'Origin';
             const bronzeLifeCheck = strategy === 'BronzeLife' && rule.type !== 'Unique';
-            if (originMaxCheck) originCount++;
             if (bronzeLifeCheck && count <= rule.breakpoints[0]) bronzeCount++;
         }
     }
@@ -187,10 +256,59 @@ function createTeamComp(
     let strategyValue = 0;
     let strategyName = '';
 
-    if (strategy === 'OriginMax') {
-        strategyValue = originCount;
-        strategyName = 'origin';
-        difficulty += originCount * 1000;
+    if (strategy === 'Vertical') {
+        let verticalScore = 0;
+        let multiplier = 100000;
+        
+        // Priority points for selected emblems
+        for (const emblem of selectedEmblems) {
+            const count = traitCounts[emblem] || 0;
+            const rule = TRAIT_RULES[emblem];
+            if (rule) {
+                let activeTier = -1;
+                for (let i = 0; i < rule.breakpoints.length; i++) {
+                    if (count >= rule.breakpoints[i]) activeTier = i;
+                }
+                
+                if (activeTier >= 0) {
+                    verticalScore += (activeTier + 1) * multiplier;
+                }
+            }
+            multiplier /= 10;
+        }
+
+        let goldOrPrismaticCount = 0;
+        let activeNonUniqueCount = 0;
+
+        for (const [trait, count] of Object.entries(traitCounts)) {
+            if (count <= 0) continue;
+            const rule = TRAIT_RULES[trait];
+            if (!rule) continue;
+
+            let activeTier = -1;
+            for (let i = 0; i < rule.breakpoints.length; i++) {
+                if (count >= rule.breakpoints[i]) activeTier = i;
+            }
+
+            if (activeTier >= 0) {
+                if (rule.type !== 'Unique') {
+                    activeNonUniqueCount++;
+
+                    // A trait is considered "gold or prismatic" if it reached its highest breakpoint, 
+                    // or the second highest breakpoint if it has 4 or more breakpoints.
+                    const isGoldOrPrismatic = activeTier === rule.breakpoints.length - 1 || 
+                        (rule.breakpoints.length >= 4 && activeTier === rule.breakpoints.length - 2);
+                    
+                    if (isGoldOrPrismatic) {
+                        goldOrPrismaticCount++;
+                    }
+                }
+            }
+        }
+
+        strategyValue = goldOrPrismaticCount;
+        strategyName = 'vertical';
+        difficulty += verticalScore + (activeNonUniqueCount * 100);
     } else {
         strategyValue = bronzeCount;
         strategyName = 'bronzeTrait';
@@ -208,13 +326,18 @@ function createTeamComp(
 
 export function solveTeamComp(
     activeChampions: Champion[], // Full filtered pool (all available)
-    activeEmblems: Record<string, number>,
+    selectedEmblems: string[], // Emblems in order of selection
     maxSlots: number, // "team size"
-    strategy: SolverStrategy = 'OriginMax',
+    strategy: SolverStrategy = 'Vertical',
     initialTeam: Champion[] = [] // selected/filtered champions
 ): TeamComp[] {
     RECURSION_COUNT = 0;
     const results: TeamComp[] = [];
+    
+    const activeEmblems: Record<string, number> = {};
+    for (const e of selectedEmblems) {
+        activeEmblems[e] = (activeEmblems[e] || 0) + 1;
+    }
 
     // 0. Clone Initial Team to prevent mutation of props
     const currentTeam = [...initialTeam];
@@ -223,7 +346,7 @@ export function solveTeamComp(
     const usedSlots = currentTeam.length;
     if (usedSlots > maxSlots) {
         // Already overfilled
-        return [createTeamComp(currentTeam, activeEmblems, strategy)];
+        return [createTeamComp(currentTeam, activeEmblems, strategy, selectedEmblems)];
     }
 
     // 2. Start Recursive Build
@@ -236,7 +359,8 @@ export function solveTeamComp(
         activeChampions,
         strategy,
         maxSlots,
-        results
+        results,
+        selectedEmblems
     );
 
     // 3. Sort & Return Top Results

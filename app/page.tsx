@@ -38,12 +38,9 @@ function MainLayout() {
     // User requirement: "our team generation shouldn't retrigger on champion select/filter when there is no selected emblem"
     if (deferredSelectedEmblems.length === 0) return [];
 
-    const activeEmblems: Record<string, number> = {};
-    deferredSelectedEmblems.forEach(e => activeEmblems[e] = (activeEmblems[e] || 0) + 1);
-
     return solveTeamComp(
       champions,
-      activeEmblems,
+      deferredSelectedEmblems,
       deferredLevel,
       deferredStrategy,
       deferredInitialTeam

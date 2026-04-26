@@ -37,9 +37,9 @@ async function runTests() {
     const aatrox = getChamp('Aatrox');
     const t1 = solveTeamComp(
         allChampions,
-        {},
+        [],
         2, // Max slots
-        'OriginMax',
+        'Vertical',
         [aatrox] // Initial
     );
     // Should have 2 units (Aatrox + 1 other that grants N.O.V.A or Bastion)
@@ -52,9 +52,9 @@ async function runTests() {
     const maokai = getChamp('Maokai');
     const t2 = solveTeamComp(
         allChampions,
-        {},
+        [],
         2,
-        'OriginMax',
+        'Vertical',
         [aatrox, maokai] // Complete NOVA team
     );
     logTeam('Aatrox + Maokai', t2);
@@ -63,7 +63,7 @@ async function runTests() {
     // Prioritize units with many distinct unique traits.
     const t3 = solveTeamComp(
         allChampions,
-        {},
+        [],
         3,
         'BronzeLife',
         []
@@ -74,12 +74,12 @@ async function runTests() {
     // Prioritizes finding units with Origins
     const t4 = solveTeamComp(
         allChampions,
-        {},
+        [],
         3,
-        'OriginMax', // Empty start
+        'Vertical', // Empty start
         []
     );
-    logTeam('OriginMax: 3 Units Empty Start', t4);
+    logTeam('Vertical: 3 Units Empty Start', t4);
 }
 
 runTests().catch(e => {
