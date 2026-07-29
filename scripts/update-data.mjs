@@ -1,42 +1,46 @@
 // scripts/update-data.mjs
-// Fetches TFT Set 17 champion data from Community Dragon and generates set17-champions.json
+// Fetches TFT champion data from Community Dragon (latest or pbe)
 import fs from 'fs';
 import path from 'path';
 
-const URL_EN = "https://raw.communitydragon.org/latest/cdragon/tft/en_us.json";
-const URL_TR = "https://raw.communitydragon.org/latest/cdragon/tft/tr_tr.json";
+const args = process.argv.slice(2);
+const usePbe = args.includes('--pbe');
+const setArg = args.find(arg => arg.startsWith('--set='));
+const SET_NUMBER = setArg ? parseInt(setArg.split('=')[1], 10) : 17;
+
+const BASE_URL = usePbe 
+    ? "https://raw.communitydragon.org/pbe/cdragon/tft" 
+    : "https://raw.communitydragon.org/latest/cdragon/tft";
+
+const URL_EN = `${BASE_URL}/en_us.json`;
+const URL_TR = `${BASE_URL}/tr_tr.json`;
 const OUTPUT_DIR = path.join(process.cwd(), 'lib');
 
-const SET_NUMBER = 17;
-
 async function fetchData() {
-    console.log("🔥 Fetching latest TFT data from Community Dragon...");
+    console.log(`🔥 Fetching TFT Set ${SET_NUMBER} data from Community Dragon (${usePbe ? 'PBE' : 'Latest'})...`);
 
     try {
-        // Fetch English data
         console.log("📥 Fetching EN data...");
         const resEn = await fetch(URL_EN);
         if (!resEn.ok) throw new Error(`Failed to fetch EN: ${resEn.statusText}`);
         const dataEn = await resEn.json();
 
-        // Find Set 17 in setData
-        let set17En = null;
+        let setEn = null;
         for (const [, val] of Object.entries(dataEn.setData)) {
-            if (val.number === SET_NUMBER) {
-                set17En = val;
+            if (val.number === SET_NUMBER || val.mutator === `TFTSet${SET_NUMBER}`) {
+                setEn = val;
                 break;
             }
         }
 
-        if (!set17En) {
+        if (!setEn) {
             throw new Error(`Set ${SET_NUMBER} not found in CDragon data!`);
         }
 
-        console.log(`✅ Found Set ${SET_NUMBER}: "${set17En.name}" (mutator: ${set17En.mutator})`);
-        console.log(`   Total champions: ${set17En.champions.length}`);
+        console.log(`✅ Found Set ${SET_NUMBER}: "${setEn.name}" (mutator: ${setEn.mutator})`);
+        console.log(`   Total champions: ${setEn.champions ? setEn.champions.length : 0}`);
 
-        // Filter playable champions (those with at least one trait)
-        const playableChamps = set17En.champions
+        const playableChamps = (setEn.champions || [])
             .filter(c => c.traits && c.traits.length > 0)
             .map(c => ({
                 apiName: c.apiName,
@@ -49,14 +53,16 @@ async function fetchData() {
 
         console.log(`   Playable champions (with traits): ${playableChamps.length}`);
 
-        // Write set17-champions.json
+        if (playableChamps.length < 20) {
+            console.warn(`\n⚠️  WARNING: Only ${playableChamps.length} playable champion(s) found for Set ${SET_NUMBER}. Data on Community Dragon may be incomplete!`);
+        }
+
         if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-        const champFile = path.join(OUTPUT_DIR, 'set17-champions.json');
+        const champFile = path.join(OUTPUT_DIR, `set${SET_NUMBER}-champions.json`);
         fs.writeFileSync(champFile, JSON.stringify(playableChamps, null, 2));
         console.log(`✅ Champion data saved to ${champFile}`);
 
-        // Save full TR data for reference
         console.log("📥 Fetching TR data...");
         const resTr = await fetch(URL_TR);
         if (!resTr.ok) throw new Error(`Failed to fetch TR: ${resTr.statusText}`);
@@ -66,14 +72,13 @@ async function fetchData() {
         fs.writeFileSync(trFile, JSON.stringify(dataTr, null, 2));
         console.log(`✅ TR data saved to ${trFile}`);
 
-        // Print summary
         console.log("\n📋 Champion Summary:");
         for (const c of playableChamps) {
             console.log(`   ${c.cost}g ${c.name} — [${c.traits.join(', ')}]`);
         }
 
     } catch (error) {
-        console.error("❌ Error:", error);
+        console.error("❌ Error:", error.message);
     }
 }
 

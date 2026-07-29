@@ -168,6 +168,7 @@
     "cost": 2,
     "traits": [
       "Meeple",
+      "Brawler",
       "Sniper"
     ],
     "id": "tft17_gnar"
@@ -467,6 +468,16 @@
     "id": "tft17_masteryi"
   },
   {
+    "apiName": "TFT17_Morgana",
+    "name": "Morgana",
+    "cost": 4,
+    "traits": [
+      "Dark Lady",
+      "Conduit"
+    ],
+    "id": "tft17_morgana"
+  },
+  {
     "apiName": "TFT17_Nami",
     "name": "Nami",
     "cost": 4,
@@ -589,20 +600,12 @@
     "id": "tft17_jhin"
   },
   {
-    "apiName": "TFT17_Morgana",
-    "name": "Morgana",
-    "cost": 5,
-    "traits": [
-      "Dark Lady"
-    ],
-    "id": "tft17_morgana"
-  },
-  {
     "apiName": "TFT17_Shen",
     "name": "Shen",
     "cost": 5,
     "traits": [
       "Bulwark",
+      "Timebreaker",
       "Bastion"
     ],
     "id": "tft17_shen"
@@ -623,7 +626,8 @@
     "name": "Vex",
     "cost": 5,
     "traits": [
-      "Doomer"
+      "Doomer",
+      "Stargazer"
     ],
     "id": "tft17_vex"
   },
