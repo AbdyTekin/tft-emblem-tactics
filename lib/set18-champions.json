@@ -1,0 +1,23 @@
+[
+  {
+    "apiName": "DA_18_Kobuko",
+    "name": "Kobuko",
+    "cost": 1,
+    "traits": [
+      "Sprykin",
+      "Brawler"
+    ],
+    "id": "da_18_kobuko"
+  },
+  {
+    "apiName": "DA_18_Alune",
+    "name": "Alune",
+    "cost": 5,
+    "traits": [
+      "Attuned",
+      "Lunar",
+      "Spellweaver"
+    ],
+    "id": "da_18_alune"
+  }
+]
