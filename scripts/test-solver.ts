@@ -36,80 +36,89 @@ function logTeam(title: string, team: TeamComp[]) {
 async function runTests() {
     fs.writeFileSync(path.join(__dirname, '../test-results.log'), "Running Solver Tests (Set 18 Edge Cases)...\n");
 
-    // 1. Lux +2 Regional Trait Test
-    // Lux (Elderwood) should give +2 to Elderwood!
+    // 1. Level 8 Team Slot Count Test
+    // A standard level 8 team with e.g. Blossom emblem must use exactly 8 slots (NOT 10 slots!)
+    const t1 = solveTeamComp(
+        allChampions,
+        ['Blossom'],
+        8,
+        'Vertical',
+        []
+    );
+    logTeam('Level 8 Blossom Team (Expect 8 slots used)', t1);
+    for (const comp of t1) {
+        const slots = comp.champions.reduce((sum, c) => sum + getChampionSlots(c), 0);
+        if (slots !== 8) {
+            throw new Error(`FAILED: Level 8 team used ${slots} slots instead of 8! Units: ${comp.champions.map(c => c.name).join(', ')}`);
+        }
+    }
+
+    // 2. Lux +2 Regional Trait Test
+    // Lux (Elderwood) grants +2 to Elderwood!
     // Ornn has 1 Elderwood. Together they should reach 3 Elderwood (activating Elderwood 3)!
     const luxElderwood = getChamp('Lux (Elderwood)');
     const ornn = getChamp('Ornn');
-    const t1 = solveTeamComp(
+    const t2 = solveTeamComp(
         allChampions,
         [],
         2,
         'Vertical',
         [luxElderwood, ornn]
     );
-    logTeam('Edge Case: Lux (Elderwood) + Ornn (Expect Elderwood (3) active)', t1);
-    if (!t1[0]?.activeSynergies.some(s => s.includes('Elderwood (3)'))) {
+    logTeam('Lux (Elderwood) + Ornn (Expect Elderwood (3) active)', t2);
+    if (!t2[0]?.activeSynergies.some(s => s.includes('Elderwood (3)'))) {
         throw new Error("FAILED: Lux did not grant +2 to Elderwood!");
     }
 
-    // 2. Only One Lux Variant Test
-    // Even if we search with 5 slots and Blossom emblem, only 1 Lux variant can appear in the team!
-    const t2 = solveTeamComp(
+    // 3. Only One Lux Variant in Team Test
+    const t3 = solveTeamComp(
         allChampions,
         ['Blossom'],
-        5,
+        8,
         'Vertical',
         []
     );
-    logTeam('Edge Case: Only 1 Lux Variant in Generated Team', t2);
-    for (const comp of t2) {
+    logTeam('Only 1 Lux Variant in Level 8 Team', t3);
+    for (const comp of t3) {
         const luxCount = comp.champions.filter(c => isLux(c)).length;
         if (luxCount > 1) {
             throw new Error(`FAILED: Found ${luxCount} Lux variants in a team: ${comp.champions.map(c => c.name).join(', ')}`);
         }
     }
 
-    // 3. Elder Dragon 2 Slots + 2 Riftbeast Test
+    // 4. Elder Dragon 2 Slots + 2 Riftbeast Test
     // Elder Dragon takes 2 slots and gives 2 Riftbeast.
-    // Since Riftbeast is 2, Riftbeast opens and team size gets +2!
-    // So with base slots 4: effectiveMaxSlots becomes 4 + 2 = 6!
-    // Elder dragon takes 2 slots, so remaining 4 slots can fit 4 normal units (total 5 units, 6 slots used).
+    // Since 2 Riftbeast is NOT 10 Riftbeast, it does NOT grant +2 team size.
+    // So on base slots 8, an Elder Dragon team must use exactly 8 slots!
+    // (e.g. 1 Elder Dragon [2 slots] + 6 normal units [6 slots] = 7 units, 8 slots).
     const elderDragon = getChamp('Elder Dragon');
-    const t3 = solveTeamComp(
-        allChampions,
-        [],
-        4,
-        'Vertical',
-        [elderDragon]
-    );
-    logTeam('Edge Case: Elder Dragon (Expect 2 slots, Riftbeast (2)+ active, +2 team size)', t3);
-    const topComp3 = t3[0];
-    const topComp3Slots = topComp3.champions.reduce((sum, c) => sum + getChampionSlots(c), 0);
-    if (topComp3Slots !== 6) {
-        throw new Error(`FAILED: Expected 6 slots used (4 base + 2 Riftbeast bonus), got ${topComp3Slots}`);
-    }
-
-    // 4. 2 Riftbeast +2 Team Size Test (without Elder Dragon)
-    // Cinderling (1) + Murkwolf (1) = 2 Riftbeast.
-    // Base slots 3 -> effectiveMaxSlots = 3 + 2 = 5!
-    // Total champions should reach 5 units!
-    const cinderling = getChamp('Cinderling');
-    const murkwolf = getChamp('Murkwolf');
     const t4 = solveTeamComp(
         allChampions,
         [],
-        3,
+        8,
         'Vertical',
-        [cinderling, murkwolf]
+        [elderDragon]
     );
-    logTeam('Edge Case: 2 Riftbeast +2 Team Size (Base 3 -> 5 units)', t4);
+    logTeam('Elder Dragon Level 8 Team (Expect 8 slots used total)', t4);
     const topComp4 = t4[0];
-    if (topComp4.champions.length !== 5) {
-        throw new Error(`FAILED: Expected 5 units (3 base + 2 bonus), got ${topComp4.champions.length}`);
+    const topComp4Slots = topComp4.champions.reduce((sum, c) => sum + getChampionSlots(c), 0);
+    if (topComp4Slots !== 8) {
+        throw new Error(`FAILED: Expected 8 slots used for Elder Dragon level 8 team, got ${topComp4Slots}`);
     }
 
-    console.log("\n ALL EDGE CASE TESTS PASSED!");
+    // 5. 10 Riftbeast +2 Team Size Test
+    // All 9 normal Riftbeast units (9 slots, 9 Riftbeast) + Elder Dragon (2 slots, +2 Riftbeast)
+    // gives 11 Riftbeast count (>= 10)!
+    // That triggers +2 team size!
+    const allRiftbeasts = allChampions.filter(c => c.traits.includes('Riftbeast'));
+    const rbTraitCounts = { Riftbeast: 11 };
+    const effectiveSlots = getEffectiveMaxSlots(8, rbTraitCounts);
+    console.log(`10+ Riftbeast effectiveMaxSlots for base 8: ${effectiveSlots} (Expected: 10)`);
+    if (effectiveSlots !== 10) {
+        throw new Error(`FAILED: Expected 10 slots for 10+ Riftbeast, got ${effectiveSlots}`);
+    }
+
+    console.log("\n ALL LEVEL 8 & EDGE CASE TESTS PASSED!");
 }
 
 runTests().catch(e => {

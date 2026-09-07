@@ -38,9 +38,9 @@ export function getChampionTraitContribution(champ: Champion, trait: string): nu
 
 /**
  * Calculates effective max slots for a team.
- * If 2 or more Riftbeast is open/active, the team gets +2 max team size.
+ * If 10 Riftbeast is active, the team gets +2 max team size.
  */
 export function getEffectiveMaxSlots(baseMaxSlots: number, traitCounts: Record<string, number>): number {
     const riftbeastCount = traitCounts['Riftbeast'] || 0;
-    return baseMaxSlots + (riftbeastCount >= 2 ? 2 : 0);
+    return baseMaxSlots + (riftbeastCount >= 10 ? 2 : 0);
 }

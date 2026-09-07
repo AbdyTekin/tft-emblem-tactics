@@ -67,7 +67,7 @@ function getCandidates(
         const candSlots = getChampionSlots(c);
         const candRb = c.traits.includes('Riftbeast') ? getChampionTraitContribution(c, 'Riftbeast') : 0;
         const newRbCount = (traitCounts['Riftbeast'] || 0) + candRb;
-        const newEffectiveMaxSlots = baseMaxSlots + (newRbCount >= 2 ? 2 : 0);
+        const newEffectiveMaxSlots = getEffectiveMaxSlots(baseMaxSlots, { ...traitCounts, Riftbeast: newRbCount });
 
         if (usedSlots + candSlots > newEffectiveMaxSlots) return false;
 
