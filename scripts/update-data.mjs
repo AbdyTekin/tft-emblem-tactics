@@ -6,7 +6,7 @@ import path from 'path';
 const args = process.argv.slice(2);
 const usePbe = args.includes('--pbe');
 const setArg = args.find(arg => arg.startsWith('--set='));
-const SET_NUMBER = setArg ? parseInt(setArg.split('=')[1], 10) : 17;
+const SET_NUMBER = setArg ? parseInt(setArg.split('=')[1], 10) : 18;
 
 const BASE_URL = usePbe 
     ? "https://raw.communitydragon.org/pbe/cdragon/tft" 
@@ -15,6 +15,11 @@ const BASE_URL = usePbe
 const URL_EN = `${BASE_URL}/en_us.json`;
 const URL_TR = `${BASE_URL}/tr_tr.json`;
 const OUTPUT_DIR = path.join(process.cwd(), 'lib');
+
+function normalizeAssetPath(p) {
+    if (!p || p.toLowerCase() === 'none') return undefined;
+    return p.toLowerCase().replace(/\.tex$/, '.png');
+}
 
 async function fetchData() {
     console.log(`🔥 Fetching TFT Set ${SET_NUMBER} data from Community Dragon (${usePbe ? 'PBE' : 'Latest'})...`);
@@ -42,13 +47,19 @@ async function fetchData() {
 
         const playableChamps = (setEn.champions || [])
             .filter(c => c.traits && c.traits.length > 0)
-            .map(c => ({
-                apiName: c.apiName,
-                name: c.name,
-                cost: c.cost,
-                traits: c.traits.map(t => t.replace(/\./g, '')),
-                id: c.apiName.toLowerCase()
-            }))
+            .map(c => {
+                const squareIcon = normalizeAssetPath(c.squareIcon);
+                const icon = normalizeAssetPath(c.icon);
+                return {
+                    apiName: c.apiName,
+                    name: c.name,
+                    cost: c.cost,
+                    traits: c.traits.map(t => t.replace(/\./g, '')),
+                    id: c.apiName.toLowerCase(),
+                    ...(squareIcon ? { squareIcon } : {}),
+                    ...(icon ? { icon } : {})
+                };
+            })
             .sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
 
         console.log(`   Playable champions (with traits): ${playableChamps.length}`);

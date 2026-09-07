@@ -4,7 +4,7 @@ import { solveTeamComp, TeamComp } from '../lib/solver';
 import { Champion } from '../types/tft';
 
 // MOCK DATA LOADING
-const championsPath = path.join(__dirname, '../lib/set17-champions.json');
+const championsPath = path.join(__dirname, '../lib/set18-champions.json');
 const allChampions: Champion[] = JSON.parse(fs.readFileSync(championsPath, 'utf-8'));
 
 function getChamp(name: string): Champion {
@@ -24,6 +24,7 @@ function logTeam(title: string, team: TeamComp[]) {
         output += `Synergies: ${top.activeSynergies.join(', ')}\n`;
         output += `Units: ${top.champions.map(c => c.name).join(', ')}\n`;
     }
+    console.log(output);
     fs.appendFileSync(path.join(__dirname, '../test-results.log'), output);
 }
 
@@ -31,57 +32,54 @@ function logTeam(title: string, team: TeamComp[]) {
 
 async function runTests() {
     // Clear log
-    fs.writeFileSync(path.join(__dirname, '../test-results.log'), "Running Solver Tests...\n");
+    fs.writeFileSync(path.join(__dirname, '../test-results.log'), "Running Solver Tests (Set 18)...\n");
 
-    // 1. Basic Slot Test - Set 17
-    const aatrox = getChamp('Aatrox');
+    // 1. Basic Slot Test - Set 18
+    const xayah = getChamp('Xayah');
     const t1 = solveTeamComp(
         allChampions,
-        [],
-        2, // Max slots
+        ['Elderwood'],
+        3, // Max slots
         'Vertical',
-        [aatrox] // Initial
+        [xayah] // Initial
     );
-    // Should have 2 units (Aatrox + 1 other that grants N.O.V.A or Bastion)
-    logTeam('Aatrox + 1 Slot (OriginMax)', t1);
+    logTeam('Xayah + Elderwood Emblem (Vertical)', t1);
 
     // 2. Trait Activation priority
-    // Aatrox is NOVA, Bastion
-    // Maokai is NOVA, Brawler
-    // 2 units should prioritize N.O.V.A.
-    const maokai = getChamp('Maokai');
+    // Ornn is Elderwood, Defender
+    // Alistar is Elderwood, Brawler
+    const ornn = getChamp('Ornn');
     const t2 = solveTeamComp(
         allChampions,
         [],
-        2,
+        3,
         'Vertical',
-        [aatrox, maokai] // Complete NOVA team
+        [xayah, ornn] // Need 1 more for Elderwood (3)
     );
-    logTeam('Aatrox + Maokai', t2);
+    logTeam('Xayah + Ornn + 1 Slot', t2);
 
     // 3. Bronze Life Test
-    // Prioritize units with many distinct unique traits.
     const t3 = solveTeamComp(
         allChampions,
         [],
-        3,
+        4,
         'BronzeLife',
         []
     );
-    logTeam('Bronze Life: 3 Units Empty Start', t3);
+    logTeam('Bronze Life: 4 Units Empty Start', t3);
 
-    // 4. OriginMax Empty Source
-    // Prioritizes finding units with Origins
+    // 4. Vertical Empty Start
     const t4 = solveTeamComp(
         allChampions,
-        [],
-        3,
-        'Vertical', // Empty start
+        ['Ravager'],
+        4,
+        'Vertical',
         []
     );
-    logTeam('Vertical: 3 Units Empty Start', t4);
+    logTeam('Vertical: 4 Units with Ravager Emblem', t4);
 }
 
 runTests().catch(e => {
+    console.error(e);
     fs.appendFileSync(path.join(__dirname, '../test-results.log'), `Error: ${e.message}\n${e.stack}`);
 });

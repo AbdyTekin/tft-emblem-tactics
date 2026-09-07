@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 import TraitIcon from '@/components/TraitIcon';
+import { getChampionImageUrl } from '@/lib/champion-image';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
@@ -281,12 +282,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     };
 
     const renderChampionCard = (champ: Champion, isSelected: boolean, onClick: () => void) => {
-        const champApiNameLower = champ.apiName.toLowerCase();
-        let imageName = `${champApiNameLower}_square.tft_set17.png`;
-        if (champ.apiName === 'TFT17_Rhaast') {
-            imageName = 'tft17_kayn_slay_square.tft_set17.png';
-        }
-        const imageUrl = `https://raw.communitydragon.org/latest/game/assets/characters/${champApiNameLower}/hud/${imageName}`;
+        const imageUrl = getChampionImageUrl(champ);
         const costColorObj = costColors[champ.cost as keyof typeof costColors] || 'border-gray-500 text-gray-400';
         const bgCostColor = costColorObj.split(' ')[1].replace('text-', 'bg-');
 

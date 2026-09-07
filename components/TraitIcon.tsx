@@ -5,18 +5,10 @@ import { useState } from 'react';
 const TraitIcon = ({ trait, className }: { trait: string, className?: string }) => {
     const normalizedTrait = trait.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 
-    // Potential URL patterns based on CDragon Set 17 paths
+    // Custom Icon file mappings based on CDragon Set 18 paths
     const customIconNames: Record<string, string> = {
-        'anima': 'trait_icon_17_animatech.tft_set17.png',
-        'psionic': 'trait_icon_17_psyops.tft_set17.png',
-        'sniper': 'trait_icon_6_sniper.png',
-        'vanguard': 'trait_icon_12_vanguard.tft_set12.png',
-        'eradicator': 'trait_icon_17_singularity.tft_set17.png',
-        'marauder': 'trait_icon_16_slayer.png',
-        'brawler': 'trait_icon_brawler.png',
-        'meeple': 'trait_icon_17_astronaut.tft_set17.png',
-        'conduit': 'trait_icon_17_channeler.tft_set17.png',
-        'oracle': 'trait_icon_12_arcana.tft_set12.png'
+        'blackthorn': 'trait_icon_18_oldgod.png',
+        'thornmaiden': 'trait_icon_18_zyraorigin.png',
     };
 
     let urls: string[] = [];
@@ -25,10 +17,9 @@ const TraitIcon = ({ trait, className }: { trait: string, className?: string }) 
     }
 
     urls.push(
-        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_17_${normalizedTrait}.tft_set17.png`,
-        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_17_${normalizedTrait}.png`,
-        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_16_${normalizedTrait}.png`, // Legacy fallback
-        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_9_${normalizedTrait}.png` // Generic fallback
+        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_18_${normalizedTrait}.png`,
+        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_18_${normalizedTrait}.tft_set18.png`,
+        `https://raw.communitydragon.org/latest/game/assets/ux/traiticons/trait_icon_${normalizedTrait}.png`
     );
 
     const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
@@ -47,7 +38,7 @@ const TraitIcon = ({ trait, className }: { trait: string, className?: string }) 
     }
 
     return (
-        <div className={`${className} relative inline-block align-middle`} style={{ width: '20px', height: '20px' }}> {/* Enforce dimensions if not provided, or rely on className */}
+        <div className={`${className} relative inline-block align-middle`} style={{ width: '20px', height: '20px' }}>
             {/* The actual image element handles loading and errors, but is hidden */}
             <img
                 src={urls[currentUrlIndex]}

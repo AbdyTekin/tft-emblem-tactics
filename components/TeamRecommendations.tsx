@@ -7,6 +7,7 @@ import { TeamComp } from '@/lib/solver';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 import { generateTeamCode } from '@/lib/team-code';
 import { useTranslations } from 'next-intl';
+import { getChampionImageUrl } from '@/lib/champion-image';
 
 // --- CONFIGURATION START ---
 
@@ -202,7 +203,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                     <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
                                         }`}>
                                         <img
-                                            src={`https://raw.communitydragon.org/latest/game/assets/characters/${champ.apiName.toLowerCase()}/hud/${champ.apiName === 'TFT17_Rhaast' ? 'tft17_kayn_slay' : champ.apiName.toLowerCase()}_square.tft_set17.png`}
+                                            src={getChampionImageUrl(champ)}
                                             alt={champ.name}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                             onError={(e) => {
