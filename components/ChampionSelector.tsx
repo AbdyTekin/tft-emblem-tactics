@@ -10,6 +10,7 @@ import HoverCard from '@/components/HoverCard';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 import TraitIcon from '@/components/TraitIcon';
 import { getChampionImageUrl } from '@/lib/champion-image';
+import { isLux } from '@/lib/tft-rules';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
@@ -269,7 +270,11 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
         if (exists) {
             setInitialTeam(initialTeam.filter(c => c.name !== champion.name));
         } else {
-            setInitialTeam([...initialTeam, champion]);
+            if (isLux(champion)) {
+                setInitialTeam([...initialTeam.filter(c => !isLux(c)), champion]);
+            } else {
+                setInitialTeam([...initialTeam, champion]);
+            }
         }
     };
 

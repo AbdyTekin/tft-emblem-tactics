@@ -1,5 +1,11 @@
 import { Champion } from '@/types/tft';
 import { TRAIT_RULES, TraitRule } from '@/lib/trait-rules';
+import {
+    isLux,
+    getChampionSlots,
+    getChampionTraitContribution,
+    getEffectiveMaxSlots
+} from '@/lib/tft-rules';
 
 export interface TeamComp {
     champions: Champion[];
@@ -22,7 +28,8 @@ function calculateTraitCounts(
 
     for (const champ of champions) {
         for (const trait of champ.traits) {
-            counts[trait] = (counts[trait] || 0) + 1;
+            const add = getChampionTraitContribution(champ, trait);
+            counts[trait] = (counts[trait] || 0) + add;
         }
     }
     return counts;
@@ -34,7 +41,8 @@ function updateTraitCounts(
     direction: 1 | -1
 ): void {
     for (const trait of champion.traits) {
-        counts[trait] = (counts[trait] || 0) + direction;
+        const delta = getChampionTraitContribution(champion, trait) * direction;
+        counts[trait] = (counts[trait] || 0) + delta;
     }
 }
 
@@ -43,13 +51,28 @@ function getCandidates(
     traitCounts: Record<string, number>,
     allChampions: Champion[],
     strategy: SolverStrategy,
-    selectedEmblems: string[]
+    selectedEmblems: string[],
+    baseMaxSlots: number
 ): Champion[] {
     const currentNames = new Set(currentTeam.map(c => c.name));
+    const hasLux = currentTeam.some(c => isLux(c));
+    const usedSlots = currentTeam.reduce((sum, c) => sum + getChampionSlots(c), 0);
 
-    const availablePool = allChampions.filter(c =>
-        !currentNames.has(c.name)
-    );
+    const availablePool = allChampions.filter(c => {
+        if (currentNames.has(c.name)) return false;
+        // Edge case: Only one variant of Lux can be added
+        if (hasLux && isLux(c)) return false;
+
+        // Check if champion fits within remaining slots (including possible Riftbeast expansion)
+        const candSlots = getChampionSlots(c);
+        const candRb = c.traits.includes('Riftbeast') ? getChampionTraitContribution(c, 'Riftbeast') : 0;
+        const newRbCount = (traitCounts['Riftbeast'] || 0) + candRb;
+        const newEffectiveMaxSlots = baseMaxSlots + (newRbCount >= 2 ? 2 : 0);
+
+        if (usedSlots + candSlots > newEffectiveMaxSlots) return false;
+
+        return true;
+    });
 
     if (availablePool.length === 0) return [];
 
@@ -72,8 +95,6 @@ function getCandidates(
         }
 
         // Fallback if no selected emblem traits can be upgraded with available pool
-        // Prioritize champions that bring in NEW origin/class traits or add to currently openable origin/class traits
-        
         const activeNonUniqueTraits = new Set<string>();
         const openableNonUniqueTraits = new Set<string>();
 
@@ -185,22 +206,24 @@ function buildTeamRecursively(
     activeEmblems: Record<string, number>,
     activeChampions: Champion[],
     strategy: SolverStrategy,
-    maxSlots: number,
+    baseMaxSlots: number,
     results: TeamComp[],
     selectedEmblems: string[]
 ): void {
     RECURSION_COUNT++;
     if (RECURSION_COUNT > MAX_RECURSION_LIMIT) return;
 
-    const usedSlots = currentTeam.length;
-    if (usedSlots >= maxSlots) {
+    const usedSlots = currentTeam.reduce((sum, c) => sum + getChampionSlots(c), 0);
+    const effectiveMaxSlots = getEffectiveMaxSlots(baseMaxSlots, traitCounts);
+
+    if (usedSlots >= effectiveMaxSlots) {
         const comp = createTeamComp(currentTeam, activeEmblems, strategy, selectedEmblems);
         results.push(comp);
         return;
     }
 
     // RECURSIVE STEP
-    const candidates = getCandidates(currentTeam, traitCounts, activeChampions, strategy, selectedEmblems);
+    const candidates = getCandidates(currentTeam, traitCounts, activeChampions, strategy, selectedEmblems, baseMaxSlots);
 
     if (candidates.length === 0) return;
 
@@ -210,7 +233,7 @@ function buildTeamRecursively(
         currentTeam.push(candidate);
         updateTraitCounts(traitCounts, candidate, 1);
 
-        buildTeamRecursively(currentTeam, traitCounts, activeEmblems, activeChampions, strategy, maxSlots, results, selectedEmblems);
+        buildTeamRecursively(currentTeam, traitCounts, activeEmblems, activeChampions, strategy, baseMaxSlots, results, selectedEmblems);
 
         updateTraitCounts(traitCounts, candidate, -1);
         currentTeam.pop();
@@ -228,7 +251,6 @@ function createTeamComp(
     const traitCounts = calculateTraitCounts(champions, activeEmblems);
     const activeSynergies: string[] = [];
     let difficulty = 0;
-    let originCount = 0;
     let bronzeCount = 0;
     let totalCost = champions.reduce((sum, c) => sum + c.cost, 0);
     difficulty += totalCost;
@@ -294,8 +316,6 @@ function createTeamComp(
                 if (rule.type !== 'Unique') {
                     activeNonUniqueCount++;
 
-                    // A trait is considered "gold or prismatic" if it reached its highest breakpoint, 
-                    // or the second highest breakpoint if it has 4 or more breakpoints.
                     const isGoldOrPrismatic = activeTier === rule.breakpoints.length - 1 || 
                         (rule.breakpoints.length >= 4 && activeTier === rule.breakpoints.length - 2);
                     
@@ -339,19 +359,33 @@ export function solveTeamComp(
         activeEmblems[e] = (activeEmblems[e] || 0) + 1;
     }
 
-    // 0. Clone Initial Team to prevent mutation of props
-    const currentTeam = [...initialTeam];
+    // 0. Ensure only one Lux variant in initialTeam
+    const uniqueInitial: Champion[] = [];
+    let seenLux = false;
+    for (const c of initialTeam) {
+        if (isLux(c)) {
+            if (!seenLux) {
+                uniqueInitial.push(c);
+                seenLux = true;
+            }
+        } else {
+            uniqueInitial.push(c);
+        }
+    }
+
+    const currentTeam = [...uniqueInitial];
 
     // 1. Validate Initial Team
-    const usedSlots = currentTeam.length;
-    if (usedSlots > maxSlots) {
-        // Already overfilled
+    const initialSlots = currentTeam.reduce((sum, c) => sum + getChampionSlots(c), 0);
+    const startTraitCounts = calculateTraitCounts(currentTeam, activeEmblems);
+    const effectiveMaxSlots = getEffectiveMaxSlots(maxSlots, startTraitCounts);
+
+    if (initialSlots >= effectiveMaxSlots) {
+        // Already filled or overfilled
         return [createTeamComp(currentTeam, activeEmblems, strategy, selectedEmblems)];
     }
 
     // 2. Start Recursive Build
-    const startTraitCounts = calculateTraitCounts(currentTeam, activeEmblems);
-
     buildTeamRecursively(
         [...currentTeam],
         startTraitCounts,

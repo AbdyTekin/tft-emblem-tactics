@@ -8,6 +8,7 @@ import { TRAIT_RULES } from '@/lib/trait-rules';
 import { generateTeamCode } from '@/lib/team-code';
 import { useTranslations } from 'next-intl';
 import { getChampionImageUrl } from '@/lib/champion-image';
+import { getChampionSlots } from '@/lib/tft-rules';
 
 // --- CONFIGURATION START ---
 
@@ -197,7 +198,7 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                         </div>
 
                         {/* Champions Grid */}
-                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
                             {team.champions.map((champ) => (
                                 <div key={champ.id} className="group relative aspect-square">
                                     <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
@@ -210,6 +211,12 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                                 (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/-1.png';
                                             }}
                                         />
+                                        {/* 2-slot badge for Elder Dragon */}
+                                        {getChampionSlots(champ) === 2 && (
+                                            <div className="absolute top-0 left-0 px-1 py-0.25 rounded-br-lg flex items-center justify-center bg-purple-900/90 border-r border-b border-purple-500/40">
+                                                <span className="text-[9px] font-black text-purple-200">2 SLOTS</span>
+                                            </div>
+                                        )}
                                         {/* Cost Badge */}
                                         <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
                                             }`}>

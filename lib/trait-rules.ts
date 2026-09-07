@@ -11,7 +11,7 @@ export const TRAIT_RULES: Record<string, TraitRule> = {
     // ORIGINS
     "Elderwood": { type: 'Origin', breakpoints: [3, 5, 7, 9, 11], hasEmblem: true, isPrismatic: true },
     "Blossom": { type: 'Origin', breakpoints: [3, 5, 7, 9, 11], hasEmblem: true, isPrismatic: true },
-    "Riftbeast": { type: 'Origin', breakpoints: [3, 5, 7, 10], hasEmblem: false, isPrismatic: true },
+    "Riftbeast": { type: 'Origin', breakpoints: [2, 3, 5, 7, 10], hasEmblem: false, isPrismatic: true },
     "Coven": { type: 'Origin', breakpoints: [3, 4, 5, 7], hasEmblem: true },
     "Inferno": { type: 'Origin', breakpoints: [2, 3, 5, 7], hasEmblem: true },
     "Blackthorn": { type: 'Origin', breakpoints: [2, 4, 6], hasEmblem: true },
