@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { solveTeams, type SolveRequest, type SolveResult } from '@/lib/solver';
+import type { SolveRequest, SolveResult } from '@/lib/solver';
 import type { SolverRequestMessage, SolverResponseMessage } from '@/lib/solver/worker';
 
 /** A result together with the request that produced it. */
@@ -49,7 +49,7 @@ export function useTeamSolver(request: SolveRequest | null): { solution: Solutio
         const run = (message: SolverRequestMessage) => {
             inFlight.current = message;
             if (worker.current) worker.current.postMessage(message);
-            else setTimeout(() => finish({ key: message.key, result: solveTeams(message.request) }), 0);
+            else import('@/lib/solver').then(({ solveTeams }) => finish({ key: message.key, result: solveTeams(message.request) }));
         };
         dispatch.current = () => {
             if (inFlight.current || !queued.current) return;

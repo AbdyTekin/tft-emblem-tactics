@@ -19,6 +19,8 @@ Build the best Teamfight Tactics **Set 18** boards around the emblems you hold.
   - Each team shows its tier-colored traits and which unit holds each emblem.
   - Copy any team straight into the in-game Team Planner.
 - **Lock champions** you already own; the picker only allows boards that fit.
+- **Share** any setup: the link holds your emblems, level, strategy and locked champions.
+- **Next steps at a glance**: each team shows the traits that are one unit short of activating.
 - **Fast and private**: the solver runs in a Web Worker (~100 ms). The site is fully static and serves every image itself.
 - **English and Turkish** UI, with champion and trait names from the game.
 

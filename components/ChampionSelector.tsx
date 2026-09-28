@@ -13,7 +13,7 @@ import TraitIcon from '@/components/TraitIcon';
 import { GOLD_ICON, championImage } from '@/lib/assets';
 import { evaluateTeam } from '@/lib/game/evaluate';
 import type { BoardSize } from '@/lib/game/rules';
-import { candidatePool } from '@/lib/solver';
+import { candidatePool } from '@/lib/game/rules';
 import { useIsClient } from '@/lib/hooks/use-is-client';
 import { useNames } from '@/lib/hooks/use-names';
 import { getTrait } from '@/lib/game/data';

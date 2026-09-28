@@ -44,5 +44,7 @@
   "add_champions": "Şampiyon kilitle",
   "clear_search": "Aramayı temizle",
   "filter_by_trait": "Özelliğe göre filtrele",
-  "filter_by_cost": "Bedele göre filtrele"
+  "filter_by_cost": "Bedele göre filtrele",
+  "share_link": "PAYLAŞ",
+  "one_unit_away": "Etkinleşmesine bir birim kaldı"
 }

@@ -1,5 +1,5 @@
 // Set 18 mechanics that the generated data can't express. Each rule quotes the in-game text it follows.
-import { TRAITS, getTrait } from '@/lib/game/data';
+import { CHAMPIONS, TRAITS, getTrait } from '@/lib/game/data';
 import type { Champion } from '@/lib/game/types';
 
 /** "Elder Dragon takes up 2 team slots and grants +2 to the Riftbeast trait." (Apex Predator) */
@@ -105,4 +105,10 @@ export function khazixVariants(khazix: Champion): Champion[] {
             traits: [...khazix.traits, trait],
         };
     });
+}
+
+/** Every unit that can be planned; evolved Kha'Zix variants are added on request. */
+export function candidatePool(options: { evolvedKhazix?: boolean }, pool: readonly Champion[] = CHAMPIONS): Champion[] {
+    const khazix = options.evolvedKhazix ? pool.find(c => c.apiName === KHAZIX) : undefined;
+    return khazix ? [...pool, ...khazixVariants(khazix)] : [...pool];
 }

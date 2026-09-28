@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
-import type { SolveRequest, Strategy } from '@/lib/solver';
+import React, { useMemo } from 'react';
+import type { SolveRequest } from '@/lib/solver';
 import { EMBLEM_TRAITS } from '@/lib/game/data';
+import { usePlannerState } from '@/lib/hooks/use-planner-state';
 import { useTeamSolver } from '@/lib/hooks/use-team-solver';
-import { Champion } from '@/types/tft';
 import Header from '@/components/Header';
 import Controls from '@/components/Controls';
 import TraitList from '@/components/TraitList';
@@ -13,41 +13,33 @@ import TeamRecommendations from '@/components/TeamRecommendations';
 import ScrollArea from '@/components/ScrollArea';
 
 function MainLayout() {
-  const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
-  const [level, setLevel] = useState<number>(8);
-  const [bonusTeamSize, setBonusTeamSize] = useState<number>(0);
-  const [strategy, setStrategy] = useState<Strategy>('BronzeLife');
-  const [rivalsAugment, setRivalsAugment] = useState(false);
-  const [evolvedKhazix, setEvolvedKhazix] = useState(false);
-  const [initialTeam, setInitialTeam] = useState<Champion[]>([]);
+  // Settings live in the URL, so every setup is a shareable link
+  const [planner, update] = usePlannerState();
+  const { emblems, level, bonusTeamSize, strategy, locked, rivalsAugment, evolvedKhazix } = planner;
 
   const request = useMemo<SolveRequest | null>(() => {
     // No emblems selected: nothing to build around, even when champions are locked.
-    if (selectedEmblems.length === 0) return null;
+    if (emblems.length === 0) return null;
     return {
-      emblems: selectedEmblems,
+      emblems,
       level,
       bonusTeamSize,
       strategy,
-      locked: initialTeam.map(c => c.apiName),
+      locked: locked.map(c => c.apiName),
       rivalsAugment,
       evolvedKhazix,
     };
-  }, [selectedEmblems, level, bonusTeamSize, strategy, initialTeam, rivalsAugment, evolvedKhazix]);
+  }, [emblems, level, bonusTeamSize, strategy, locked, rivalsAugment, evolvedKhazix]);
 
   // Solved in a Web Worker; the previous result stays on screen (dimmed) until the new one arrives.
   const { solution, solving } = useTeamSolver(request);
 
-  const addEmblem = (trait: string) => {
-    setSelectedEmblems(prev => [...prev, trait]);
-  };
+  const addEmblem = (trait: string) => update(s => ({ emblems: [...s.emblems, trait] }));
 
-  const removeEmblem = (trait: string) => {
-    setSelectedEmblems(prev => {
-      const index = prev.lastIndexOf(trait);
-      return index === -1 ? prev : [...prev.slice(0, index), ...prev.slice(index + 1)];
-    });
-  };
+  const removeEmblem = (trait: string) => update(s => {
+    const index = s.emblems.lastIndexOf(trait);
+    return index === -1 ? {} : { emblems: [...s.emblems.slice(0, index), ...s.emblems.slice(index + 1)] };
+  });
 
   return (
     <div className="flex min-h-screen lg:h-screen lg:overflow-hidden flex-col bg-gray-900 text-gray-100 font-sans">
@@ -61,30 +53,34 @@ function MainLayout() {
             <div className="flex flex-col gap-6 w-full lg:h-full lg:min-h-0 lg:overflow-hidden justify-center">
               <Controls
                 level={level}
-                setLevel={setLevel}
+                setLevel={value => update({ level: value })}
                 bonusTeamSize={bonusTeamSize}
-                setBonusTeamSize={setBonusTeamSize}
+                setBonusTeamSize={value => update({ bonusTeamSize: value })}
                 strategy={strategy}
-                setStrategy={setStrategy}
+                setStrategy={value => update({ strategy: value })}
                 rivalsAugment={rivalsAugment}
-                setRivalsAugment={setRivalsAugment}
+                setRivalsAugment={value => update({ rivalsAugment: value })}
                 evolvedKhazix={evolvedKhazix}
-                setEvolvedKhazix={setEvolvedKhazix}
+                setEvolvedKhazix={value => update(s => ({
+                  evolvedKhazix: value,
+                  // Evolved variants only exist while the option is on
+                  locked: value ? s.locked : s.locked.filter(c => !c.apiName.includes(':')),
+                }))}
               />
 
               <ChampionSelector
-                initialTeam={initialTeam}
-                setInitialTeam={setInitialTeam}
+                initialTeam={locked}
+                setInitialTeam={team => update({ locked: team })}
                 boardSize={{ level, bonusTeamSize }}
                 evolvedKhazix={evolvedKhazix}
               />
 
               <TraitList
                 availableTraits={EMBLEM_TRAITS}
-                selectedEmblems={selectedEmblems}
+                selectedEmblems={emblems}
                 addEmblem={addEmblem}
                 removeEmblem={removeEmblem}
-                resetEmblems={() => setSelectedEmblems([])}
+                resetEmblems={() => update({ emblems: [] })}
               />
             </div>
           </div>

@@ -138,6 +138,16 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                                 <span className="text-[12px] font-medium opacity-90 text-gray-300">{names.trait(trait.trait)}</span>
                             </div>
                         ))}
+                        {/* Traits one unit short of activating: cheap upgrades to look for */}
+                        {team.evaluation.traits
+                            .filter(trait => !trait.style && !trait.suppressed && trait.kind !== 'unique' && trait.next !== null && trait.next - trait.count === 1)
+                            .map(trait => (
+                                <div key={trait.trait} title={t('one_unit_away')} className="flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] border-dashed border-white/15 text-gray-500">
+                                    <span className="text-[12px] font-bold leading-none">{trait.count}/{trait.next}</span>
+                                    <TraitIcon trait={trait.trait} className="w-2 h-2" />
+                                    <span className="text-[12px] font-medium">{names.trait(trait.trait)}</span>
+                                </div>
+                            ))}
                     </div>
 
                     {/* Strategy metric & Team Code */}

@@ -1,6 +1,6 @@
 import { CHAMPIONS } from '@/lib/game/data';
 import { evaluateTeam } from '@/lib/game/evaluate';
-import { KHAZIX, baseTeamSize, khazixVariants } from '@/lib/game/rules';
+import { baseTeamSize, candidatePool } from '@/lib/game/rules';
 import type { Champion } from '@/lib/game/types';
 import { Search } from '@/lib/solver/search';
 import { compareScores, teamMetrics, teamScore } from '@/lib/solver/score';
@@ -17,12 +17,6 @@ const POLISH_COUNT = 12;
 const EXACT_CANDIDATES = 300;
 /** Two results must differ by at least this many units, while enough such teams exist. */
 const MIN_DIFFERENCE = 2;
-
-/** Every unit the solver may use; evolved Kha'Zix variants are added on request. */
-export function candidatePool(options: { evolvedKhazix?: boolean }, pool: readonly Champion[] = CHAMPIONS): Champion[] {
-    const khazix = options.evolvedKhazix ? pool.find(c => c.apiName === KHAZIX) : undefined;
-    return khazix ? [...pool, ...khazixVariants(khazix)] : [...pool];
-}
 
 export function solveTeams(request: SolveRequest): SolveResult {
     const pool = candidatePool(request, request.pool ?? CHAMPIONS);

@@ -44,5 +44,7 @@
   "add_champions": "Lock champions",
   "clear_search": "Clear search",
   "filter_by_trait": "Filter by trait",
-  "filter_by_cost": "Filter by cost"
+  "filter_by_cost": "Filter by cost",
+  "share_link": "SHARE",
+  "one_unit_away": "One unit away from activating"
 }
