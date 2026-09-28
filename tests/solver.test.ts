@@ -1,11 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import championData from '@/lib/set18-champions.json';
+import { CHAMPIONS } from '@/lib/game/data';
 import { solveTeamComp, type TeamComp } from '@/lib/solver';
 import { getChampionSlots, getEffectiveMaxSlots, isLux } from '@/lib/tft-rules';
 import type { Champion } from '@/types/tft';
 
-const champions = championData as Champion[];
+const champions = CHAMPIONS as Champion[];
 
 function champ(name: string): Champion {
     const found = champions.find(c => c.name === name);

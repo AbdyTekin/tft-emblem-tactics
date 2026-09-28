@@ -1,0 +1,2373 @@
+{
+  "meta": {
+    "set": 18,
+    "mutator": "TFTSet18",
+    "patch": "16.19",
+    "channel": "latest"
+  },
+  "traits": [
+    {
+      "key": "Adaptor",
+      "apiName": "DA_18_Adaptor",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_adaptor.png",
+      "names": {
+        "en": "Adaptor",
+        "tr": "Ahenkli"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Brawler",
+      "apiName": "DA_18_Brawler",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_brawler.png",
+      "names": {
+        "en": "Brawler",
+        "tr": "Dövüşçü"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemBrawler",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_brawler.png",
+        "recipe": [
+          "Frying Pan",
+          "Giant's Belt"
+        ]
+      }
+    },
+    {
+      "key": "Defender",
+      "apiName": "DA_18_Defender",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_defender.png",
+      "names": {
+        "en": "Defender",
+        "tr": "Savunucu"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemDefender",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_defender.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Executioner",
+      "apiName": "DA_18_Executioner",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_executioner.png",
+      "names": {
+        "en": "Executioner",
+        "tr": "İnfazcı"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemExecutioner",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_executioner.png",
+        "recipe": [
+          "Frying Pan",
+          "Sparring Gloves"
+        ]
+      }
+    },
+    {
+      "key": "Hunter",
+      "apiName": "DA_18_Hunter",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_hunter.png",
+      "names": {
+        "en": "Hunter",
+        "tr": "Avcı"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemHunter",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_hunter.png",
+        "recipe": [
+          "Frying Pan",
+          "B.F. Sword"
+        ]
+      }
+    },
+    {
+      "key": "Invoker",
+      "apiName": "DA_18_Invoker",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_invoker.png",
+      "names": {
+        "en": "Invoker",
+        "tr": "Manabaz"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemInvoker",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_invoker.png",
+        "recipe": [
+          "Frying Pan",
+          "Tear Of The Goddess"
+        ]
+      }
+    },
+    {
+      "key": "Juggernaut",
+      "apiName": "DA_Juggernaut18",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_juggernaut.png",
+      "names": {
+        "en": "Juggernaut",
+        "tr": "Ezergeçer"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemJuggernaut",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_juggernaut.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Rapidfire",
+      "apiName": "DA_18_Rapidfire",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_rapidfire.png",
+      "names": {
+        "en": "Rapidfire",
+        "tr": "Bombardımancı"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemRapidfire",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_rapidfire.png",
+        "recipe": [
+          "Frying Pan",
+          "Recurve Bow"
+        ]
+      }
+    },
+    {
+      "key": "Ravager",
+      "apiName": "DA_18_Slayer",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_ravager.png",
+      "names": {
+        "en": "Ravager",
+        "tr": "Tahripkâr"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemSlayer",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_ravager.png",
+        "recipe": [
+          "Frying Pan",
+          "Negatron Cloak"
+        ]
+      }
+    },
+    {
+      "key": "Spellweaver",
+      "apiName": "DA_18_Spellweaver",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_spellweaver.png",
+      "names": {
+        "en": "Spellweaver",
+        "tr": "Sihirkâr"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemSpellweaver",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_spellweaver.png",
+        "recipe": [
+          "Frying Pan",
+          "Needlessly Large Rod"
+        ]
+      }
+    },
+    {
+      "key": "Summoner",
+      "apiName": "DA_18_Summoner",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_summoner.png",
+      "names": {
+        "en": "Summoner",
+        "tr": "Efendi"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Vanguard",
+      "apiName": "DA_18_Vanguard",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_vanguard.png",
+      "names": {
+        "en": "Vanguard",
+        "tr": "Öncü"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemVanguard",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_vanguard.png",
+        "recipe": [
+          "Frying Pan",
+          "Chain Vest"
+        ]
+      }
+    },
+    {
+      "key": "Blackthorn",
+      "apiName": "DA_18_Blackthorn",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_oldgod.png",
+      "names": {
+        "en": "Blackthorn",
+        "tr": "Karadiken"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemBlackthorn",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_blackthorn.png",
+        "recipe": [
+          "Spatula",
+          "Giant's Belt"
+        ]
+      }
+    },
+    {
+      "key": "Blossom",
+      "apiName": "DA_18_Blossom",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": 8,
+          "style": "gold"
+        },
+        {
+          "min": 9,
+          "max": 10,
+          "style": "gold"
+        },
+        {
+          "min": 11,
+          "max": null,
+          "style": "prismatic"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_blossom.png",
+      "names": {
+        "en": "Blossom",
+        "tr": "Çiçek"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemBlossom",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_blossom.png",
+        "recipe": [
+          "Spatula",
+          "Needlessly Large Rod"
+        ]
+      }
+    },
+    {
+      "key": "Coven",
+      "apiName": "DA_18_Coven",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_coven.png",
+      "names": {
+        "en": "Coven",
+        "tr": "Cadılar Meclisi"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemCoven",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_coven.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Elderwood",
+      "apiName": "DA_18_Elderwood",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": 8,
+          "style": "gold"
+        },
+        {
+          "min": 9,
+          "max": 10,
+          "style": "gold"
+        },
+        {
+          "min": 11,
+          "max": null,
+          "style": "prismatic"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_elderwood.png",
+      "names": {
+        "en": "Elderwood",
+        "tr": "Kadim Orman"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemElderwood",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_elderwood.png",
+        "recipe": [
+          "Spatula",
+          "Chain Vest"
+        ]
+      }
+    },
+    {
+      "key": "Fae",
+      "apiName": "DA_18_Fae",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_fae.png",
+      "names": {
+        "en": "Fae",
+        "tr": "Fey"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemFae",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_fae.png",
+        "recipe": [
+          "Spatula",
+          "B.F. Sword"
+        ]
+      }
+    },
+    {
+      "key": "Flora Fatalis",
+      "apiName": "DA_FloraFatalis18",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 1,
+          "style": "bronze"
+        },
+        {
+          "min": 2,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_florafatalis.png",
+      "names": {
+        "en": "Flora Fatalis",
+        "tr": "Flora Fatalis"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemFloraFatalisAugment",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_florafatalis.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Inferno",
+      "apiName": "DA_18_Inferno",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "gold"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_inferno.png",
+      "names": {
+        "en": "Inferno",
+        "tr": "Alev"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemInferno",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_inferno.png",
+        "recipe": [
+          "Spatula",
+          "Recurve Bow"
+        ]
+      }
+    },
+    {
+      "key": "Lunar",
+      "apiName": "DA_18_Lunar",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_lunar.png",
+      "names": {
+        "en": "Lunar",
+        "tr": "Ay"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemLunar",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_lunar.png",
+        "recipe": [
+          "Spatula",
+          "Tear Of The Goddess"
+        ]
+      }
+    },
+    {
+      "key": "Primal",
+      "apiName": "DA_Primal18",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_primal.png",
+      "names": {
+        "en": "Primal",
+        "tr": "İlkel"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemPrimal",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_primal.png",
+        "recipe": [
+          "Spatula",
+          "Sparring Gloves"
+        ]
+      }
+    },
+    {
+      "key": "Riftbeast",
+      "apiName": "DA_Riftbeast18",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": 9,
+          "style": "gold"
+        },
+        {
+          "min": 10,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "teamSize": {
+        "min": 10,
+        "bonus": 2
+      },
+      "icon": "assets/ux/traiticons/trait_icon_18_riftbeast.png",
+      "names": {
+        "en": "Riftbeast",
+        "tr": "Vadi Canavarı"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Solar",
+      "apiName": "DA_18_Solar",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_solar.png",
+      "names": {
+        "en": "Solar",
+        "tr": "Güneş"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Sprykin",
+      "apiName": "DA_18_Sprykin",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_sprykin.png",
+      "names": {
+        "en": "Sprykin",
+        "tr": "Zıpırgil"
+      },
+      "emblem": {
+        "apiName": "DA_18_EmblemSprykin",
+        "icon": "assets/maps/particles/tft/item_icons/traits/spatula/set18/tft18_emblem_sprykin.png",
+        "recipe": [
+          "Spatula",
+          "Negatron Cloak"
+        ]
+      }
+    },
+    {
+      "key": "Apex Predator",
+      "apiName": "DA_18_ApexPredator",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_apexpredator.png",
+      "names": {
+        "en": "Apex Predator",
+        "tr": "Üstün Yırtıcı"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Attuned",
+      "apiName": "DA_AluneUniqueTrait18",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_attuned.png",
+      "names": {
+        "en": "Attuned",
+        "tr": "Harmoni"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Avatar",
+      "apiName": "DA_18_LuxUniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_avatar.png",
+      "names": {
+        "en": "Avatar",
+        "tr": "Avatar"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Bounty Seeker",
+      "apiName": "DA_DravenUniqueTrait18",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_bountyseeker.png",
+      "names": {
+        "en": "Bounty Seeker",
+        "tr": "Ödül Avcısı"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Caustic",
+      "apiName": "DA_18_Caustic",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_caustic.png",
+      "names": {
+        "en": "Caustic",
+        "tr": "Yıpratıcı"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Emerald Aspect",
+      "apiName": "DA_Emerald18",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_emeraldaspect.png",
+      "names": {
+        "en": "Emerald Aspect",
+        "tr": "Zümrüt Suret"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Greenfather",
+      "apiName": "DA_18_Greenfather",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_greenfather.png",
+      "names": {
+        "en": "Greenfather",
+        "tr": "Doğasever Baba"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Monolith",
+      "apiName": "DA_18_Battlemage",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_monolith.png",
+      "names": {
+        "en": "Monolith",
+        "tr": "Monolit"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Old Growth",
+      "apiName": "DA_18_Maokai_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_oldgrowth.png",
+      "names": {
+        "en": "Old Growth",
+        "tr": "Kadim Büyüme"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Rival",
+      "apiName": "DA_18_Rival",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 1,
+          "style": "bronze"
+        },
+        {
+          "min": 1,
+          "max": null,
+          "style": "gold"
+        },
+        {
+          "min": 2,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_rival.png",
+      "names": {
+        "en": "Rival",
+        "tr": "Hasım"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Thornmaiden",
+      "apiName": "DA_18_ZyraUniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "assets/ux/traiticons/trait_icon_18_zyraorigin.png",
+      "names": {
+        "en": "Thornmaiden",
+        "tr": "Dikenli Leydi"
+      },
+      "emblem": null
+    }
+  ],
+  "champions": [
+    {
+      "apiName": "DA_18_Akali_AD",
+      "id": "da_18_akali_ad",
+      "unitId": "DA_18_Akali_AD",
+      "name": "Akali",
+      "names": {
+        "en": "Akali",
+        "tr": "Akali"
+      },
+      "cost": 1,
+      "traits": [
+        "Inferno",
+        "Adaptor",
+        "Ravager"
+      ],
+      "plannerCode": 1002,
+      "squareIcon": "assets/characters/tft18_akali/skins/base/images/tft18_akali_splash_tile_2.png",
+      "tileIcon": "assets/characters/tft18_akali/tft18_akali_square.png"
+    },
+    {
+      "apiName": "DA_18_Camille",
+      "id": "da_18_camille",
+      "unitId": "DA_18_Camille",
+      "name": "Camille",
+      "names": {
+        "en": "Camille",
+        "tr": "Camille"
+      },
+      "cost": 1,
+      "traits": [
+        "Coven",
+        "Ravager"
+      ],
+      "plannerCode": 1013,
+      "squareIcon": "assets/characters/tft18_camille/skins/base/images/tft18_camille_splash_tile_2.png",
+      "tileIcon": "assets/characters/tft18_camille/tft18_camille_square.png"
+    },
+    {
+      "apiName": "DA_Cinderling18",
+      "id": "da_cinderling18",
+      "unitId": "DA_Cinderling18",
+      "name": "Cinderling",
+      "names": {
+        "en": "Cinderling",
+        "tr": "Közcük"
+      },
+      "cost": 1,
+      "traits": [
+        "Riftbeast",
+        "Hunter"
+      ],
+      "plannerCode": 1015,
+      "squareIcon": "assets/characters/tft18_cinderling/skins/base/images/t_18_cinderling_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_cinderling/tft18_cinderling_square.png"
+    },
+    {
+      "apiName": "DA_Karma18",
+      "id": "da_karma18",
+      "unitId": "DA_Karma18",
+      "name": "Karma",
+      "names": {
+        "en": "Karma",
+        "tr": "Karma"
+      },
+      "cost": 1,
+      "traits": [
+        "Blossom",
+        "Spellweaver"
+      ],
+      "plannerCode": 1031,
+      "squareIcon": "assets/characters/tft18_karma/skins/base/images/tft18_karma_splash_tile_70.png",
+      "tileIcon": "assets/characters/tft18_karma/tft18_karma_square.png"
+    },
+    {
+      "apiName": "DA_18_Kobuko",
+      "id": "da_18_kobuko",
+      "unitId": "DA_18_Kobuko",
+      "name": "Kobuko",
+      "names": {
+        "en": "Kobuko",
+        "tr": "Kobuko"
+      },
+      "cost": 1,
+      "traits": [
+        "Sprykin",
+        "Brawler"
+      ],
+      "plannerCode": 1085,
+      "squareIcon": "assets/characters/tft18_kobuko/skins/base/images/tft18_kobuko_splash_tile_2.png",
+      "tileIcon": "assets/characters/tft18_kobuko/tft18_kobuko_square.png"
+    },
+    {
+      "apiName": "DA_18_Leona",
+      "id": "da_18_leona",
+      "unitId": "DA_18_Leona",
+      "name": "Leona",
+      "names": {
+        "en": "Leona",
+        "tr": "Leona"
+      },
+      "cost": 1,
+      "traits": [
+        "Solar",
+        "Defender"
+      ],
+      "plannerCode": 1041,
+      "squareIcon": "assets/characters/tft18_leona/skins/base/images/tft18_leona_splash_tile_10.png",
+      "tileIcon": "assets/characters/tft18_leona/tft18_leona_square.png"
+    },
+    {
+      "apiName": "DA_18_Ornn",
+      "id": "da_18_ornn",
+      "unitId": "DA_18_Ornn",
+      "name": "Ornn",
+      "names": {
+        "en": "Ornn",
+        "tr": "Ornn"
+      },
+      "cost": 1,
+      "traits": [
+        "Elderwood",
+        "Defender"
+      ],
+      "plannerCode": 1055,
+      "squareIcon": "assets/characters/tft18_ornn/skins/base/images/tft18_ornn_splash_tile_2.png",
+      "tileIcon": "assets/characters/tft18_ornn/tft18_ornn_square.png"
+    },
+    {
+      "apiName": "DA_18_Sentry",
+      "id": "da_18_sentry",
+      "unitId": "DA_18_Sentry",
+      "name": "Pebbles",
+      "names": {
+        "en": "Pebbles",
+        "tr": "Çakıl"
+      },
+      "cost": 1,
+      "traits": [
+        "Riftbeast",
+        "Invoker"
+      ],
+      "plannerCode": 1065,
+      "squareIcon": "assets/characters/tft18_sentry/skins/base/images/t_18_sentry_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_sentry/tft18_sentry_square.png"
+    },
+    {
+      "apiName": "DA_18_Rakan",
+      "id": "da_18_rakan",
+      "unitId": "DA_18_Rakan",
+      "name": "Rakan",
+      "names": {
+        "en": "Rakan",
+        "tr": "Rakan"
+      },
+      "cost": 1,
+      "traits": [
+        "Fae",
+        "Juggernaut",
+        "Vanguard"
+      ],
+      "plannerCode": 1056,
+      "squareIcon": "assets/characters/tft18_rakan/skins/base/images/tft18_rakan_splash_tile_9.png",
+      "tileIcon": "assets/characters/tft18_rakan/tft18_rakan_square.png"
+    },
+    {
+      "apiName": "DA_18_RekSai",
+      "id": "da_18_reksai",
+      "unitId": "DA_18_RekSai",
+      "name": "Rek'Sai",
+      "names": {
+        "en": "Rek'Sai",
+        "tr": "Rek'Sai"
+      },
+      "cost": 1,
+      "traits": [
+        "Blackthorn",
+        "Brawler"
+      ],
+      "plannerCode": 1059,
+      "squareIcon": "assets/characters/tft18_reksai/skins/base/images/tft18_reksai_splash_tile_17.png",
+      "tileIcon": "assets/characters/tft18_reksai/tft18_reksai_square.png"
+    },
+    {
+      "apiName": "DA_18_Varus",
+      "id": "da_18_varus",
+      "unitId": "DA_18_Varus",
+      "name": "Varus",
+      "names": {
+        "en": "Varus",
+        "tr": "Varus"
+      },
+      "cost": 1,
+      "traits": [
+        "Inferno",
+        "Rapidfire"
+      ],
+      "plannerCode": 1077,
+      "squareIcon": "assets/characters/tft18_varus/skins/base/images/tft18_varus_splash_tile_9.png",
+      "tileIcon": "assets/characters/tft18_varus/tft18_varus_square.png"
+    },
+    {
+      "apiName": "DA_18_Veigar",
+      "id": "da_18_veigar",
+      "unitId": "DA_18_Veigar",
+      "name": "Veigar",
+      "names": {
+        "en": "Veigar",
+        "tr": "Veigar"
+      },
+      "cost": 1,
+      "traits": [
+        "Blackthorn",
+        "Sprykin",
+        "Spellweaver"
+      ],
+      "plannerCode": 1078,
+      "squareIcon": "assets/characters/tft18_veigar/skins/base/images/tft18_veigar_splash_tile_13.png",
+      "tileIcon": "assets/characters/tft18_veigar/tft18_veigar_square.png"
+    },
+    {
+      "apiName": "DA_18_Xayah",
+      "id": "da_18_xayah",
+      "unitId": "DA_18_Xayah",
+      "name": "Xayah",
+      "names": {
+        "en": "Xayah",
+        "tr": "Xayah"
+      },
+      "cost": 1,
+      "traits": [
+        "Elderwood",
+        "Fae",
+        "Rapidfire"
+      ],
+      "plannerCode": 1081,
+      "squareIcon": "assets/characters/tft18_xayah/skins/base/images/tft18_xayah_splash_tile_8.png",
+      "tileIcon": "assets/characters/tft18_xayah/tft18_xayah_square.png"
+    },
+    {
+      "apiName": "DA_18_Yorick",
+      "id": "da_18_yorick",
+      "unitId": "DA_18_Yorick",
+      "name": "Yorick",
+      "names": {
+        "en": "Yorick",
+        "tr": "Yorick"
+      },
+      "cost": 1,
+      "traits": [
+        "Blossom",
+        "Juggernaut",
+        "Summoner"
+      ],
+      "plannerCode": 1082,
+      "squareIcon": "assets/characters/tft18_yorick/skins/base/images/tft18_yorick_splash_tile_30.png",
+      "tileIcon": "assets/characters/tft18_yorick/tft18_yorick_square.png"
+    },
+    {
+      "apiName": "DA_18_Alistar",
+      "id": "da_18_alistar",
+      "unitId": "DA_18_Alistar",
+      "name": "Alistar",
+      "names": {
+        "en": "Alistar",
+        "tr": "Alistar"
+      },
+      "cost": 2,
+      "traits": [
+        "Elderwood",
+        "Brawler"
+      ],
+      "plannerCode": 1003,
+      "squareIcon": "assets/characters/tft18_alistar/skins/base/images/tft18_alistar_splash_tile_40.png",
+      "tileIcon": "assets/characters/tft18_alistar/tft18_alistar_square.png"
+    },
+    {
+      "apiName": "DA_18_Caitlyn",
+      "id": "da_18_caitlyn",
+      "unitId": "DA_18_Caitlyn",
+      "name": "Caitlyn",
+      "names": {
+        "en": "Caitlyn",
+        "tr": "Caitlyn"
+      },
+      "cost": 2,
+      "traits": [
+        "Coven",
+        "Hunter"
+      ],
+      "plannerCode": 1012,
+      "squareIcon": "assets/characters/tft18_caitlyn/skins/base/images/tft18_caitlyn_splash_tile_30.png",
+      "tileIcon": "assets/characters/tft18_caitlyn/tft18_caitlyn_square.png"
+    },
+    {
+      "apiName": "DA_18_Elise",
+      "id": "da_18_elise",
+      "unitId": "DA_18_Elise",
+      "name": "Elise",
+      "names": {
+        "en": "Elise",
+        "tr": "Elise"
+      },
+      "cost": 2,
+      "traits": [
+        "Coven",
+        "Vanguard"
+      ],
+      "plannerCode": 1021,
+      "squareIcon": "assets/characters/tft18_elise/skins/base/images/tft18_elise_splash_tile_24.png",
+      "tileIcon": "assets/characters/tft18_elise/tft18_elise_square.png"
+    },
+    {
+      "apiName": "DA_Gromp18_AP",
+      "id": "da_gromp18_ap",
+      "unitId": "DA_Gromp18_AP",
+      "name": "Gromp",
+      "names": {
+        "en": "Gromp",
+        "tr": "Gromp"
+      },
+      "cost": 2,
+      "traits": [
+        "Riftbeast",
+        "Adaptor"
+      ],
+      "plannerCode": 1026,
+      "squareIcon": "assets/characters/tft18_gromp/skins/base/images/t_18_gromp_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_gromp/tft18_gromp_square.png"
+    },
+    {
+      "apiName": "DA_18_Kayle",
+      "id": "da_18_kayle",
+      "unitId": "DA_18_Kayle",
+      "name": "Kayle",
+      "names": {
+        "en": "Kayle",
+        "tr": "Kayle"
+      },
+      "cost": 2,
+      "traits": [
+        "Solar",
+        "Rapidfire"
+      ],
+      "plannerCode": 1034,
+      "squareIcon": "assets/characters/tft18_kayle/skins/base/images/tft18_kayle_splash_tile_42.png",
+      "tileIcon": "assets/characters/tft18_kayle/tft18_kayle_square.png"
+    },
+    {
+      "apiName": "DA_18_LeBlanc",
+      "id": "da_18_leblanc",
+      "unitId": "DA_18_LeBlanc",
+      "name": "LeBlanc",
+      "names": {
+        "en": "LeBlanc",
+        "tr": "LeBlanc"
+      },
+      "cost": 2,
+      "traits": [
+        "Elderwood",
+        "Spellweaver"
+      ],
+      "plannerCode": 1040,
+      "squareIcon": "assets/characters/tft18_leblanc/skins/base/images/tft18_leblanc_splash_tile_5.png",
+      "tileIcon": "assets/characters/tft18_leblanc/tft18_leblanc_square.png"
+    },
+    {
+      "apiName": "DA_Murkwolf18",
+      "id": "da_murkwolf18",
+      "unitId": "DA_Murkwolf18",
+      "name": "Murkwolf",
+      "names": {
+        "en": "Murkwolf",
+        "tr": "Alacakurt"
+      },
+      "cost": 2,
+      "traits": [
+        "Riftbeast",
+        "Ravager"
+      ],
+      "plannerCode": 1049,
+      "squareIcon": "assets/characters/tft18_murkwolf/skins/base/images/t_18_murkwolf_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_murkwolf/tft18_murkwolf_square.png"
+    },
+    {
+      "apiName": "DA_Scuttlecrab18",
+      "id": "da_scuttlecrab18",
+      "unitId": "DA_Scuttlecrab18",
+      "name": "Scuttlecrab",
+      "names": {
+        "en": "Scuttlecrab",
+        "tr": "Yampiri Yengeç"
+      },
+      "cost": 2,
+      "traits": [
+        "Riftbeast",
+        "Juggernaut"
+      ],
+      "plannerCode": 1062,
+      "squareIcon": "assets/characters/tft18_scuttlecrab/skins/base/images/t_18_scuttlecrab_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_scuttlecrab/tft18_scuttlecrab_square.png"
+    },
+    {
+      "apiName": "DA_18_Sejuani",
+      "id": "da_18_sejuani",
+      "unitId": "DA_18_Sejuani",
+      "name": "Sejuani",
+      "names": {
+        "en": "Sejuani",
+        "tr": "Sejuani"
+      },
+      "cost": 2,
+      "traits": [
+        "Solar",
+        "Juggernaut"
+      ],
+      "plannerCode": 1063,
+      "squareIcon": "assets/characters/tft18_sejuani/skins/base/images/tft18_sejuani_splash_tile_26.png",
+      "tileIcon": "assets/characters/tft18_sejuani/tft18_sejuani_square.png"
+    },
+    {
+      "apiName": "DA_18_Shen",
+      "id": "da_18_shen",
+      "unitId": "DA_18_Shen",
+      "name": "Shen",
+      "names": {
+        "en": "Shen",
+        "tr": "Shen"
+      },
+      "cost": 2,
+      "traits": [
+        "Inferno",
+        "Defender"
+      ],
+      "plannerCode": 1067,
+      "squareIcon": "assets/characters/tft18_shen/skins/base/images/tft18_shen_splash_tile_16.png",
+      "tileIcon": "assets/characters/tft18_shen/tft18_shen_square.png"
+    },
+    {
+      "apiName": "DA_18_Teemo",
+      "id": "da_18_teemo",
+      "unitId": "DA_18_Teemo",
+      "name": "Teemo",
+      "names": {
+        "en": "Teemo",
+        "tr": "Teemo"
+      },
+      "cost": 2,
+      "traits": [
+        "Sprykin",
+        "Invoker"
+      ],
+      "plannerCode": 1073,
+      "squareIcon": "assets/characters/tft18_teemo/skins/base/images/tft18_teemo_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_teemo/tft18_teemo_square.png"
+    },
+    {
+      "apiName": "DA_18_Warwick",
+      "id": "da_18_warwick",
+      "unitId": "DA_18_Warwick",
+      "name": "Warwick",
+      "names": {
+        "en": "Warwick",
+        "tr": "Warwick"
+      },
+      "cost": 2,
+      "traits": [
+        "Blackthorn",
+        "Ravager"
+      ],
+      "plannerCode": 1080,
+      "squareIcon": "assets/characters/tft18_warwick/skins/base/images/tft18_warwick_splash_tile_35.png",
+      "tileIcon": "assets/characters/tft18_warwick/tft18_warwick_square.png"
+    },
+    {
+      "apiName": "DA_18_Yunara",
+      "id": "da_18_yunara",
+      "unitId": "DA_18_Yunara",
+      "name": "Yunara",
+      "names": {
+        "en": "Yunara",
+        "tr": "Yunara"
+      },
+      "cost": 2,
+      "traits": [
+        "Blossom",
+        "Executioner"
+      ],
+      "plannerCode": 1083,
+      "squareIcon": "assets/characters/tft18_yunara/skins/base/images/tft18_yunara_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_yunara/tft18_yunara_square.png"
+    },
+    {
+      "apiName": "DA_18_Azir",
+      "id": "da_18_azir",
+      "unitId": "DA_18_Azir",
+      "name": "Azir",
+      "names": {
+        "en": "Azir",
+        "tr": "Azir"
+      },
+      "cost": 3,
+      "traits": [
+        "Blackthorn",
+        "Executioner",
+        "Summoner"
+      ],
+      "plannerCode": 1009,
+      "squareIcon": "assets/characters/tft18_azir/skins/base/images/tft18_azir_splash_tile_5.png",
+      "tileIcon": "assets/characters/tft18_azir/tft18_azir_square.png"
+    },
+    {
+      "apiName": "DA_18_Cassiopeia",
+      "id": "da_18_cassiopeia",
+      "unitId": "DA_18_Cassiopeia",
+      "name": "Cassiopeia",
+      "names": {
+        "en": "Cassiopeia",
+        "tr": "Cassiopeia"
+      },
+      "cost": 3,
+      "traits": [
+        "Coven",
+        "Spellweaver"
+      ],
+      "plannerCode": 1014,
+      "squareIcon": "assets/characters/tft18_cassiopeia/skins/base/images/tft18_cassiopeia_splash_tile_18.png",
+      "tileIcon": "assets/characters/tft18_cassiopeia/tft18_cassiopeia_square.png"
+    },
+    {
+      "apiName": "DA_18_Diana",
+      "id": "da_18_diana",
+      "unitId": "DA_18_Diana",
+      "name": "Diana",
+      "names": {
+        "en": "Diana",
+        "tr": "Diana"
+      },
+      "cost": 3,
+      "traits": [
+        "Lunar",
+        "Ravager",
+        "Vanguard"
+      ],
+      "plannerCode": 1018,
+      "squareIcon": "assets/characters/tft18_diana/skins/base/images/tft18_diana_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_diana/tft18_diana_square.png"
+    },
+    {
+      "apiName": "DA_Fiddlesticks18",
+      "id": "da_fiddlesticks18",
+      "unitId": "DA_Fiddlesticks18",
+      "name": "Fiddlesticks",
+      "names": {
+        "en": "Fiddlesticks",
+        "tr": "Fiddlesticks"
+      },
+      "cost": 3,
+      "traits": [
+        "Flora Fatalis",
+        "Defender",
+        "Spellweaver"
+      ],
+      "plannerCode": 1024,
+      "squareIcon": "assets/characters/tft18_fiddlesticks/skins/base/images/tft18_fiddlesticks_splash_tile_46.png",
+      "tileIcon": "assets/characters/tft18_fiddlesticks/tft18_fiddlesticks_square.png"
+    },
+    {
+      "apiName": "DA_18_Hecarim",
+      "id": "da_18_hecarim",
+      "unitId": "DA_18_Hecarim",
+      "name": "Hecarim",
+      "names": {
+        "en": "Hecarim",
+        "tr": "Hecarim"
+      },
+      "cost": 3,
+      "traits": [
+        "Elderwood",
+        "Vanguard"
+      ],
+      "plannerCode": 1027,
+      "squareIcon": "assets/characters/tft18_hecarim/skins/base/images/tft18_hecarim_splash_tile_5.png",
+      "tileIcon": "assets/characters/tft18_hecarim/tft18_hecarim_square.png"
+    },
+    {
+      "apiName": "DA_18_KhaZix",
+      "id": "da_18_khazix",
+      "unitId": "DA_18_KhaZix",
+      "name": "Kha'Zix",
+      "names": {
+        "en": "Kha'Zix",
+        "tr": "Kha'Zix"
+      },
+      "cost": 3,
+      "traits": [
+        "Rival"
+      ],
+      "plannerCode": 1036,
+      "squareIcon": "assets/characters/tft18_khazix/skins/base/images/tft18_khazix_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_khazix/tft18_khazix_square.png"
+    },
+    {
+      "apiName": "DA_KogMaw18_AD",
+      "id": "da_kogmaw18_ad",
+      "unitId": "DA_KogMaw18_AD",
+      "name": "Kog'Maw",
+      "names": {
+        "en": "Kog'Maw",
+        "tr": "Kog'Maw"
+      },
+      "cost": 3,
+      "traits": [
+        "Caustic",
+        "Adaptor",
+        "Invoker"
+      ],
+      "plannerCode": 1038,
+      "squareIcon": "assets/characters/tft18_kogmaw/skins/base/images/tft18_kogmaw_splash_tile_3.png",
+      "tileIcon": "assets/characters/tft18_kogmaw/tft18_kogmaw_square.png"
+    },
+    {
+      "apiName": "DA_Krug18",
+      "id": "da_krug18",
+      "unitId": "DA_Krug18",
+      "name": "Krug",
+      "names": {
+        "en": "Krug",
+        "tr": "Kayacıl"
+      },
+      "cost": 3,
+      "traits": [
+        "Riftbeast",
+        "Brawler"
+      ],
+      "plannerCode": 1039,
+      "squareIcon": "assets/characters/tft18_krug/skins/base/images/t_18_krug_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_krug/tft18_krug_square.png"
+    },
+    {
+      "apiName": "DA_CrimsonRaptor18",
+      "id": "da_crimsonraptor18",
+      "unitId": "DA_CrimsonRaptor18",
+      "name": "Mama Beak",
+      "names": {
+        "en": "Mama Beak",
+        "tr": "Anne Gaga"
+      },
+      "cost": 3,
+      "traits": [
+        "Riftbeast",
+        "Summoner",
+        "Rapidfire"
+      ],
+      "plannerCode": 1058,
+      "squareIcon": "assets/characters/tft18_raptor/skins/base/images/t_18_crimsonraptor_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_raptor/tft18_crimsonraptor_teamplanner_splash.png"
+    },
+    {
+      "apiName": "DA_18_MasterYi_AD",
+      "id": "da_18_masteryi_ad",
+      "unitId": "DA_18_MasterYi_AD",
+      "name": "Master Yi",
+      "names": {
+        "en": "Master Yi",
+        "tr": "Master Yi"
+      },
+      "cost": 3,
+      "traits": [
+        "Blossom",
+        "Adaptor"
+      ],
+      "plannerCode": 1046,
+      "squareIcon": "assets/characters/tft18_masteryi/skins/base/images/tft18_masteryi_splash_tile_52.png",
+      "tileIcon": "assets/characters/tft18_masteryi/tft18_masteryi_square.png"
+    },
+    {
+      "apiName": "DA_18_Rammus",
+      "id": "da_18_rammus",
+      "unitId": "DA_18_Rammus",
+      "name": "Rammus",
+      "names": {
+        "en": "Rammus",
+        "tr": "Rammus"
+      },
+      "cost": 3,
+      "traits": [
+        "Sprykin",
+        "Defender"
+      ],
+      "plannerCode": 1057,
+      "squareIcon": "assets/characters/tft18_rammus/skins/base/images/tft18_rammus_splash_tile_26.png",
+      "tileIcon": "assets/characters/tft18_rammus/tft18_rammus_square.png"
+    },
+    {
+      "apiName": "DA_18_Rengar",
+      "id": "da_18_rengar",
+      "unitId": "DA_18_Rengar",
+      "name": "Rengar",
+      "names": {
+        "en": "Rengar",
+        "tr": "Rengar"
+      },
+      "cost": 3,
+      "traits": [
+        "Rival"
+      ],
+      "plannerCode": 1060,
+      "squareIcon": "assets/characters/tft18_rengar/skins/base/images/tft18_rengar_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_rengar/tft18_rengar_square.png"
+    },
+    {
+      "apiName": "DA_18_Tristana",
+      "id": "da_18_tristana",
+      "unitId": "DA_18_Tristana",
+      "name": "Tristana",
+      "names": {
+        "en": "Tristana",
+        "tr": "Tristana"
+      },
+      "cost": 3,
+      "traits": [
+        "Fae",
+        "Sprykin",
+        "Hunter"
+      ],
+      "plannerCode": 1075,
+      "squareIcon": "assets/characters/tft18_tristana/skins/base/images/tft18_tristana_splash_tile_61.png",
+      "tileIcon": "assets/characters/tft18_tristana/tft18_tristana_square.png"
+    },
+    {
+      "apiName": "DA_Vi18",
+      "id": "da_vi18",
+      "unitId": "DA_Vi18",
+      "name": "Vi",
+      "names": {
+        "en": "Vi",
+        "tr": "Vi"
+      },
+      "cost": 3,
+      "traits": [
+        "Primal",
+        "Juggernaut"
+      ],
+      "plannerCode": 1079,
+      "squareIcon": "assets/characters/tft18_vi/skins/base/images/tft18_vi_splash_tile_39.png",
+      "tileIcon": "assets/characters/tft18_vi/tft18_vi_square.png"
+    },
+    {
+      "apiName": "DA_18_Ahri",
+      "id": "da_18_ahri",
+      "unitId": "DA_18_Ahri",
+      "name": "Ahri",
+      "names": {
+        "en": "Ahri",
+        "tr": "Ahri"
+      },
+      "cost": 4,
+      "traits": [
+        "Blossom",
+        "Spellweaver"
+      ],
+      "plannerCode": 1001,
+      "squareIcon": "assets/characters/tft18_ahri/skins/base/images/tft18_ahri_splash_tile_27.png",
+      "tileIcon": "assets/characters/tft18_ahri/tft18_ahri_square.png"
+    },
+    {
+      "apiName": "DA_Amumu18",
+      "id": "da_amumu18",
+      "unitId": "DA_Amumu18",
+      "name": "Amumu",
+      "names": {
+        "en": "Amumu",
+        "tr": "Amumu"
+      },
+      "cost": 4,
+      "traits": [
+        "Inferno",
+        "Juggernaut"
+      ],
+      "plannerCode": 1005,
+      "squareIcon": "assets/characters/tft18_amumu/skins/base/images/tft18_amumu_splash_tile_17.png",
+      "tileIcon": "assets/characters/tft18_amumu/tft18_amumu_square.png"
+    },
+    {
+      "apiName": "DA_18_Aphelios",
+      "id": "da_18_aphelios",
+      "unitId": "DA_18_Aphelios",
+      "name": "Aphelios",
+      "names": {
+        "en": "Aphelios",
+        "tr": "Aphelios"
+      },
+      "cost": 4,
+      "traits": [
+        "Lunar",
+        "Rapidfire"
+      ],
+      "plannerCode": 1007,
+      "squareIcon": "assets/characters/tft18_aphelios/skins/base/images/tft18_aphelios_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_aphelios/tft18_aphelios_square.png"
+    },
+    {
+      "apiName": "DA_Brambleback18",
+      "id": "da_brambleback18",
+      "unitId": "DA_Brambleback18",
+      "name": "Brambleback",
+      "names": {
+        "en": "Brambleback",
+        "tr": "Korkabuk"
+      },
+      "cost": 4,
+      "traits": [
+        "Riftbeast",
+        "Ravager"
+      ],
+      "plannerCode": 1011,
+      "squareIcon": "assets/characters/tft18_brambleback/skins/base/images/t_18_brambleback_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_brambleback/tft18_brambleback_square.png"
+    },
+    {
+      "apiName": "DA_18_Ezreal",
+      "id": "da_18_ezreal",
+      "unitId": "DA_18_Ezreal",
+      "name": "Ezreal",
+      "names": {
+        "en": "Ezreal",
+        "tr": "Ezreal"
+      },
+      "cost": 4,
+      "traits": [
+        "Elderwood",
+        "Executioner"
+      ],
+      "plannerCode": 1023,
+      "squareIcon": "assets/characters/tft18_ezreal/skins/base/images/tft18_ezreal_splash_tile_1.png",
+      "tileIcon": "assets/characters/tft18_ezreal/tft18_ezreal_square.png"
+    },
+    {
+      "apiName": "DA_18_Lillia",
+      "id": "da_18_lillia",
+      "unitId": "DA_18_Lillia",
+      "name": "Lillia",
+      "names": {
+        "en": "Lillia",
+        "tr": "Lillia"
+      },
+      "cost": 4,
+      "traits": [
+        "Fae",
+        "Defender"
+      ],
+      "plannerCode": 1042,
+      "squareIcon": "assets/characters/tft18_lillia/skins/base/images/tft18_lillia_splash_tile_28.png",
+      "tileIcon": "assets/characters/tft18_lillia/tft18_lillia_square.png"
+    },
+    {
+      "apiName": "DA_18_Malphite",
+      "id": "da_18_malphite",
+      "unitId": "DA_18_Malphite",
+      "name": "Malphite",
+      "names": {
+        "en": "Malphite",
+        "tr": "Malphite"
+      },
+      "cost": 4,
+      "traits": [
+        "Blackthorn",
+        "Monolith"
+      ],
+      "plannerCode": 1044,
+      "squareIcon": "assets/characters/tft18_malphite/skins/base/images/tft18_malphite_splash_tile_27.png",
+      "tileIcon": "assets/characters/tft18_malphite/tft18_malphite_square.png"
+    },
+    {
+      "apiName": "DA_18_Morgana",
+      "id": "da_18_morgana",
+      "unitId": "DA_18_Morgana",
+      "name": "Morgana",
+      "names": {
+        "en": "Morgana",
+        "tr": "Morgana"
+      },
+      "cost": 4,
+      "traits": [
+        "Coven",
+        "Invoker"
+      ],
+      "plannerCode": 1048,
+      "squareIcon": "assets/characters/tft18_morgana/skins/base/images/tft18_morgana_splash_tile_26.png",
+      "tileIcon": "assets/characters/tft18_morgana/tft18_morgana_square.png"
+    },
+    {
+      "apiName": "DA_Nidalee18_AP",
+      "id": "da_nidalee18_ap",
+      "unitId": "DA_Nidalee18_AP",
+      "name": "Nidalee",
+      "names": {
+        "en": "Nidalee",
+        "tr": "Nidalee"
+      },
+      "cost": 4,
+      "traits": [
+        "Primal",
+        "Adaptor"
+      ],
+      "plannerCode": 1051,
+      "squareIcon": "assets/characters/tft18_nidalee/skins/base/images/tft18_nidalee_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_nidalee/tft18_nidalee_square.png"
+    },
+    {
+      "apiName": "DA_Sentinel18",
+      "id": "da_sentinel18",
+      "unitId": "DA_Sentinel18",
+      "name": "Sentinel",
+      "names": {
+        "en": "Sentinel",
+        "tr": "Gözcü"
+      },
+      "cost": 4,
+      "traits": [
+        "Riftbeast",
+        "Vanguard",
+        "Invoker"
+      ],
+      "plannerCode": 1064,
+      "squareIcon": "assets/characters/tft18_sentinel/skins/base/images/t_18_sentinel_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_sentinel/tft18_sentinel_square.png"
+    },
+    {
+      "apiName": "DA_18_Sett",
+      "id": "da_18_sett",
+      "unitId": "DA_18_Sett",
+      "name": "Sett",
+      "names": {
+        "en": "Sett",
+        "tr": "Sett"
+      },
+      "cost": 4,
+      "traits": [
+        "Blossom",
+        "Brawler"
+      ],
+      "plannerCode": 1066,
+      "squareIcon": "assets/characters/tft18_sett/skins/base/images/tft18_sett_splash_tile_38.png",
+      "tileIcon": "assets/characters/tft18_sett/tft18_sett_square.png"
+    },
+    {
+      "apiName": "DA_18_Sivir",
+      "id": "da_18_sivir",
+      "unitId": "DA_18_Sivir",
+      "name": "Sivir",
+      "names": {
+        "en": "Sivir",
+        "tr": "Sivir"
+      },
+      "cost": 4,
+      "traits": [
+        "Primal",
+        "Hunter"
+      ],
+      "plannerCode": 1068,
+      "squareIcon": "assets/characters/tft18_sivir/skins/base/images/tft18_sivir_splash_tile_61.png",
+      "tileIcon": "assets/characters/tft18_sivir/tft18_sivir_square.png"
+    },
+    {
+      "apiName": "DA_18_Soraka",
+      "id": "da_18_soraka",
+      "unitId": "DA_18_Soraka",
+      "name": "Soraka",
+      "names": {
+        "en": "Soraka",
+        "tr": "Soraka"
+      },
+      "cost": 4,
+      "traits": [
+        "Flora Fatalis",
+        "Executioner"
+      ],
+      "plannerCode": 1070,
+      "squareIcon": "assets/characters/tft18_soraka/skins/base/images/tft18_soraka_splash_tile_53.png",
+      "tileIcon": "assets/characters/tft18_soraka/tft18_soraka_square.png"
+    },
+    {
+      "apiName": "DA_18_Zyra",
+      "id": "da_18_zyra",
+      "unitId": "DA_18_Zyra",
+      "name": "Zyra",
+      "names": {
+        "en": "Zyra",
+        "tr": "Zyra"
+      },
+      "cost": 4,
+      "traits": [
+        "Thornmaiden",
+        "Summoner"
+      ],
+      "plannerCode": 1084,
+      "squareIcon": "assets/characters/tft18_zyra/skins/base/images/tft18_zyra_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_zyra/tft18_zyra_square.png"
+    },
+    {
+      "apiName": "DA_18_Alune",
+      "id": "da_18_alune",
+      "unitId": "DA_18_Alune",
+      "name": "Alune",
+      "names": {
+        "en": "Alune",
+        "tr": "Alune"
+      },
+      "cost": 5,
+      "traits": [
+        "Attuned",
+        "Lunar",
+        "Spellweaver"
+      ],
+      "plannerCode": 1004,
+      "squareIcon": "assets/characters/tft18_alune/skins/base/images/tft18_alune_splash_tile_15.png",
+      "tileIcon": "assets/characters/tft18_alune/hud/tft18_alune_square.png"
+    },
+    {
+      "apiName": "DA_18_Ashe",
+      "id": "da_18_ashe",
+      "unitId": "DA_18_Ashe",
+      "name": "Ashe",
+      "names": {
+        "en": "Ashe",
+        "tr": "Ashe"
+      },
+      "cost": 5,
+      "traits": [
+        "Blossom",
+        "Hunter"
+      ],
+      "plannerCode": 1008,
+      "squareIcon": "assets/characters/tft18_ashe/skins/base/images/tft18_ashe_splash_tile_76.png",
+      "tileIcon": "assets/characters/tft18_ashe/tft18_ashe_square.png"
+    },
+    {
+      "apiName": "DA_Draven18",
+      "id": "da_draven18",
+      "unitId": "DA_Draven18",
+      "name": "Draven",
+      "names": {
+        "en": "Draven",
+        "tr": "Draven"
+      },
+      "cost": 5,
+      "traits": [
+        "Bounty Seeker"
+      ],
+      "plannerCode": 1019,
+      "squareIcon": "assets/characters/tft18_draven/skins/base/images/tft18_draven_splash_tile_5.png",
+      "tileIcon": "assets/characters/tft18_draven/tft18_draven_square.png"
+    },
+    {
+      "apiName": "DA_18_ElderDragon",
+      "id": "da_18_elderdragon",
+      "unitId": "DA_18_ElderDragon",
+      "name": "Elder Dragon",
+      "names": {
+        "en": "Elder Dragon",
+        "tr": "Kadim Ejderha"
+      },
+      "cost": 5,
+      "traits": [
+        "Apex Predator",
+        "Riftbeast"
+      ],
+      "plannerCode": 1020,
+      "squareIcon": "assets/characters/tft18_elderdragon/skins/base/images/t_18_elderdragon_teamplannersplash.png",
+      "tileIcon": "assets/characters/tft18_elderdragon/hud/tft18_elderdragon_square.png"
+    },
+    {
+      "apiName": "DA_18_GnarSmall",
+      "id": "da_18_gnarsmall",
+      "unitId": "DA_18_GnarSmall",
+      "name": "Gnar",
+      "names": {
+        "en": "Gnar",
+        "tr": "Gnar"
+      },
+      "cost": 5,
+      "traits": [
+        "Elderwood",
+        "Sprykin",
+        "Brawler"
+      ],
+      "plannerCode": 1025,
+      "squareIcon": "assets/characters/tft18_gnar/skins/base/images/tft18_gnar_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_gnar/tft18_gnar_square.png"
+    },
+    {
+      "apiName": "DA_18_Ivern",
+      "id": "da_18_ivern",
+      "unitId": "DA_18_Ivern",
+      "name": "Ivern",
+      "names": {
+        "en": "Ivern",
+        "tr": "Ivern"
+      },
+      "cost": 5,
+      "traits": [
+        "Greenfather"
+      ],
+      "plannerCode": 1028,
+      "squareIcon": "assets/characters/tft18_ivern/skins/base/images/tft18_ivern_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_ivern/hud/tft18_ivern_square.png"
+    },
+    {
+      "apiName": "DA_18_Kennen",
+      "id": "da_18_kennen",
+      "unitId": "DA_18_Kennen",
+      "name": "Kennen",
+      "names": {
+        "en": "Kennen",
+        "tr": "Kennen"
+      },
+      "cost": 5,
+      "traits": [
+        "Inferno",
+        "Executioner"
+      ],
+      "plannerCode": 1035,
+      "squareIcon": "assets/characters/tft18_kennen/skins/base/images/tft18_kennen_splash_tile_8.png",
+      "tileIcon": "assets/characters/tft18_kennen/tft18_kennen_square.png"
+    },
+    {
+      "apiName": "DA_Lux18_Blackthorn",
+      "id": "da_lux18_blackthorn",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Blackthorn)",
+      "names": {
+        "en": "Lux (Blackthorn)",
+        "tr": "Lux (Karadiken)"
+      },
+      "cost": 5,
+      "traits": [
+        "Blackthorn",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_blackthorn_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_blackthorn_square.png"
+    },
+    {
+      "apiName": "DA_Lux18_Blossom",
+      "id": "da_lux18_blossom",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Blossom)",
+      "names": {
+        "en": "Lux (Blossom)",
+        "tr": "Lux (Çiçek)"
+      },
+      "cost": 5,
+      "traits": [
+        "Blossom",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_blossom_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_blossom_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Coven",
+      "id": "da_18_lux_coven",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Coven)",
+      "names": {
+        "en": "Lux (Coven)",
+        "tr": "Lux (Cadılar Meclisi)"
+      },
+      "cost": 5,
+      "traits": [
+        "Coven",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_coven_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_coven_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Elderwood",
+      "id": "da_18_lux_elderwood",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Elderwood)",
+      "names": {
+        "en": "Lux (Elderwood)",
+        "tr": "Lux (Kadim Orman)"
+      },
+      "cost": 5,
+      "traits": [
+        "Elderwood",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_elderwood_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_elderwood_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Fae",
+      "id": "da_18_lux_fae",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Fae)",
+      "names": {
+        "en": "Lux (Fae)",
+        "tr": "Lux (Peri)"
+      },
+      "cost": 5,
+      "traits": [
+        "Fae",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_fae_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_fae_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Inferno",
+      "id": "da_18_lux_inferno",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Inferno)",
+      "names": {
+        "en": "Lux (Inferno)",
+        "tr": "Lux (Alev)"
+      },
+      "cost": 5,
+      "traits": [
+        "Inferno",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_inferno_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_inferno_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Moonbeam",
+      "id": "da_18_lux_moonbeam",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Lunar)",
+      "names": {
+        "en": "Lux (Lunar)",
+        "tr": "Lux (Ay)"
+      },
+      "cost": 5,
+      "traits": [
+        "Lunar",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_moonbeam_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_moonbeam_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Primal",
+      "id": "da_18_lux_primal",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Primal)",
+      "names": {
+        "en": "Lux (Primal)",
+        "tr": "Lux (İlkel)"
+      },
+      "cost": 5,
+      "traits": [
+        "Primal",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_primal_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_primal_square.png"
+    },
+    {
+      "apiName": "DA_18_Lux_Sunbeam",
+      "id": "da_18_lux_sunbeam",
+      "unitId": "DA_Lux18_Base",
+      "name": "Lux (Solar)",
+      "names": {
+        "en": "Lux (Solar)",
+        "tr": "Lux (Güneş)"
+      },
+      "cost": 5,
+      "traits": [
+        "Solar",
+        "Avatar"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "assets/characters/tft18_lux/hud/splashes/t_18_lux_sunbeam_teamplanner.png",
+      "tileIcon": "assets/characters/tft18_lux/tft18_lux_sunbeam_square.png"
+    },
+    {
+      "apiName": "DA_18_Maokai",
+      "id": "da_18_maokai",
+      "unitId": "DA_18_Maokai",
+      "name": "Maokai",
+      "names": {
+        "en": "Maokai",
+        "tr": "Maokai"
+      },
+      "cost": 5,
+      "traits": [
+        "Old Growth",
+        "Juggernaut"
+      ],
+      "plannerCode": 1045,
+      "squareIcon": "assets/characters/tft18_maokai/skins/base/images/tft18_maokai_splash_tile_0.png",
+      "tileIcon": "assets/characters/tft18_maokai/tft18_maokai_square.png"
+    },
+    {
+      "apiName": "DA_Taric18",
+      "id": "da_taric18",
+      "unitId": "DA_Taric18",
+      "name": "Taric",
+      "names": {
+        "en": "Taric",
+        "tr": "Taric"
+      },
+      "cost": 5,
+      "traits": [
+        "Emerald Aspect",
+        "Vanguard"
+      ],
+      "plannerCode": 1072,
+      "squareIcon": "assets/characters/tft18_taric/skins/base/images/tft18_taric_splash_tile_1.png",
+      "tileIcon": "assets/characters/tft18_taric/tft18_taric_square.png"
+    }
+  ]
+}

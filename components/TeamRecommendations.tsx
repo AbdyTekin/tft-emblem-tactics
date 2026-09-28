@@ -4,8 +4,8 @@ import { useState } from 'react';
 import TraitIcon from '@/components/TraitIcon';
 import TeamSkeleton from '@/components/TeamSkeleton';
 import { TeamComp } from '@/lib/solver';
-import { TRAIT_RULES } from '@/lib/trait-rules';
-import { generateTeamCode } from '@/lib/team-code';
+import { generateTeamCode } from '@/lib/game/team-code';
+import { tierStyle } from '@/lib/game/traits';
 import { useTranslations } from 'next-intl';
 import { getChampionImageUrl } from '@/lib/champion-image';
 import { getChampionSlots } from '@/lib/tft-rules';
@@ -14,11 +14,11 @@ import { getChampionSlots } from '@/lib/tft-rules';
 
 const TRAIT_STYLES = {
     DEFAULT: "bg-transparent border-white/10 text-gray-500",
-    BRONZE: "bg-transparent border-yellow-700 text-yellow-700",
-    SILVER: "bg-transparent border-gray-300 text-gray-300",
-    GOLD: "bg-transparent border-yellow-500 text-yellow-500",
-    PRISMATIC: "bg-transparent border-cyan-400 text-cyan-400",
-    UNIQUE: "bg-transparent border-rose-600 text-rose-600"
+    bronze: "bg-transparent border-yellow-700 text-yellow-700",
+    silver: "bg-transparent border-gray-300 text-gray-300",
+    gold: "bg-transparent border-yellow-500 text-yellow-500",
+    prismatic: "bg-transparent border-cyan-400 text-cyan-400",
+    unique: "bg-transparent border-rose-600 text-rose-600"
 };
 
 const CHAMPION_STYLES: Record<number, { border: string; badge: string }> = {
@@ -99,51 +99,10 @@ export default function TeamRecommendations({ teamRecommendations, selectedEmble
                                     const name = match[1];
                                     const count = parseInt(match[2], 10);
 
-                                    const traitRule = TRAIT_RULES[name];
-                                    // Default (Inactive/Low)
-                                    let styleClass = TRAIT_STYLES.DEFAULT;
-                                    let displayCount = `${count}`;
-
-                                    if (traitRule) {
-                                        const { breakpoints, isPrismatic } = traitRule;
-                                        let tier = -1;
-
-                                        for (let b = 0; b < breakpoints.length; b++) {
-                                            if (count >= breakpoints[b]) {
-                                                tier = b;
-                                            } else {
-                                                break;
-                                            }
-                                        }
-
-                                        // Set Display Text: "Count"
-                                        displayCount = `${count}`;
-
-                                        // Determine Color Style
-                                        if (tier >= 0) {
-                                            if (traitRule.type === 'Unique') {
-                                                styleClass = TRAIT_STYLES.UNIQUE;
-                                            } else if (isPrismatic) {
-                                                if (tier === breakpoints.length - 1) {
-                                                    styleClass = TRAIT_STYLES.PRISMATIC;
-                                                } else if (tier === breakpoints.length - 2) {
-                                                    styleClass = TRAIT_STYLES.GOLD;
-                                                } else if (tier === 0) {
-                                                    styleClass = TRAIT_STYLES.BRONZE;
-                                                } else {
-                                                    styleClass = TRAIT_STYLES.SILVER;
-                                                }
-                                            } else {
-                                                if (tier === breakpoints.length - 1) {
-                                                    styleClass = TRAIT_STYLES.GOLD;
-                                                } else if (tier === 0) {
-                                                    styleClass = TRAIT_STYLES.BRONZE;
-                                                } else {
-                                                    styleClass = TRAIT_STYLES.SILVER;
-                                                }
-                                            }
-                                        }
-                                    }
+                                    // Tier colors come from the game data (bronze/silver/gold/prismatic/unique)
+                                    const style = tierStyle(name, count);
+                                    const styleClass = style ? TRAIT_STYLES[style] : TRAIT_STYLES.DEFAULT;
+                                    const displayCount = `${count}`;
 
                                     return (
                                         <div key={i} className={`flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] shadow-sm transition-all ${styleClass}`}>

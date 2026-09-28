@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import enChampions from '@/lib/set18-champions.json';
+import { CHAMPIONS } from '@/lib/game/data';
 import enMessages from '@/messages/en.json';
 import trMessages from '@/messages/tr.json';
 import { Champion } from '@/types/tft';
@@ -25,7 +25,7 @@ const messages = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<Language>('tr');
 
-    const champions = enChampions as unknown as Champion[];
+    const champions = CHAMPIONS as Champion[];
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage, champions }}>
