@@ -6,7 +6,7 @@ import { useTFT } from '@/context/language-context';
 import { Champion } from '@/types/tft';
 import HorizontalScrollArea from '@/components/HorizontalScrollArea';
 import ScrollArea from '@/components/ScrollArea';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
 import { TRAITS } from '@/lib/game/data';
 import TraitIcon from '@/components/TraitIcon';
@@ -15,6 +15,8 @@ import { evaluateTeam } from '@/lib/game/evaluate';
 import type { BoardSize } from '@/lib/game/rules';
 import { candidatePool } from '@/lib/solver';
 import { useIsClient } from '@/lib/hooks/use-is-client';
+import { useNames } from '@/lib/hooks/use-names';
+import { getTrait } from '@/lib/game/data';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
@@ -88,7 +90,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
     const { champions: setChampions } = useTFT();
     const champions = useMemo(() => candidatePool({ evolvedKhazix }, setChampions), [evolvedKhazix, setChampions]);
     const t = useTranslations();
-    const tTraits = useTranslations('Traits');
+    const names = useNames();
+    const locale = useLocale();
     const [search, setSearch] = useState("");
     const [filterCost, setFilterCost] = useState<number | null>(null);
     const [filterTrait, setFilterTrait] = useState<string | null>(null);
@@ -124,19 +127,15 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
     }, [regionClassTraits]);
 
     const filteredChampions = useMemo(() => {
+        // Search matches champion names and origin/class names, in English and Turkish
+        const q = search.trim().toLocaleLowerCase(locale);
+        const matches = (text: string) => text.toLocaleLowerCase(locale).includes(q);
         return champions.filter(c => {
-            // Search: match name OR Region/Class trait names (translated)
-            if (search) {
-                const q = search.toLowerCase();
-                const nameMatch = c.name.toLowerCase().includes(q);
+            if (q) {
+                const nameMatch = matches(c.names.en) || matches(c.names.tr);
                 const traitMatch = c.traits.some(trait => {
-                    if (!regionClassTraitNames.has(trait)) return false;
-                    // Match against both the raw key and the translated name
-                    try {
-                        return trait.toLowerCase().includes(q) || tTraits(trait).toLowerCase().includes(q);
-                    } catch {
-                        return trait.toLowerCase().includes(q);
-                    }
+                    const traitNames = getTrait(trait)?.names;
+                    return regionClassTraitNames.has(trait) && !!traitNames && (matches(traitNames.en) || matches(traitNames.tr));
                 });
                 if (!nameMatch && !traitMatch) return false;
             }
@@ -144,7 +143,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
             if (filterTrait !== null && !c.traits.includes(filterTrait)) return false;
             return true;
         }).sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
-    }, [champions, search, filterCost, filterTrait, regionClassTraitNames, tTraits]);
+    }, [champions, search, filterCost, filterTrait, regionClassTraitNames, locale]);
 
     // Close cost/trait dropdowns on outside click
     useEffect(() => {
@@ -182,7 +181,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                     onClick={onClick}
                     aria-disabled={disabled}
                     aria-pressed={isSelected}
-                    aria-label={champ.name}
+                    aria-label={names.champion(champ)}
                     className={`
                         relative aspect-square rounded-lg overflow-hidden border transition-all group w-full
                         ${isSelected
@@ -205,7 +204,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                     <div className={`absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full ${COST_DOT[champ.cost] ?? COST_DOT[1]}`} />
                 </button>
             }>
-                <span>{champ.name}</span>
+                <span>{names.champion(champ)}</span>
             </HoverCard>
         );
     };
@@ -235,6 +234,9 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                     <div className="flex-shrink-0" style={{ width: 'calc((100% - 1.5rem) / 5)' }}>
                         <button
                             ref={buttonRef}
+                            aria-label={t('add_champions')}
+                            aria-expanded={isOpen}
+                            aria-haspopup="dialog"
                             onClick={() => setIsOpen(!isOpen)}
                             className={`w-full aspect-square rounded-lg border flex items-center justify-center transition-all duration-300 cursor-pointer
                                 ${isOpen ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)] text-indigo-400' : 'bg-black/20 border-white/5 hover:border-white/7 hover:bg-white/2 text-gray-400 hover:text-gray-300'}
@@ -274,6 +276,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                     <input
                                         type="text"
                                         placeholder={t('search')}
+                                        aria-label={t('search')}
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         className="w-full bg-black/20 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500/50"
@@ -282,6 +285,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                     {search && (
                                         <button
                                             onClick={() => setSearch('')}
+                                            aria-label={t('clear_search')}
                                             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
                                         >
                                             ×
@@ -293,6 +297,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                 <div ref={traitDropdownRef} className="relative">
                                     <button
                                         onClick={() => { setIsTraitDropdownOpen(!isTraitDropdownOpen); setIsCostDropdownOpen(false); }}
+                                        aria-label={t('filter_by_trait')}
+                                        aria-expanded={isTraitDropdownOpen}
                                         className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${filterTrait
                                             ? 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300'
                                             : 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
@@ -301,7 +307,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                         {filterTrait ? (
                                             <>
                                                 <TraitIcon trait={filterTrait} className="w-3.5 h-3.5" />
-                                                <span>{tTraits(filterTrait)}</span>
+                                                <span>{names.trait(filterTrait)}</span>
                                             </>
                                         ) : (
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -331,7 +337,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                                             }`}
                                                     >
                                                         <TraitIcon trait={trait} className="w-3.5 h-3.5" />
-                                                        <span>{tTraits(trait)}</span>
+                                                        <span>{names.trait(trait)}</span>
                                                     </button>
                                                 ))}
                                                 {/* Classes */}
@@ -344,7 +350,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                                             }`}
                                                     >
                                                         <TraitIcon trait={trait} className="w-3.5 h-3.5" />
-                                                        <span>{tTraits(trait)}</span>
+                                                        <span>{names.trait(trait)}</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -356,6 +362,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                 <div ref={costDropdownRef} className="relative">
                                     <button
                                         onClick={() => { setIsCostDropdownOpen(!isCostDropdownOpen); setIsTraitDropdownOpen(false); }}
+                                        aria-label={t('filter_by_cost')}
+                                        aria-expanded={isCostDropdownOpen}
                                         className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${(() => {
                                             if (filterCost === null) return 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300';
                                             const costBtnStyles: Record<number, string> = {

@@ -5,6 +5,7 @@ import ScrollArea from '@/components/ScrollArea';
 import { useTranslations } from 'next-intl';
 import HoverCard from './HoverCard';
 import { emblemImage } from '@/lib/assets';
+import { useNames } from '@/lib/hooks/use-names';
 
 interface TraitListProps {
     availableTraits: readonly string[];
@@ -16,7 +17,7 @@ interface TraitListProps {
 
 export default function TraitList({ availableTraits, selectedEmblems, addEmblem, removeEmblem, resetEmblems }: TraitListProps) {
     const t = useTranslations();
-    const tTraits = useTranslations('Traits');
+    const names = useNames();
 
     return (
         <div className="rounded-xl border border-white/10 bg-gray-900/50 p-4 flex flex-col lg:shrink-1 lg:min-h-[95px] h-auto z-10 relative">
@@ -40,7 +41,7 @@ export default function TraitList({ availableTraits, selectedEmblems, addEmblem,
                     {availableTraits.map((trait) => {
                         const count = selectedEmblems.filter(e => e === trait).length;
                         const isSelected = count > 0;
-                        const name = tTraits(trait);
+                        const name = names.trait(trait);
 
                         return (
                             <HoverCard key={trait} trigger={

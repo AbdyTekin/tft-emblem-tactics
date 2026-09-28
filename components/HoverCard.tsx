@@ -49,6 +49,8 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
                 className={`relative flex items-center justify-center ${className}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onFocus={handleMouseEnter}
+                onBlur={handleMouseLeave}
             >
                 {trigger}
             </div>
@@ -56,6 +58,7 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
             {isClient && isOpen && createPortal(
                 <div
                     style={tooltipStyle}
+                    role="tooltip"
                     className="transition-opacity duration-200 ease-out"
                 >
                     <div className="bg-gray-900 border border-gray-700 text-gray-100 text-xs rounded-lg shadow-xl px-3 py-2 whitespace-nowrap relative mb-0">

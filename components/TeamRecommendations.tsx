@@ -8,6 +8,7 @@ import { GOLD_ICON, championImage, emblemImage } from '@/lib/assets';
 import { PLANNER_MAX_UNITS, unitSlots } from '@/lib/game/rules';
 import { generateTeamCode } from '@/lib/game/team-code';
 import type { TierStyle } from '@/lib/game/types';
+import { useNames } from '@/lib/hooks/use-names';
 import type { Solution } from '@/lib/hooks/use-team-solver';
 import type { Strategy, TeamResult } from '@/lib/solver';
 
@@ -117,7 +118,7 @@ interface TeamCardProps {
 /** One recommended board. Memoized so copying a code or dimming the list doesn't re-render every card. */
 const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCopy }: TeamCardProps) {
     const t = useTranslations();
-    const tTraits = useTranslations('Traits');
+    const names = useNames();
 
     return (
         <div className="[content-visibility:auto] [contain-intrinsic-size:auto_220px] rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
@@ -134,7 +135,7 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                                     trait={trait.trait}
                                     className="w-2 h-2"
                                 />
-                                <span className="text-[12px] font-medium opacity-90 text-gray-300">{tTraits(trait.trait)}</span>
+                                <span className="text-[12px] font-medium opacity-90 text-gray-300">{names.trait(trait.trait)}</span>
                             </div>
                         ))}
                     </div>
@@ -144,7 +145,7 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                         <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
                             {strategy === 'Vertical' && team.metrics.vertical ? (
                                 <>
-                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{tTraits(team.metrics.vertical.trait)}</span>
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{names.trait(team.metrics.vertical.trait)}</span>
                                     <span className={`text-sm font-bold mr-2 ${team.metrics.vertical.style ? METRIC_COLORS[team.metrics.vertical.style] : 'text-gray-500'}`}>{team.metrics.vertical.count}</span>
                                 </>
                             ) : (
@@ -196,7 +197,7 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                                     }`}
                             >
                                 <img src={emblemImage(holder.trait)} alt="" width={16} height={16} className="w-4 h-4 rounded-sm" />
-                                <span>{tTraits(holder.trait)} → {holder.holder ? holder.holder.name : t('no_holder')}</span>
+                                <span>{names.trait(holder.trait)} → {holder.holder ? names.champion(holder.holder) : t('no_holder')}</span>
                             </div>
                         ))}
                     </div>
@@ -238,7 +239,7 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                                 {/* Name Overlay */}
                                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
                                     <span className="text-[10px] font-bold text-white truncate block">
-                                        {champ.name}
+                                        {names.champion(champ)}
                                     </span>
                                 </div>
                             </div>
