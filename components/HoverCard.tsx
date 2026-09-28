@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useIsClient } from '@/lib/hooks/use-is-client';
 
 interface HoverCardProps {
     trigger: React.ReactNode;
@@ -13,15 +14,9 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLDivElement>(null);
     const [coords, setCoords] = useState({ top: 0, left: 0 });
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const isClient = useIsClient();
 
     const handleMouseEnter = () => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         if (triggerRef.current) {
             const rect = triggerRef.current.getBoundingClientRect();
             // Calculate center top position
@@ -58,7 +53,7 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
                 {trigger}
             </div>
 
-            {mounted && isOpen && createPortal(
+            {isClient && isOpen && createPortal(
                 <div
                     style={tooltipStyle}
                     className="transition-opacity duration-200 ease-out"

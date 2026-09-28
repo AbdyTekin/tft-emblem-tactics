@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTFT } from '@/context/language-context';
 import { Champion } from '@/types/tft';
 import HorizontalScrollArea from '@/components/HorizontalScrollArea';
+import ScrollArea from '@/components/ScrollArea';
 import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
 import { TRAIT_RULES } from '@/lib/trait-rules';
 import TraitIcon from '@/components/TraitIcon';
 import { getChampionImageUrl } from '@/lib/champion-image';
 import { isLux } from '@/lib/tft-rules';
+import { useIsClient } from '@/lib/hooks/use-is-client';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
@@ -18,89 +20,56 @@ interface ChampionSelectorProps {
     currentLevel: number;
 }
 
+/**
+ * Keeps the fixed-position popup anchored under (or above) the add button.
+ * Writes straight to the popup's style, so scrolling and resizing never re-render the selector.
+ */
 function usePopupPosition(
     isOpen: boolean,
     buttonRef: React.RefObject<HTMLButtonElement | null>,
-    containerRef: React.RefObject<HTMLDivElement | null>
+    containerRef: React.RefObject<HTMLDivElement | null>,
+    popupRef: React.RefObject<HTMLDivElement | null>
 ) {
-    const [style, setStyle] = useState<React.CSSProperties>({ visibility: 'hidden' });
+    // Layout effect so the first position is applied before paint (no flash).
+    useLayoutEffect(() => {
+        if (!isOpen) return;
 
-    const updatePosition = useCallback(() => {
-        if (!isOpen || !buttonRef.current || !containerRef.current) return;
+        const position = () => {
+            const button = buttonRef.current;
+            const container = containerRef.current;
+            const popup = popupRef.current;
+            if (!button || !container || !popup) return;
 
-        const rect = buttonRef.current.getBoundingClientRect();
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const width = containerRect.width;
+            const rect = button.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const width = containerRect.width;
 
-        let left = containerRect.left;
-        let flipAbove = false;
-
-        if (typeof window !== 'undefined') {
+            let left = containerRect.left;
             if (left + width > window.innerWidth) {
                 left = window.innerWidth - width - 10;
             }
             left = Math.max(10, left);
 
-            // If popup would go below viewport, position above the button
-            const popupMaxHeight = 350; // max-h-[300px] + header ~50px
-            if (rect.bottom + 8 + popupMaxHeight > window.innerHeight) {
-                // Only flip if there's reasonable space above
-                if (rect.top > 100) {
-                    flipAbove = true;
-                }
-            }
-        }
+            // If the popup would go below the viewport, anchor it above the button (when there's room)
+            const popupMaxHeight = 350; // max-h-[203px] grid + header
+            const flipAbove = rect.bottom + 8 + popupMaxHeight > window.innerHeight && rect.top > 100;
 
-        if (flipAbove) {
-            // Anchor the popup's bottom edge just above the button's top
-            setStyle({
-                bottom: `${window.innerHeight - rect.top + 8}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                position: 'fixed',
-                zIndex: 50,
-                visibility: 'visible',
-            });
-        } else {
-            setStyle({
-                top: `${rect.bottom + 8}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                position: 'fixed',
-                zIndex: 50,
-                visibility: 'visible',
-            });
-        }
-    }, [isOpen, buttonRef, containerRef]);
-
-    // Compute position synchronously before paint to avoid flash
-    useLayoutEffect(() => {
-        if (isOpen) {
-            updatePosition();
-        } else {
-            setStyle({ visibility: 'hidden' });
-        }
-    }, [isOpen, updatePosition]);
-
-    // Continuously update position on scroll (any ancestor) and resize
-    useEffect(() => {
-        if (!isOpen) return;
-
-        const onScrollOrResize = () => {
-            updatePosition();
+            popup.style.left = `${left}px`;
+            popup.style.width = `${width}px`;
+            popup.style.top = flipAbove ? '' : `${rect.bottom + 8}px`;
+            popup.style.bottom = flipAbove ? `${window.innerHeight - rect.top + 8}px` : '';
+            popup.style.visibility = 'visible';
         };
 
-        // Listen on window scroll + resize, and use capture to catch any scrollable ancestor
-        window.addEventListener('scroll', onScrollOrResize, true);
-        window.addEventListener('resize', onScrollOrResize);
-
+        position();
+        // Capture catches scrolling in any ancestor
+        window.addEventListener('scroll', position, true);
+        window.addEventListener('resize', position);
         return () => {
-            window.removeEventListener('scroll', onScrollOrResize, true);
-            window.removeEventListener('resize', onScrollOrResize);
+            window.removeEventListener('scroll', position, true);
+            window.removeEventListener('resize', position);
         };
-    }, [isOpen, updatePosition]);
-
-    return style;
+    }, [isOpen, buttonRef, containerRef, popupRef]);
 }
 
 export default function ChampionSelector({ initialTeam, setInitialTeam, currentLevel }: ChampionSelectorProps) {
@@ -115,82 +84,13 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     const [isTraitDropdownOpen, setIsTraitDropdownOpen] = useState(false);
     const costDropdownRef = useRef<HTMLDivElement>(null);
     const traitDropdownRef = useRef<HTMLDivElement>(null);
-    const [mounted, setMounted] = useState(false);
+    const isClient = useIsClient();
 
     const containerRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
 
-    const popupStyle = usePopupPosition(isOpen, buttonRef, containerRef);
-
-    // Custom scrollbar state for popup
-    const popupScrollRef = useRef<HTMLDivElement>(null);
-    const [thumbHeight, setThumbHeight] = useState(0);
-    const [thumbTop, setThumbTop] = useState(0);
-    const [isScrollHovering, setIsScrollHovering] = useState(false);
-    const [isScrollDragging, setIsScrollDragging] = useState(false);
-    const dragStartY = useRef(0);
-    const dragStartScrollTop = useRef(0);
-
-    const handlePopupScroll = useCallback(() => {
-        if (!popupScrollRef.current) return;
-        const { scrollTop, scrollHeight, clientHeight } = popupScrollRef.current;
-
-        if (scrollHeight <= clientHeight) {
-            setThumbHeight(0);
-            return;
-        }
-
-        const newThumbHeight = Math.max((clientHeight / scrollHeight) * clientHeight, 20);
-        const maxTop = clientHeight - newThumbHeight;
-        const scrollRatio = scrollTop / (scrollHeight - clientHeight);
-
-        setThumbHeight(newThumbHeight);
-        setThumbTop(scrollRatio * maxTop);
-    }, []);
-
-    const handleScrollDragStart = (e: React.MouseEvent) => {
-        if (!popupScrollRef.current) return;
-        setIsScrollDragging(true);
-        dragStartY.current = e.clientY;
-        dragStartScrollTop.current = popupScrollRef.current.scrollTop;
-        e.preventDefault();
-    };
-
-    useEffect(() => {
-        const handleDragMove = (e: MouseEvent) => {
-            if (!isScrollDragging || !popupScrollRef.current) return;
-
-            const deltaY = e.clientY - dragStartY.current;
-            const { scrollHeight, clientHeight } = popupScrollRef.current;
-            const maxScrollTop = scrollHeight - clientHeight;
-
-            const maxThumbTop = clientHeight - thumbHeight;
-            if (maxThumbTop <= 0) return;
-
-            const scrollRatio = deltaY / maxThumbTop;
-            const scrollAmount = scrollRatio * maxScrollTop;
-
-            popupScrollRef.current.scrollTop = dragStartScrollTop.current + scrollAmount;
-        };
-
-        const handleDragEnd = () => {
-            setIsScrollDragging(false);
-        };
-
-        if (isScrollDragging) {
-            document.addEventListener('mousemove', handleDragMove);
-            document.addEventListener('mouseup', handleDragEnd);
-        }
-
-        return () => {
-            document.removeEventListener('mousemove', handleDragMove);
-            document.removeEventListener('mouseup', handleDragEnd);
-        };
-    }, [isScrollDragging, thumbHeight]);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    usePopupPosition(isOpen, buttonRef, containerRef, popupRef);
 
     // Derive Region/Class traits for the trait dropdown
     const regionClassTraits = useMemo(() => {
@@ -246,24 +146,6 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    // Observe popup scroll area for resize and scroll
-    useEffect(() => {
-        if (!isOpen) return;
-        const element = popupScrollRef.current;
-        if (!element) return;
-
-        handlePopupScroll();
-
-        const observer = new ResizeObserver(handlePopupScroll);
-        observer.observe(element);
-        element.addEventListener('scroll', handlePopupScroll);
-
-        return () => {
-            observer.disconnect();
-            element.removeEventListener('scroll', handlePopupScroll);
-        };
-    }, [isOpen, handlePopupScroll, filteredChampions]);
 
     const handleToggleChampion = (champion: Champion) => {
         const exists = initialTeam.find(c => c.name === champion.name);
@@ -367,12 +249,13 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                 </div>
             </HorizontalScrollArea>
 
-            {mounted && isOpen && createPortal(
+            {isClient && isOpen && createPortal(
                 <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)}>
                     {/* Content Container */}
                     <div
+                        ref={popupRef}
                         className="bg-gray-900 border border-white/10 rounded-xl shadow-2xl overflow-visible flex flex-col"
-                        style={popupStyle}
+                        style={{ position: 'fixed', zIndex: 50, visibility: 'hidden' }}
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="p-3 border-b border-white/10 bg-gray-950/30">
@@ -533,54 +416,20 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                             </div>
                         </div>
 
-                        {/* Wrapper clips the custom scrollbar thumb at 50% */}
+                        {/* Wrapper clips the scrollbar thumb at 50% */}
                         <div className="overflow-hidden rounded-b-xl">
-                            {/* Custom scrollable area with custom scrollbar */}
-                            <div
-                                className="relative overflow-visible bg-gray-950/30"
-                                onMouseEnter={() => setIsScrollHovering(true)}
-                                onMouseLeave={() => setIsScrollHovering(false)}
-                            >
-                                <div
-                                    ref={popupScrollRef}
-                                    className="max-h-[203px] overflow-y-auto"
-                                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                                >
-                                    <style jsx>{`
-                                    div::-webkit-scrollbar {
-                                        display: none;
-                                    }
-                                `}</style>
-                                    <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
-                                        {filteredChampions.map(champ => {
-                                            const isSelected = initialTeam.some(c => c.name === champ.name);
-                                            return (
-                                                <div key={champ.name} className="w-full">
-                                                    {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                            <ScrollArea className="bg-gray-950/30" viewportClassName="max-h-[203px]" trackClassName="right-[-6px]">
+                                <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
+                                    {filteredChampions.map(champ => {
+                                        const isSelected = initialTeam.some(c => c.name === champ.name);
+                                        return (
+                                            <div key={champ.name} className="w-full">
+                                                {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-
-                                {/* Custom scrollbar thumb — 50% overflows right edge, clipped by popup's overflow-hidden */}
-                                {thumbHeight > 0 && (
-                                    <div
-                                        className={`absolute right-[-6px] top-0 w-3 h-full transition-opacity duration-200 ${isScrollHovering || isScrollDragging ? 'opacity-100' : 'opacity-0'
-                                            }`}
-                                    >
-                                        <div
-                                            className={`w-full bg-white/20 rounded-full cursor-pointer hover:bg-white/30 active:bg-white/40 transition-colors ${isScrollDragging ? 'bg-white/40' : ''}`}
-                                            style={{
-                                                height: `${thumbHeight}px`,
-                                                transform: `translateY(${thumbTop}px)`,
-                                                transition: isScrollDragging ? 'none' : 'transform 0.05s linear'
-                                            }}
-                                            onMouseDown={handleScrollDragStart}
-                                        />
-                                    </div>
-                                )}
-                            </div>
+                            </ScrollArea>
                         </div>
                     </div>
                 </div>,

@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+test-results.log
+
+# CommunityDragon download cache (scripts/update-data.mjs)
+/.cache/
 
 # next.js
 /.next/

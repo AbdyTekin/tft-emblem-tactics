@@ -1,5 +1,5 @@
 import { Champion } from '@/types/tft';
-import { TRAIT_RULES, TraitRule } from '@/lib/trait-rules';
+import { TRAIT_RULES } from '@/lib/trait-rules';
 import {
     isLux,
     getChampionSlots,
@@ -112,7 +112,7 @@ function getCandidates(
 
         // 1. Try to activate an openable trait
         if (openableNonUniqueTraits.size > 0) {
-            let candidates = availablePool.filter(c => 
+            const candidates = availablePool.filter(c => 
                 c.traits.some(t => openableNonUniqueTraits.has(t))
             );
             if (candidates.length > 0) return candidates;
@@ -252,7 +252,7 @@ function createTeamComp(
     const activeSynergies: string[] = [];
     let difficulty = 0;
     let bronzeCount = 0;
-    let totalCost = champions.reduce((sum, c) => sum + c.cost, 0);
+    const totalCost = champions.reduce((sum, c) => sum + c.cost, 0);
     difficulty += totalCost;
 
     for (const [trait, count] of Object.entries(traitCounts)) {

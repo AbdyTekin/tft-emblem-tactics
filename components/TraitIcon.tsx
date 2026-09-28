@@ -11,7 +11,7 @@ const TraitIcon = ({ trait, className }: { trait: string, className?: string }) 
         'thornmaiden': 'trait_icon_18_zyraorigin.png',
     };
 
-    let urls: string[] = [];
+    const urls: string[] = [];
     if (customIconNames[normalizedTrait]) {
         urls.push(`https://raw.communitydragon.org/latest/game/assets/ux/traiticons/${customIconNames[normalizedTrait]}`);
     }
