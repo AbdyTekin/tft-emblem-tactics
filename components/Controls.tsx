@@ -1,13 +1,13 @@
 "use client";
 
-import { SolverStrategy } from '@/lib/solver';
+import type { Strategy } from '@/lib/solver';
 import { useTranslations } from 'next-intl';
 
 interface ControlsProps {
     level: number;
     setLevel: (level: number) => void;
-    strategy: SolverStrategy;
-    setStrategy: (strategy: SolverStrategy) => void;
+    strategy: Strategy;
+    setStrategy: (strategy: Strategy) => void;
 }
 
 export default function Controls({ level, setLevel, strategy, setStrategy }: ControlsProps) {
@@ -93,7 +93,7 @@ export default function Controls({ level, setLevel, strategy, setStrategy }: Con
                     ].map((option) => (
                         <button
                             key={option.id}
-                            onClick={() => setStrategy(option.id as SolverStrategy)}
+                            onClick={() => setStrategy(option.id as Strategy)}
                             className={`cursor-pointer relative flex items-center w-full p-2.5 rounded-xl border transition-all duration-300 group text-left
                 ${strategy === option.id
                                     ? 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/20 border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)]'

@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useMemo, useDeferredValue } from 'react';
-import { useTFT } from '@/context/language-context';
-import { solveTeamComp, SolverStrategy } from '@/lib/solver';
-import { getEmblemTraits } from '@/lib/trait-rules';
+import { solveTeams, type SolveResult, type Strategy } from '@/lib/solver';
+import { EMBLEM_TRAITS } from '@/lib/game/data';
 import { Champion } from '@/types/tft';
 import Header from '@/components/Header';
 import Controls from '@/components/Controls';
@@ -13,11 +12,9 @@ import TeamRecommendations from '@/components/TeamRecommendations';
 import ScrollArea from '@/components/ScrollArea';
 
 function MainLayout() {
-  const { champions } = useTFT();
-
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
   const [level, setLevel] = useState<number>(8);
-  const [strategy, setStrategy] = useState<SolverStrategy>('BronzeLife');
+  const [strategy, setStrategy] = useState<Strategy>('BronzeLife');
   const [initialTeam, setInitialTeam] = useState<Champion[]>([]);
 
   // Defer heavy calculation inputs to prevent UI blocking
@@ -26,26 +23,19 @@ function MainLayout() {
   const deferredStrategy = useDeferredValue(strategy);
   const deferredInitialTeam = useDeferredValue(initialTeam);
 
-  const availableTraits = useMemo(() => {
-    const traits = getEmblemTraits();
-    return traits.sort();
-  }, []);
+  const availableTraits = EMBLEM_TRAITS as string[];
 
-  const teamRecommendations = useMemo(() => {
-    // If no emblems and no team selected, maybe return empty? 
-    // Or just run solver with empty inputs (might be expensive if no constraints).
-    // If no emblems are selected, do not generate a team, even if initialTeam is set.
-    // User requirement: "our team generation shouldn't retrigger on champion select/filter when there is no selected emblem"
-    if (deferredSelectedEmblems.length === 0) return [];
+  const result = useMemo<SolveResult | null>(() => {
+    // No emblems selected: nothing to build around, even when champions are locked.
+    if (deferredSelectedEmblems.length === 0) return null;
 
-    return solveTeamComp(
-      champions,
-      deferredSelectedEmblems,
-      deferredLevel,
-      deferredStrategy,
-      deferredInitialTeam
-    );
-  }, [champions, deferredSelectedEmblems, deferredLevel, deferredStrategy, deferredInitialTeam]);
+    return solveTeams({
+      emblems: deferredSelectedEmblems,
+      level: deferredLevel,
+      strategy: deferredStrategy,
+      locked: deferredInitialTeam.map(c => c.apiName),
+    });
+  }, [deferredSelectedEmblems, deferredLevel, deferredStrategy, deferredInitialTeam]);
 
   const addEmblem = (trait: string) => {
     setSelectedEmblems(prev => [...prev, trait]);
@@ -102,7 +92,8 @@ function MainLayout() {
             <ScrollArea className="h-auto lg:h-full pr-1 [&>div]:!h-auto lg:[&>div]:!h-full">
               <div className="flex flex-col gap-4 h-full">
                 <TeamRecommendations
-                  teamRecommendations={teamRecommendations}
+                  result={result}
+                  strategy={deferredStrategy}
                   selectedEmblems={deferredSelectedEmblems}
                   level={deferredLevel}
                   isGenerating={selectedEmblems.length > 0 && (selectedEmblems !== deferredSelectedEmblems || level !== deferredLevel || strategy !== deferredStrategy || initialTeam !== deferredInitialTeam)}

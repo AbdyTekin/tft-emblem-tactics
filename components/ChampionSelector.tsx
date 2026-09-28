@@ -8,10 +8,9 @@ import HorizontalScrollArea from '@/components/HorizontalScrollArea';
 import ScrollArea from '@/components/ScrollArea';
 import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
-import { TRAIT_RULES } from '@/lib/trait-rules';
+import { TRAITS } from '@/lib/game/data';
 import TraitIcon from '@/components/TraitIcon';
 import { getChampionImageUrl } from '@/lib/champion-image';
-import { isLux } from '@/lib/tft-rules';
 import { useIsClient } from '@/lib/hooks/use-is-client';
 
 interface ChampionSelectorProps {
@@ -96,9 +95,9 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     const regionClassTraits = useMemo(() => {
         const origins: string[] = [];
         const classes: string[] = [];
-        for (const [name, rule] of Object.entries(TRAIT_RULES)) {
-            if (rule.type === 'Origin') origins.push(name);
-            else if (rule.type === 'Class') classes.push(name);
+        for (const trait of TRAITS) {
+            if (trait.kind === 'origin') origins.push(trait.key);
+            else if (trait.kind === 'class') classes.push(trait.key);
         }
         origins.sort((a, b) => a.localeCompare(b));
         classes.sort((a, b) => a.localeCompare(b));
@@ -148,15 +147,11 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
     }, []);
 
     const handleToggleChampion = (champion: Champion) => {
-        const exists = initialTeam.find(c => c.name === champion.name);
-        if (exists) {
-            setInitialTeam(initialTeam.filter(c => c.name !== champion.name));
+        if (initialTeam.some(c => c.apiName === champion.apiName)) {
+            setInitialTeam(initialTeam.filter(c => c.apiName !== champion.apiName));
         } else {
-            if (isLux(champion)) {
-                setInitialTeam([...initialTeam.filter(c => !isLux(c)), champion]);
-            } else {
-                setInitialTeam([...initialTeam, champion]);
-            }
+            // One unit per unit id: picking another Lux variant replaces the current one
+            setInitialTeam([...initialTeam.filter(c => c.unitId !== champion.unitId), champion]);
         }
     };
 
@@ -421,7 +416,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                             <ScrollArea className="bg-gray-950/30" viewportClassName="max-h-[203px]" trackClassName="right-[-6px]">
                                 <div className="grid grid-cols-5 gap-1.5 p-3 pb-8">
                                     {filteredChampions.map(champ => {
-                                        const isSelected = initialTeam.some(c => c.name === champ.name);
+                                        const isSelected = initialTeam.some(c => c.apiName === champ.apiName);
                                         return (
                                             <div key={champ.name} className="w-full">
                                                 {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
