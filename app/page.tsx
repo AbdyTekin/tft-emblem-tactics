@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useMemo, useDeferredValue } from 'react';
-import { solveTeams, type SolveResult, type Strategy } from '@/lib/solver';
+import React, { useState, useMemo } from 'react';
+import type { SolveRequest, Strategy } from '@/lib/solver';
 import { EMBLEM_TRAITS } from '@/lib/game/data';
+import { useTeamSolver } from '@/lib/hooks/use-team-solver';
 import { Champion } from '@/types/tft';
 import Header from '@/components/Header';
 import Controls from '@/components/Controls';
@@ -14,43 +15,37 @@ import ScrollArea from '@/components/ScrollArea';
 function MainLayout() {
   const [selectedEmblems, setSelectedEmblems] = useState<string[]>([]);
   const [level, setLevel] = useState<number>(8);
+  const [bonusTeamSize, setBonusTeamSize] = useState<number>(0);
   const [strategy, setStrategy] = useState<Strategy>('BronzeLife');
+  const [rivalsAugment, setRivalsAugment] = useState(false);
+  const [evolvedKhazix, setEvolvedKhazix] = useState(false);
   const [initialTeam, setInitialTeam] = useState<Champion[]>([]);
 
-  // Defer heavy calculation inputs to prevent UI blocking
-  const deferredSelectedEmblems = useDeferredValue(selectedEmblems);
-  const deferredLevel = useDeferredValue(level);
-  const deferredStrategy = useDeferredValue(strategy);
-  const deferredInitialTeam = useDeferredValue(initialTeam);
-
-  const availableTraits = EMBLEM_TRAITS as string[];
-
-  const result = useMemo<SolveResult | null>(() => {
+  const request = useMemo<SolveRequest | null>(() => {
     // No emblems selected: nothing to build around, even when champions are locked.
-    if (deferredSelectedEmblems.length === 0) return null;
+    if (selectedEmblems.length === 0) return null;
+    return {
+      emblems: selectedEmblems,
+      level,
+      bonusTeamSize,
+      strategy,
+      locked: initialTeam.map(c => c.apiName),
+      rivalsAugment,
+      evolvedKhazix,
+    };
+  }, [selectedEmblems, level, bonusTeamSize, strategy, initialTeam, rivalsAugment, evolvedKhazix]);
 
-    return solveTeams({
-      emblems: deferredSelectedEmblems,
-      level: deferredLevel,
-      strategy: deferredStrategy,
-      locked: deferredInitialTeam.map(c => c.apiName),
-    });
-  }, [deferredSelectedEmblems, deferredLevel, deferredStrategy, deferredInitialTeam]);
+  // Solved in a Web Worker; the previous result stays on screen (dimmed) until the new one arrives.
+  const { solution, solving } = useTeamSolver(request);
 
   const addEmblem = (trait: string) => {
     setSelectedEmblems(prev => [...prev, trait]);
   };
 
-  const removeEmblem = (trait: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const removeEmblem = (trait: string) => {
     setSelectedEmblems(prev => {
-      const index = prev.indexOf(trait);
-      if (index > -1) {
-        const newArr = [...prev];
-        newArr.splice(index, 1);
-        return newArr;
-      }
-      return prev;
+      const index = prev.lastIndexOf(trait);
+      return index === -1 ? prev : [...prev.slice(0, index), ...prev.slice(index + 1)];
     });
   };
 
@@ -67,18 +62,25 @@ function MainLayout() {
               <Controls
                 level={level}
                 setLevel={setLevel}
+                bonusTeamSize={bonusTeamSize}
+                setBonusTeamSize={setBonusTeamSize}
                 strategy={strategy}
                 setStrategy={setStrategy}
+                rivalsAugment={rivalsAugment}
+                setRivalsAugment={setRivalsAugment}
+                evolvedKhazix={evolvedKhazix}
+                setEvolvedKhazix={setEvolvedKhazix}
               />
 
               <ChampionSelector
                 initialTeam={initialTeam}
                 setInitialTeam={setInitialTeam}
-                currentLevel={level}
+                boardSize={{ level, bonusTeamSize }}
+                evolvedKhazix={evolvedKhazix}
               />
 
               <TraitList
-                availableTraits={availableTraits}
+                availableTraits={EMBLEM_TRAITS}
                 selectedEmblems={selectedEmblems}
                 addEmblem={addEmblem}
                 removeEmblem={removeEmblem}
@@ -92,11 +94,9 @@ function MainLayout() {
             <ScrollArea className="h-auto lg:h-full pr-1 [&>div]:!h-auto lg:[&>div]:!h-full">
               <div className="flex flex-col gap-4 h-full">
                 <TeamRecommendations
-                  result={result}
-                  strategy={deferredStrategy}
-                  selectedEmblems={deferredSelectedEmblems}
-                  level={deferredLevel}
-                  isGenerating={selectedEmblems.length > 0 && (selectedEmblems !== deferredSelectedEmblems || level !== deferredLevel || strategy !== deferredStrategy || initialTeam !== deferredInitialTeam)}
+                  solution={solution}
+                  solving={solving}
+                  level={level}
                 />
               </div>
             </ScrollArea>

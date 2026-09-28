@@ -11,7 +11,8 @@
     "test": "tsx --test \"tests/**/*.test.ts\"",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "data:update": "node scripts/update-data.mjs",
-    "data:check": "node scripts/update-data.mjs --check"
+    "data:check": "node scripts/update-data.mjs --check",
+    "assets:update": "node scripts/update-assets.mjs"
   },
   "engines": {
     "node": ">=20.9.0"
@@ -29,6 +30,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"

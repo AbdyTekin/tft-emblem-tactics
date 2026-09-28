@@ -10,13 +10,18 @@ import { useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
 import { TRAITS } from '@/lib/game/data';
 import TraitIcon from '@/components/TraitIcon';
-import { getChampionImageUrl } from '@/lib/champion-image';
+import { GOLD_ICON, championImage } from '@/lib/assets';
+import { evaluateTeam } from '@/lib/game/evaluate';
+import type { BoardSize } from '@/lib/game/rules';
+import { candidatePool } from '@/lib/solver';
 import { useIsClient } from '@/lib/hooks/use-is-client';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
     setInitialTeam: (team: Champion[]) => void;
-    currentLevel: number;
+    boardSize: BoardSize;
+    /** Offer evolved Kha'Zix variants too. */
+    evolvedKhazix: boolean;
 }
 
 /**
@@ -71,8 +76,17 @@ function usePopupPosition(
     }, [isOpen, buttonRef, containerRef, popupRef]);
 }
 
-export default function ChampionSelector({ initialTeam, setInitialTeam, currentLevel }: ChampionSelectorProps) {
-    const { champions } = useTFT();
+const COST_DOT: Record<number, string> = {
+    1: 'bg-gray-400',
+    2: 'bg-green-400',
+    3: 'bg-blue-400',
+    4: 'bg-purple-400',
+    5: 'bg-yellow-400',
+};
+
+export default function ChampionSelector({ initialTeam, setInitialTeam, boardSize, evolvedKhazix }: ChampionSelectorProps) {
+    const { champions: setChampions } = useTFT();
+    const champions = useMemo(() => candidatePool({ evolvedKhazix }, setChampions), [evolvedKhazix, setChampions]);
     const t = useTranslations();
     const tTraits = useTranslations('Traits');
     const [search, setSearch] = useState("");
@@ -146,49 +160,49 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    /** Locking `champion` must leave a legal board (slots, including Elder Dragon's two). */
+    const withChampion = (champion: Champion) => [...initialTeam.filter(c => c.unitId !== champion.unitId), champion];
+    const canLock = (champion: Champion) => evaluateTeam(withChampion(champion), boardSize).valid;
+
     const handleToggleChampion = (champion: Champion) => {
         if (initialTeam.some(c => c.apiName === champion.apiName)) {
             setInitialTeam(initialTeam.filter(c => c.apiName !== champion.apiName));
-        } else {
+        } else if (canLock(champion)) {
             // One unit per unit id: picking another Lux variant replaces the current one
-            setInitialTeam([...initialTeam.filter(c => c.unitId !== champion.unitId), champion]);
+            setInitialTeam(withChampion(champion));
         }
     };
 
-    const costColors = {
-        1: 'border-gray-500 text-gray-400',
-        2: 'border-green-500 text-green-400',
-        3: 'border-blue-500 text-blue-400',
-        4: 'border-purple-500 text-purple-400',
-        5: 'border-yellow-500 text-yellow-400'
-    };
-
     const renderChampionCard = (champ: Champion, isSelected: boolean, onClick: () => void) => {
-        const imageUrl = getChampionImageUrl(champ);
-        const costColorObj = costColors[champ.cost as keyof typeof costColors] || 'border-gray-500 text-gray-400';
-        const bgCostColor = costColorObj.split(' ')[1].replace('text-', 'bg-');
+        const disabled = !isSelected && !canLock(champ);
 
         return (
-            <HoverCard key={champ.name} trigger={
+            <HoverCard key={champ.apiName} trigger={
                 <button
                     onClick={onClick}
+                    aria-disabled={disabled}
+                    aria-pressed={isSelected}
+                    aria-label={champ.name}
                     className={`
-                        relative aspect-square rounded-lg overflow-hidden border transition-all group w-full cursor-pointer
+                        relative aspect-square rounded-lg overflow-hidden border transition-all group w-full
                         ${isSelected
-                            ? 'border-indigo-500 ring-1 ring-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)]'
-                            : 'border-white/10 hover:border-white/30 hover:bg-white/5'
+                            ? 'border-indigo-500 ring-1 ring-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)] cursor-pointer'
+                            : disabled
+                                ? 'border-white/5 opacity-30 cursor-not-allowed'
+                                : 'border-white/10 hover:border-white/30 hover:bg-white/5 cursor-pointer'
                         }
                     `}
                 >
                     <img
-                        src={imageUrl}
-                        alt={champ.name}
+                        src={championImage(champ)}
+                        alt=""
+                        width={128}
+                        height={128}
+                        loading="lazy"
+                        decoding="async"
                         className={`w-full h-full object-cover transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60 group-hover:opacity-90'}`}
-                        onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/-1.png';
-                        }}
                     />
-                    <div className={`absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full ${bgCostColor}`} />
+                    <div className={`absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full ${COST_DOT[champ.cost] ?? COST_DOT[1]}`} />
                 </button>
             }>
                 <span>{champ.name}</span>
@@ -234,7 +248,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                     </div>
 
                     {initialTeam.map(champ => (
-                        <div key={champ.name} className="flex-shrink-0" style={{ width: 'calc((100% - 1.5rem) / 5)' }}>
+                        <div key={champ.apiName} className="flex-shrink-0" style={{ width: 'calc((100% - 1.5rem) / 5)' }}>
                             {renderChampionCard(champ, true, () => handleToggleChampion(champ))}
                         </div>
                     ))}
@@ -357,8 +371,8 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                         <div
                                             className="w-4 h-4 bg-current"
                                             style={{
-                                                maskImage: 'url(https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png)',
-                                                WebkitMaskImage: 'url(https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png)',
+                                                maskImage: `url(${GOLD_ICON})`,
+                                                WebkitMaskImage: `url(${GOLD_ICON})`,
                                                 maskSize: 'contain',
                                                 WebkitMaskSize: 'contain',
                                                 maskRepeat: 'no-repeat',
@@ -418,7 +432,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, currentL
                                     {filteredChampions.map(champ => {
                                         const isSelected = initialTeam.some(c => c.apiName === champ.apiName);
                                         return (
-                                            <div key={champ.name} className="w-full">
+                                            <div key={champ.apiName} className="w-full">
                                                 {renderChampionCard(champ, isSelected, () => handleToggleChampion(champ))}
                                             </div>
                                         );

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import TraitIcon from '@/components/TraitIcon';
 import TeamSkeleton from '@/components/TeamSkeleton';
-import { getChampionImageUrl, getEmblemImageUrl } from '@/lib/champion-image';
-import { unitSlots } from '@/lib/game/rules';
+import { GOLD_ICON, championImage, emblemImage } from '@/lib/assets';
+import { PLANNER_MAX_UNITS, unitSlots } from '@/lib/game/rules';
 import { generateTeamCode } from '@/lib/game/team-code';
 import type { TierStyle } from '@/lib/game/types';
-import type { SolveResult, Strategy, TeamResult } from '@/lib/solver';
+import type { Solution } from '@/lib/hooks/use-team-solver';
+import type { Strategy, TeamResult } from '@/lib/solver';
 
 // --- CONFIGURATION START ---
 
@@ -39,11 +40,10 @@ const CHAMPION_STYLES: Record<number, { border: string; badge: string }> = {
 // --- CONFIGURATION END ---
 
 interface TeamRecommendationsProps {
-    result: SolveResult | null;
-    strategy: Strategy;
-    selectedEmblems: string[];
+    /** Latest result and the request that produced it (may be one step behind while `solving`). */
+    solution: Solution | null;
+    solving: boolean;
     level: number;
-    isGenerating: boolean;
 }
 
 function Notice({ title, message }: { title: string; message: string }) {
@@ -60,17 +60,14 @@ function Notice({ title, message }: { title: string; message: string }) {
     );
 }
 
-export default function TeamRecommendations({ result, strategy, selectedEmblems, level, isGenerating }: TeamRecommendationsProps) {
+export default function TeamRecommendations({ solution, solving, level }: TeamRecommendationsProps) {
     const t = useTranslations();
-    const tTraits = useTranslations('Traits');
-    const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+    const [copied, setCopied] = useState<string | null>(null);
 
-    const handleCopyTeamCode = async (team: TeamResult, idx: number) => {
+    const handleCopyTeamCode = useCallback(async (team: TeamResult, key: string) => {
         const code = generateTeamCode(team.champions);
         try {
             await navigator.clipboard.writeText(code);
-            setCopiedIdx(idx);
-            setTimeout(() => setCopiedIdx(null), 2000);
         } catch {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -79,18 +76,17 @@ export default function TeamRecommendations({ result, strategy, selectedEmblems,
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            setCopiedIdx(idx);
-            setTimeout(() => setCopiedIdx(null), 2000);
         }
-    };
+        setCopied(key);
+        setTimeout(() => setCopied(current => (current === key ? null : current)), 2000);
+    }, []);
 
-    if (isGenerating) {
-        return <TeamSkeleton />;
+    if (!solution) {
+        return solving ? <TeamSkeleton /> : <Notice title={t('ready_to_build')} message={t('select_emblems_msg', { level })} />;
     }
 
-    if (selectedEmblems.length === 0 || !result) {
-        return <Notice title={t('ready_to_build')} message={t('select_emblems_msg', { level })} />;
-    }
+    const { result, request } = solution;
+    const strategy = request.strategy;
 
     if (result.status === 'invalid-lock') {
         return <Notice title={t('no_teams_title')} message={t(result.reason === 'too-many-slots' ? 'invalid_lock_slots' : 'invalid_lock_duplicate')} />;
@@ -101,134 +97,155 @@ export default function TeamRecommendations({ result, strategy, selectedEmblems,
     }
 
     return (
-        <div className="grid grid-cols-1 gap-6">
-            {result.teams.map((team, idx) => (
-                <div key={team.champions.map(c => c.apiName).join('|')} className="rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
-                    <div className="p-4">
-                        {/* Synergies & Score Row */}
-                        <div className="mb-4 flex items-start justify-between gap-4">
-
-                            {/* Active traits, colored by tier (bronze/silver/gold/prismatic/unique) */}
-                            <div className="flex flex-wrap gap-2 flex-1">
-                                {team.evaluation.traits.filter(trait => trait.style).map(trait => (
-                                    <div key={trait.trait} className={`flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] shadow-sm transition-all ${TRAIT_STYLES[trait.style!]}`}>
-                                        <span className="text-[15px] font-bold w-2 text-center leading-none opacity-90">{trait.count}</span>
-                                        <TraitIcon
-                                            trait={trait.trait}
-                                            className="w-2 h-2"
-                                        />
-                                        <span className="text-[12px] font-medium opacity-90 text-gray-300">{tTraits(trait.trait)}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Strategy metric & Team Code */}
-                            <div className="flex flex-col items-end gap-1.5 shrink-0">
-                                <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
-                                    {strategy === 'Vertical' && team.metrics.vertical ? (
-                                        <>
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{tTraits(team.metrics.vertical.trait)}</span>
-                                            <span className={`text-sm font-bold mr-2 ${team.metrics.vertical.style ? METRIC_COLORS[team.metrics.vertical.style] : 'text-gray-500'}`}>{team.metrics.vertical.count}</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('bronze_traits')}</span>
-                                            <span className="text-sm font-bold text-yellow-700 mr-2">{team.metrics.bronze}</span>
-                                        </>
-                                    )}
-                                    <div className="w-[1px] h-4 bg-white/10 mx-1"></div>
-                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('active_traits')}</span>
-                                    <span className="text-xl font-black text-white tracking-tight">{team.metrics.activeTraits}</span>
-                                </div>
-                                <button
-                                    onClick={() => handleCopyTeamCode(team, idx)}
-                                    className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border ${copiedIdx === idx
-                                        ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
-                                        : 'bg-black/20 border-white/5 text-gray-400 hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:text-indigo-300'
-                                        }`}
-                                >
-                                    {copiedIdx === idx ? (
-                                        <>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                            </svg>
-                                            {t('copied')}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
-                                            </svg>
-                                            {t('team_code')}
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Who holds each emblem (an emblem only counts on a unit without that trait) */}
-                        {team.evaluation.emblemHolders.length > 0 && (
-                            <div className="mb-3 flex flex-wrap gap-1.5">
-                                {team.evaluation.emblemHolders.map((holder, i) => (
-                                    <div
-                                        key={`${holder.trait}-${i}`}
-                                        className={`flex items-center gap-1.5 pl-1 pr-2 py-0.5 rounded-md border text-[11px] font-medium ${holder.holder
-                                            ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-200'
-                                            : 'border-white/10 bg-black/20 text-gray-500'
-                                            }`}
-                                    >
-                                        {getEmblemImageUrl(holder.trait) && (
-                                            <img src={getEmblemImageUrl(holder.trait)} alt="" width={16} height={16} className="w-4 h-4" />
-                                        )}
-                                        <span>{tTraits(holder.trait)} → {holder.holder ? holder.holder.name : t('no_holder')}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Champions Grid */}
-                        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
-                            {team.champions.map((champ) => (
-                                <div key={champ.id} className="group relative aspect-square">
-                                    <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
-                                        }`}>
-                                        <img
-                                            src={getChampionImageUrl(champ)}
-                                            alt={champ.name}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                            onError={(e) => {
-                                                (e.target as HTMLImageElement).src = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/-1.png';
-                                            }}
-                                        />
-                                        {/* 2-slot badge for Elder Dragon */}
-                                        {unitSlots(champ) === 2 && (
-                                            <div className="absolute top-0 left-0 px-1 py-0.25 rounded-br-lg flex items-center justify-center bg-purple-900/90 border-r border-b border-purple-500/40">
-                                                <span className="text-[9px] font-black text-purple-200">2 SLOTS</span>
-                                            </div>
-                                        )}
-                                        {/* Cost Badge */}
-                                        <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
-                                            }`}>
-                                            <img
-                                                src="https://raw.communitydragon.org/latest/game/assets/ux/tft/regionportals/icon/gold.png"
-                                                alt="Gold"
-                                                className="w-3 h-3 mr-0.5"
-                                            />
-                                            <span className="text-[10px] font-black text-white">{champ.cost}</span>
-                                        </div>
-                                        {/* Name Overlay */}
-                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
-                                            <span className="text-[10px] font-bold text-white truncate block">
-                                                {champ.name}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            ))}
+        <div className={`grid grid-cols-1 gap-6 transition-opacity duration-150 ${solving ? 'opacity-50' : 'opacity-100'}`} aria-busy={solving}>
+            {result.teams.map(team => {
+                const key = team.champions.map(c => c.apiName).join('|');
+                return <TeamCard key={key} teamKey={key} team={team} strategy={strategy} copied={copied === key} onCopy={handleCopyTeamCode} />;
+            })}
         </div>
     );
 }
+
+interface TeamCardProps {
+    team: TeamResult;
+    teamKey: string;
+    strategy: Strategy;
+    copied: boolean;
+    onCopy: (team: TeamResult, key: string) => void;
+}
+
+/** One recommended board. Memoized so copying a code or dimming the list doesn't re-render every card. */
+const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCopy }: TeamCardProps) {
+    const t = useTranslations();
+    const tTraits = useTranslations('Traits');
+
+    return (
+        <div className="[content-visibility:auto] [contain-intrinsic-size:auto_220px] rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
+            <div className="p-4">
+                {/* Synergies & Score Row */}
+                <div className="mb-4 flex items-start justify-between gap-4">
+
+                    {/* Active traits, colored by tier (bronze/silver/gold/prismatic/unique) */}
+                    <div className="flex flex-wrap gap-2 flex-1">
+                        {team.evaluation.traits.filter(trait => trait.style).map(trait => (
+                            <div key={trait.trait} className={`flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] shadow-sm transition-all ${TRAIT_STYLES[trait.style!]}`}>
+                                <span className="text-[15px] font-bold w-2 text-center leading-none opacity-90">{trait.count}</span>
+                                <TraitIcon
+                                    trait={trait.trait}
+                                    className="w-2 h-2"
+                                />
+                                <span className="text-[12px] font-medium opacity-90 text-gray-300">{tTraits(trait.trait)}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Strategy metric & Team Code */}
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                        <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
+                            {strategy === 'Vertical' && team.metrics.vertical ? (
+                                <>
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{tTraits(team.metrics.vertical.trait)}</span>
+                                    <span className={`text-sm font-bold mr-2 ${team.metrics.vertical.style ? METRIC_COLORS[team.metrics.vertical.style] : 'text-gray-500'}`}>{team.metrics.vertical.count}</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('bronze_traits')}</span>
+                                    <span className="text-sm font-bold text-yellow-700 mr-2">{team.metrics.bronze}</span>
+                                </>
+                            )}
+                            <div className="w-[1px] h-4 bg-white/10 mx-1"></div>
+                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('active_traits')}</span>
+                            <span className="text-xl font-black text-white tracking-tight">{team.metrics.activeTraits}</span>
+                        </div>
+                        <button
+                            onClick={() => onCopy(team, teamKey)}
+                            title={team.champions.length > PLANNER_MAX_UNITS ? t('team_code_cut', { max: PLANNER_MAX_UNITS }) : undefined}
+                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border ${copied
+                                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
+                                : 'bg-black/20 border-white/5 text-gray-400 hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:text-indigo-300'
+                                }`}
+                        >
+                            {copied ? (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                    </svg>
+                                    {t('copied')}
+                                </>
+                            ) : (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                                    </svg>
+                                    {t('team_code')}
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Who holds each emblem (an emblem only counts on a unit without that trait) */}
+                {team.evaluation.emblemHolders.length > 0 && (
+                    <div className="mb-3 flex flex-wrap gap-1.5">
+                        {team.evaluation.emblemHolders.map((holder, i) => (
+                            <div
+                                key={`${holder.trait}-${i}`}
+                                className={`flex items-center gap-1.5 pl-1 pr-2 py-0.5 rounded-md border text-[11px] font-medium ${holder.holder
+                                    ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-200'
+                                    : 'border-white/10 bg-black/20 text-gray-500'
+                                    }`}
+                            >
+                                <img src={emblemImage(holder.trait)} alt="" width={16} height={16} className="w-4 h-4 rounded-sm" />
+                                <span>{tTraits(holder.trait)} → {holder.holder ? holder.holder.name : t('no_holder')}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Champions Grid */}
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+                    {team.champions.map((champ) => (
+                        <div key={champ.id} className="group relative aspect-square">
+                            <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
+                                }`}>
+                                <img
+                                    src={championImage(champ)}
+                                    alt=""
+                                    width={128}
+                                    height={128}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                {/* 2-slot badge for Elder Dragon */}
+                                {unitSlots(champ) === 2 && (
+                                    <div className="absolute top-0 left-0 px-1 py-0.25 rounded-br-lg flex items-center justify-center bg-purple-900/90 border-r border-b border-purple-500/40">
+                                        <span className="text-[9px] font-black text-purple-200">2 SLOTS</span>
+                                    </div>
+                                )}
+                                {/* Cost Badge */}
+                                <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
+                                    }`}>
+                                    <img
+                                        src={GOLD_ICON}
+                                        alt=""
+                                        width={12}
+                                        height={12}
+                                        className="w-3 h-3 mr-0.5"
+                                    />
+                                    <span className="text-[10px] font-black text-white">{champ.cost}</span>
+                                </div>
+                                {/* Name Overlay */}
+                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
+                                    <span className="text-[10px] font-bold text-white truncate block">
+                                        {champ.name}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+});

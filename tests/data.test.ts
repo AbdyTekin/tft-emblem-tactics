@@ -1,5 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { GOLD_ICON, championImage, emblemImage, traitIcon } from '@/lib/assets';
 import { CHAMPIONS, EMBLEM_TRAITS, SET_META, TRAITS, getTrait } from '@/lib/game/data';
 import { champ } from './helpers';
 
@@ -50,6 +53,16 @@ describe('generated Set 18 data', () => {
             ...CHAMPIONS.flatMap(c => [c.squareIcon, c.tileIcon]),
         ].filter((p): p is string => p !== undefined);
         for (const p of paths) assert.match(p, /^assets\/[a-z0-9_./-]+\.png$/);
+    });
+
+    it('has a self-hosted image for every champion, trait and emblem (npm run assets:update)', () => {
+        const exists = (url: string) => fs.existsSync(path.join(process.cwd(), 'public', url));
+        for (const c of CHAMPIONS) assert.ok(exists(championImage(c)), c.name);
+        for (const t of TRAITS) {
+            assert.ok(exists(traitIcon(t.key)), `${t.key} icon`);
+            if (t.emblem) assert.ok(exists(emblemImage(t.key)), `${t.key} emblem`);
+        }
+        assert.ok(exists(GOLD_ICON));
     });
 
     it('has Turkish names from the game', () => {
