@@ -3,7 +3,7 @@ import type { Champion } from '@/lib/game/types';
 
 const slug = (key: string) => key.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-/** Evolved Kha'Zix variants ("da_18_khazix-executioner") reuse the base champion's image. */
+/** Sona Producer variants ("da_sona19-heartsteel") reuse the base champion's image. */
 export const championImage = (champion: Champion) => `/assets/champions/${champion.id.split('-')[0]}.webp`;
 
 export const traitIcon = (trait: string) => `/assets/traits/${slug(trait)}.webp`;

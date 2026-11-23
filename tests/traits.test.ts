@@ -3,47 +3,54 @@ import assert from 'node:assert/strict';
 import { getTrait } from '@/lib/game/data';
 import { breakpoints, nextBreakpoint, tierStyle } from '@/lib/game/traits';
 
-describe('trait tiers', () => {
-    it('take their colors from the game data (R1)', () => {
+describe('Set 19 trait tiers', () => {
+    it('uses game-accurate tier colors', () => {
         const cases: [string, number, string | null][] = [
-            ['Hunter', 4, 'silver'],
-            ['Invoker', 4, 'silver'],
-            ['Coven', 5, 'silver'],
-            ['Coven', 7, 'gold'],
-            ['Elderwood', 7, 'gold'],
-            ['Blossom', 7, 'gold'],
-            ['Blossom', 11, 'prismatic'],
-            ['Inferno', 5, 'gold'],
-            ['Riftbeast', 7, 'gold'],
-            ['Riftbeast', 10, 'gold'],
-            ['Bounty Seeker', 1, 'unique'],
+            ['Beach Pop', 3, 'bronze'],
+            ['Beach Pop', 5, 'silver'],
+            ['Beach Pop', 7, 'gold'],
+            ['Pentakill', 3, 'bronze'],
+            ['Pentakill', 5, 'silver'],
+            ['Pentakill', 7, 'gold'],
+            ['Heartsteel', 1, 'bronze'],
+            ['Heartsteel', 3, 'silver'],
+            ['Heartsteel', 5, 'silver'],
+            ['Heartsteel', 7, 'gold'],
+            ['True Damage', 3, 'bronze'],
+            ['True Damage', 5, 'gold'],
+            ['Ionic Spark', 7, 'gold'],
+            ['Ionic Spark', 10, 'prismatic'],
+            ['K/DA', 3, 'bronze'],
+            ['K/DA', 5, 'silver'],
+            ['K/DA', 15, 'gold'],
+            ['K/DA', 21, 'prismatic'],
+            ['Manager', 2, 'bronze'],
+            ['Manager', 3, 'gold'],
+            ['Manager', 4, 'gold'],
+            ['One Monster Band', 1, 'unique'],
         ];
         for (const [trait, count, style] of cases) assert.equal(tierStyle(trait, count), style, `${trait} ${count}`);
     });
 
-    it('mark every count inside a bronze tier as bronze, and nothing else (R2)', () => {
+    it('marks every count inside a bronze tier as bronze, and non-bronze tiers accurately', () => {
         const bronze: [string, number][] = [
-            ['Juggernaut', 2], ['Juggernaut', 3], ['Blossom', 3], ['Blossom', 4], ['Riftbeast', 4], ['Sprykin', 4],
-            ['Fae', 3], ['Primal', 3], ['Flora Fatalis', 1], ['Summoner', 2], ['Rival', 1],
+            ['Arcanist', 2], ['Arcanist', 3], ['Juggernaut', 2], ['Juggernaut', 3],
+            ['Beach Pop', 3], ['Beach Pop', 4], ['Heartsteel', 1], ['Heartsteel', 2],
+            ['R&B', 1], ['K/DA', 3], ['K/DA', 4], ['Rock', 3],
         ];
         for (const [trait, count] of bronze) assert.equal(tierStyle(trait, count), 'bronze', `${trait} ${count}`);
 
-        assert.equal(tierStyle('Solar', 3), 'gold', "Solar's only tier is gold");
-        assert.equal(tierStyle('Solar', 2), null);
+        assert.equal(tierStyle('EDM', 2), 'gold', "EDM's only tier is gold");
+        assert.equal(tierStyle('EDM', 1), null);
+        assert.equal(tierStyle('R&B', 2), 'gold');
         assert.equal(tierStyle('Juggernaut', 4), 'silver');
-        assert.equal(tierStyle('Flora Fatalis', 2), 'gold');
     });
 
-    it('resolve overlapping Rival ranges to the most specific tier', () => {
-        assert.equal(tierStyle('Rival', 1), 'bronze');
-        assert.equal(tierStyle('Rival', 2), 'gold');
-        assert.deepEqual(breakpoints(getTrait('Rival')!), [1, 2]);
-    });
-
-    it('report the next breakpoint', () => {
-        const blossom = getTrait('Blossom')!;
-        assert.equal(nextBreakpoint(blossom, 4), 5);
-        assert.equal(nextBreakpoint(blossom, 9), 11);
-        assert.equal(nextBreakpoint(blossom, 11), null);
+    it('reports distinct breakpoints and next breakpoint', () => {
+        const ionic = getTrait('Ionic Spark')!;
+        assert.deepEqual(breakpoints(ionic), [3, 5, 7, 10]);
+        assert.equal(nextBreakpoint(ionic, 4), 5);
+        assert.equal(nextBreakpoint(ionic, 7), 10);
+        assert.equal(nextBreakpoint(ionic, 10), null);
     });
 });

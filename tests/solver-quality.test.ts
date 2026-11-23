@@ -43,7 +43,7 @@ function exhaustiveBest(spec: SearchSpec): number[] {
 
 describe('solver quality', () => {
     it('finds the exhaustive optimum on random 20-unit pools', () => {
-        const next = random(18);
+        const next = random(19);
         let optimal = 0;
         const trials = 24;
         for (let trial = 0; trial < trials; trial++) {
@@ -53,7 +53,7 @@ describe('solver quality', () => {
             const emblems = [traits[Math.floor(next() * traits.length)]];
             if (next() < 0.5) emblems.push(traits[Math.floor(next() * traits.length)]);
             const level = 5 + (trial % 2);
-            const spec: SearchSpec = { pool, locked: [], emblems, strategy, baseSlots: level, rivalsAugment: false, beamWidth: 250, polishCount: 12 };
+            const spec: SearchSpec = { pool, locked: [], emblems, strategy, level, baseSlots: level, beamWidth: 250, polishCount: 12 };
 
             const best = exhaustiveBest(spec);
             const result = solveTeams({ pool, emblems, strategy, level, limit: 1 });

@@ -4,8 +4,10 @@ import { memo, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import TraitIcon from '@/components/TraitIcon';
 import TeamSkeleton from '@/components/TeamSkeleton';
+import HoverCard from '@/components/HoverCard';
+import ChampionTooltip, { LockIcon, UNLOCK_BADGE_STYLE } from '@/components/ChampionTooltip';
 import { GOLD_ICON, championImage, emblemImage } from '@/lib/assets';
-import { PLANNER_MAX_UNITS, unitSlots } from '@/lib/game/rules';
+import { KDA, PLANNER_MAX_UNITS, emblemContribution, unitSlots } from '@/lib/game/rules';
 import { generateTeamCode } from '@/lib/game/team-code';
 import type { TierStyle } from '@/lib/game/types';
 import { useNames } from '@/lib/hooks/use-names';
@@ -36,6 +38,7 @@ const CHAMPION_STYLES: Record<number, { border: string; badge: string }> = {
     3: { border: 'border-blue-500', badge: 'bg-blue-700' },
     4: { border: 'border-purple-600', badge: 'bg-purple-800' },
     5: { border: 'border-yellow-500', badge: 'bg-yellow-700' },
+    7: { border: 'border-cyan-400', badge: 'bg-cyan-700' },
 };
 
 // --- CONFIGURATION END ---
@@ -119,6 +122,7 @@ interface TeamCardProps {
 const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCopy }: TeamCardProps) {
     const t = useTranslations();
     const names = useNames();
+    const unlockableCount = team.champions.filter(c => c.unlock).length;
 
     return (
         <div className="[content-visibility:auto] [contain-intrinsic-size:auto_220px] rounded-xl border border-white/10 bg-gray-900/50 overflow-hidden backdrop-blur-sm shadow-xl transition-all hover:border-indigo-500/30 hover:shadow-2xl hover:bg-gray-900/80">
@@ -128,19 +132,28 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
 
                     {/* Active traits, colored by tier (bronze/silver/gold/prismatic/unique) */}
                     <div className="flex flex-wrap gap-2 flex-1">
-                        {team.evaluation.traits.filter(trait => trait.style).map(trait => (
-                            <div key={trait.trait} className={`flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] shadow-sm transition-all ${TRAIT_STYLES[trait.style!]}`}>
-                                <span className="text-[15px] font-bold w-2 text-center leading-none opacity-90">{trait.count}</span>
-                                <TraitIcon
-                                    trait={trait.trait}
-                                    className="w-2 h-2"
-                                />
-                                <span className="text-[12px] font-medium opacity-90 text-gray-300">{names.trait(trait.trait)}</span>
-                            </div>
-                        ))}
+                        {team.evaluation.traits.filter(trait => trait.style).map(trait => {
+                            const isKda = trait.trait === KDA;
+                            return (
+                                <div
+                                    key={trait.trait}
+                                    title={isKda ? t('kda_star_hint') : undefined}
+                                    className={`flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] shadow-sm transition-all ${TRAIT_STYLES[trait.style!]}`}
+                                >
+                                    <span className="text-[14px] font-bold min-w-[14px] text-center leading-none opacity-90">
+                                        {isKda ? `${trait.count}★` : trait.count}
+                                    </span>
+                                    <TraitIcon
+                                        trait={trait.trait}
+                                        className="w-2 h-2"
+                                    />
+                                    <span className="text-[12px] font-medium opacity-90 text-gray-300">{names.trait(trait.trait)}</span>
+                                </div>
+                            );
+                        })}
                         {/* Traits one unit short of activating: cheap upgrades to look for */}
                         {team.evaluation.traits
-                            .filter(trait => !trait.style && !trait.suppressed && trait.kind !== 'unique' && trait.next !== null && trait.next - trait.count === 1)
+                            .filter(trait => !trait.style && !trait.suppressed && trait.kind !== 'unique' && trait.next !== null && trait.next - trait.count <= emblemContribution(trait.trait))
                             .map(trait => (
                                 <div key={trait.trait} title={t('one_unit_away')} className="flex items-center gap-1 pl-2 pr-2 py-0.5 rounded-full border-[1.5px] border-dashed border-white/15 text-gray-500">
                                     <span className="text-[12px] font-bold leading-none">{trait.count}/{trait.next}</span>
@@ -156,7 +169,9 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                             {strategy === 'Vertical' && team.metrics.vertical ? (
                                 <>
                                     <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{names.trait(team.metrics.vertical.trait)}</span>
-                                    <span className={`text-sm font-bold mr-2 ${team.metrics.vertical.style ? METRIC_COLORS[team.metrics.vertical.style] : 'text-gray-500'}`}>{team.metrics.vertical.count}</span>
+                                    <span className={`text-sm font-bold mr-2 ${team.metrics.vertical.style ? METRIC_COLORS[team.metrics.vertical.style] : 'text-gray-500'}`}>
+                                        {team.metrics.vertical.trait === KDA ? `${team.metrics.vertical.count}★` : team.metrics.vertical.count}
+                                    </span>
                                 </>
                             ) : (
                                 <>
@@ -168,30 +183,41 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('active_traits')}</span>
                             <span className="text-xl font-black text-white tracking-tight">{team.metrics.activeTraits}</span>
                         </div>
-                        <button
-                            onClick={() => onCopy(team, teamKey)}
-                            title={team.champions.length > PLANNER_MAX_UNITS ? t('team_code_cut', { max: PLANNER_MAX_UNITS }) : undefined}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border ${copied
-                                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
-                                : 'bg-black/20 border-white/5 text-gray-400 hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:text-indigo-300'
-                                }`}
-                        >
-                            {copied ? (
-                                <>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                    </svg>
-                                    {t('copied')}
-                                </>
-                            ) : (
-                                <>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
-                                    </svg>
-                                    {t('team_code')}
-                                </>
+                        <div className="flex items-center gap-1.5">
+                            {unlockableCount > 0 && (
+                                <span
+                                    title={t('unlock_count_hint')}
+                                    className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/25 text-amber-300"
+                                >
+                                    <LockIcon className="w-3 h-3" />
+                                    {t('unlock_count', { count: unlockableCount })}
+                                </span>
                             )}
-                        </button>
+                            <button
+                                onClick={() => onCopy(team, teamKey)}
+                                title={team.champions.length > PLANNER_MAX_UNITS ? t('team_code_cut', { max: PLANNER_MAX_UNITS }) : undefined}
+                                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer border ${copied
+                                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
+                                    : 'bg-black/20 border-white/5 text-gray-400 hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:text-indigo-300'
+                                    }`}
+                            >
+                                {copied ? (
+                                    <>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+                                        {t('copied')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                                        </svg>
+                                        {t('team_code')}
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -216,44 +242,65 @@ const TeamCard = memo(function TeamCard({ team, teamKey, strategy, copied, onCop
                 {/* Champions Grid */}
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
                     {team.champions.map((champ) => (
-                        <div key={champ.id} className="group relative aspect-square">
-                            <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
-                                }`}>
-                                <img
-                                    src={championImage(champ)}
-                                    alt=""
-                                    width={128}
-                                    height={128}
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                                {/* 2-slot badge for Elder Dragon */}
-                                {unitSlots(champ) === 2 && (
-                                    <div className="absolute top-0 left-0 px-1 py-0.25 rounded-br-lg flex items-center justify-center bg-purple-900/90 border-r border-b border-purple-500/40">
-                                        <span className="text-[9px] font-black text-purple-200">2 SLOTS</span>
+                        <HoverCard
+                            key={champ.id}
+                            className="aspect-square"
+                            trigger={
+                                <div
+                                    tabIndex={0}
+                                    aria-label={names.champion(champ)}
+                                    className="group relative w-full h-full rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                                >
+                                    <div className={`absolute inset-0 rounded-xl border-2 transition-all shadow-lg overflow-hidden bg-gray-800 ${CHAMPION_STYLES[champ.cost]?.border || CHAMPION_STYLES[1].border
+                                        }`}>
+                                        <img
+                                            src={championImage(champ)}
+                                            alt=""
+                                            width={128}
+                                            height={128}
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                        {/* Top-left unlockable medallion (consistent position across all unlockable units) */}
+                                        {champ.unlock && (
+                                            <div className={`absolute top-1 left-1 w-5 h-5 rounded-full border-[1.5px] flex items-center justify-center ${UNLOCK_BADGE_STYLE[champ.unlock.difficulty]}`}>
+                                                <LockIcon className="w-3 h-3" />
+                                            </div>
+                                        )}
+                                        {/* Cost Badge */}
+                                        <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
+                                            }`}>
+                                            <img
+                                                src={GOLD_ICON}
+                                                alt=""
+                                                width={12}
+                                                height={12}
+                                                className="w-3 h-3 mr-0.5"
+                                            />
+                                            <span className="text-[10px] font-black text-white">{champ.cost}</span>
+                                        </div>
+                                        {/* Compact 2-slot badge (Baron Nashor) positioned cleanly below the cost pill */}
+                                        {unitSlots(champ) === 2 && (
+                                            <div
+                                                title={t('two_slots')}
+                                                className="absolute top-4 right-0.5 px-1 rounded bg-purple-900/95 border border-purple-400/50 shadow-sm"
+                                            >
+                                                <span className="text-[8px] font-black text-purple-100 leading-none">2×</span>
+                                            </div>
+                                        )}
+                                        {/* Name Overlay */}
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
+                                            <span className="text-[10px] font-bold text-white truncate block">
+                                                {names.champion(champ)}
+                                            </span>
+                                        </div>
                                     </div>
-                                )}
-                                {/* Cost Badge */}
-                                <div className={`absolute top-0 right-0 px-1 py-0.25 rounded-bl-lg flex items-center justify-center ${CHAMPION_STYLES[champ.cost]?.badge || CHAMPION_STYLES[1].badge
-                                    }`}>
-                                    <img
-                                        src={GOLD_ICON}
-                                        alt=""
-                                        width={12}
-                                        height={12}
-                                        className="w-3 h-3 mr-0.5"
-                                    />
-                                    <span className="text-[10px] font-black text-white">{champ.cost}</span>
                                 </div>
-                                {/* Name Overlay */}
-                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-4 text-center">
-                                    <span className="text-[10px] font-bold text-white truncate block">
-                                        {names.champion(champ)}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                            }
+                        >
+                            <ChampionTooltip champion={champ} />
+                        </HoverCard>
                     ))}
                 </div>
             </div>

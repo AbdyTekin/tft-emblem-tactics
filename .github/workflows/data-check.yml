@@ -1,4 +1,4 @@
-# Fails when CommunityDragon's live Set data no longer matches lib/data (usually after a patch).
+# Fails when upstream Set data no longer matches lib/data (usually after a patch).
 # Fix by running `npm run data:update` locally and committing the regenerated file.
 name: Game data check
 

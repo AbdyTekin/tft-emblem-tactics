@@ -10,19 +10,25 @@ interface HoverCardProps {
     className?: string; // For trigger wrapper
 }
 
+const VIEWPORT_MARGIN = 140;
+const TOP_FLIP_THRESHOLD = 110;
+
 export default function HoverCard({ trigger, children, className = "" }: HoverCardProps) {
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLDivElement>(null);
-    const [coords, setCoords] = useState({ top: 0, left: 0 });
+    const [coords, setCoords] = useState({ top: 0, left: 0, below: false });
     const isClient = useIsClient();
 
     const handleMouseEnter = () => {
         if (triggerRef.current) {
             const rect = triggerRef.current.getBoundingClientRect();
-            // Calculate center top position
+            const below = rect.top < TOP_FLIP_THRESHOLD;
+            const rawLeft = rect.left + rect.width / 2;
+            const clampedLeft = Math.min(Math.max(rawLeft, VIEWPORT_MARGIN), Math.max(VIEWPORT_MARGIN, window.innerWidth - VIEWPORT_MARGIN));
             setCoords({
-                top: rect.top + window.scrollY - 8, // 8px Offset above
-                left: rect.left + window.scrollX + (rect.width / 2)
+                top: below ? rect.bottom + window.scrollY + 8 : rect.top + window.scrollY - 8,
+                left: clampedLeft + window.scrollX,
+                below,
             });
         }
         setIsOpen(true);
@@ -32,14 +38,13 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
         setIsOpen(false);
     };
 
-    // calculate position style
     const tooltipStyle: React.CSSProperties = {
         position: 'absolute',
         top: `${coords.top}px`,
         left: `${coords.left}px`,
-        transform: 'translate(-50%, -100%)', // Center horizontally, move above
-        zIndex: 9999, // Ensure it's on top of everything
-        pointerEvents: 'none', // Cannot hover the tooltip itself
+        transform: coords.below ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
+        zIndex: 9999,
+        pointerEvents: 'none',
     };
 
     return (
@@ -61,7 +66,7 @@ export default function HoverCard({ trigger, children, className = "" }: HoverCa
                     role="tooltip"
                     className="transition-opacity duration-200 ease-out"
                 >
-                    <div className="bg-gray-900 border border-gray-700 text-gray-100 text-xs rounded-lg shadow-xl px-3 py-2 whitespace-nowrap relative mb-0">
+                    <div className="bg-gray-900 border border-gray-700 text-gray-100 text-xs rounded-lg shadow-xl px-3 py-2 w-max max-w-64 whitespace-normal relative mb-0">
                         {children}
                     </div>
                 </div>,

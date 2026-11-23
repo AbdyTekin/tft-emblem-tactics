@@ -1,16 +1,24 @@
 // Beam search over sets of units (never orderings). Each step scores every "board + one unit" child
 // incrementally from its parent, keeps the best `beamWidth` distinct sets, and only then builds them.
-// Emblems count through the holder rule, min(copies, units lacking the trait); the exact assignment
-// with the 3-item cap is applied to the final candidates in index.ts.
+// Emblems count through the holder rule, min(copies, units lacking the trait) * emblemContribution;
+// the exact assignment with the 3-item cap is applied to the final candidates in index.ts.
 import { TRAITS } from '@/lib/game/data';
-import { RIVAL, traitContribution, unitSlots } from '@/lib/game/rules';
+import {
+    TRAIT_SCORE_SCALE,
+    UNLOCK_SCORE_COST,
+    emblemContribution,
+    isTraitSuppressed,
+    traitContribution,
+    unitSlots,
+    unlockDifficultyFor,
+} from '@/lib/game/rules';
 import { activeTier, breakpoints } from '@/lib/game/traits';
 import type { Champion } from '@/lib/game/types';
 import type { Strategy } from '@/lib/solver/types';
 import { compareScores } from '@/lib/solver/score';
 
-/** Tier tables cover trait counts up to this value; Set 18 boards stay far below it. */
-const MAX_COUNT = 30;
+/** Tier tables cover trait counts up to this value (including 2-star K/DA totals with emblems). */
+const MAX_COUNT = 40;
 
 // Per-trait summary contributions, packed 6 bits per field so a board's totals are plain sums
 // (each field stays below 64: a board has at most ~35 traits).
@@ -19,8 +27,11 @@ const GOLD_PLUS = 1 << 6;
 const BRONZE = 1 << 12;
 const field = (packed: number, unit: number) => Math.floor(packed / unit) & 63;
 
-/** Radix for folding the beam ordering into one number (every component stays below it). */
+/** Radix for folding the beam ordering into one number (every component stays in [0, RADIX)). */
 const RADIX = 64;
+/** Shift applied to unlock-adjusted trait scores so every folded digit stays non-negative. */
+const UNLOCK_SHIFT = 16;
+const UNLOCK_RATIO = UNLOCK_SCORE_COST / TRAIT_SCORE_SCALE;
 /** Weight of partial progress toward activating more traits, relative to one active trait. */
 const PROGRESS_WEIGHT = 0.5;
 /** Set ids are two 26-bit XOR halves combined into one exact double. */
@@ -32,8 +43,9 @@ export interface SearchSpec {
     locked: readonly Champion[];
     emblems: readonly string[];
     strategy: Strategy;
+    /** Player level (used to score level-gated unlocks). */
+    level: number;
     baseSlots: number;
-    rivalsAugment: boolean;
     beamWidth: number;
     /** How many of the best finished boards get a 1-swap polish. */
     polishCount: number;
@@ -43,6 +55,7 @@ interface Unit {
     champion: Champion;
     slots: number;
     cost: number;
+    unlockDifficulty: number;
     unitKey: number;
     traits: number[];
     contributions: number[];
@@ -63,6 +76,7 @@ export interface State {
     size: number;
     slots: number;
     cost: number;
+    unlockDifficulty: number;
     /** Sum of packed per-trait summaries at the current effective counts. */
     summary: number;
     /** Sum of progressAt at the current effective counts. */
@@ -86,6 +100,7 @@ export class Search {
     /** Partial progress of an inactive origin/class trait toward its first breakpoint (count / breakpoint). */
     private readonly progressAt: Float64Array[];
     private readonly bps: number[][];
+    private readonly emblemValue: Int8Array;
     private readonly emblemCopies: Int8Array;
     /** Distinct emblem traits in pick order. */
     private readonly emblemOrder: number[];
@@ -103,14 +118,13 @@ export class Search {
 
     constructor(private readonly spec: SearchSpec) {
         const traitIndex = new Map(TRAITS.map((t, i) => [t.key, i]));
-        const rival = traitIndex.get(RIVAL) ?? -1;
-        const suppressed = (t: number, n: number) => t === rival && n > 1 && !spec.rivalsAugment;
 
         this.bps = TRAITS.map(t => breakpoints(t));
-        this.tierAt = TRAITS.map((t, i) => Int8Array.from({ length: MAX_COUNT + 1 }, (_, n) =>
-            suppressed(i, n) ? -1 : activeTier(t, n)?.index ?? -1));
-        this.summaryAt = TRAITS.map((t, i) => Float64Array.from({ length: MAX_COUNT + 1 }, (_, n) => {
-            const tier = n === 0 || suppressed(i, n) ? null : activeTier(t, n);
+        this.emblemValue = Int8Array.from(TRAITS, t => emblemContribution(t.key));
+        this.tierAt = TRAITS.map(t => Int8Array.from({ length: MAX_COUNT + 1 }, (_, n) =>
+            isTraitSuppressed() ? -1 : activeTier(t, n)?.index ?? -1));
+        this.summaryAt = TRAITS.map(t => Float64Array.from({ length: MAX_COUNT + 1 }, (_, n) => {
+            const tier = n === 0 || isTraitSuppressed() ? null : activeTier(t, n);
             if (!tier) return 0;
             const style = tier.tier.style;
             let packed = style === 'bronze' ? BRONZE : 0;
@@ -119,7 +133,7 @@ export class Search {
         }));
         this.progressAt = TRAITS.map((t, i) => Float64Array.from({ length: MAX_COUNT + 1 }, (_, n) => {
             if (n === 0 || t.kind === 'unique') return 0;
-            if (activeTier(t, n) && !suppressed(i, n)) return 0;
+            if (activeTier(t, n) && !isTraitSuppressed()) return 0;
             // Bronze For Life only cares about traits whose first tier is bronze
             const firstIsBronze = activeTier(t, this.bps[i][0])?.tier.style === 'bronze';
             return spec.strategy === 'BronzeLife' && !firstIsBronze ? 0 : n / this.bps[i][0];
@@ -128,7 +142,7 @@ export class Search {
         this.sizeMin = this.sizeTrait >= 0 ? TRAITS[this.sizeTrait].teamSize!.min : Infinity;
         this.sizeBonus = this.sizeTrait >= 0 ? TRAITS[this.sizeTrait].teamSize!.bonus : 0;
 
-        const random = mulberry32(0x5eed18);
+        const random = mulberry32(0x5eed19);
         const unitKeys = new Map<string, number>();
         this.units = [...spec.locked, ...spec.pool].map(champion => {
             const known = champion.traits.filter(t => traitIndex.has(t));
@@ -137,6 +151,7 @@ export class Search {
                 champion,
                 slots: unitSlots(champion),
                 cost: champion.cost,
+                unlockDifficulty: unlockDifficultyFor(champion, spec.level),
                 unitKey: unitKeys.get(champion.unitId)!,
                 traits: known.map(t => traitIndex.get(t)!),
                 contributions: known.map(t => traitContribution(champion, t)),
@@ -180,6 +195,7 @@ export class Search {
             size: 0,
             slots: 0,
             cost: 0,
+            unlockDifficulty: 0,
             summary: 0,
             progress: 0,
         };
@@ -193,6 +209,7 @@ export class Search {
             state.size += 1;
             state.slots += unit.slots;
             state.cost += unit.cost;
+            state.unlockDifficulty += unit.unlockDifficulty;
             state.idHi ^= unit.hashHi;
             state.idLo ^= unit.hashLo;
         }
@@ -218,6 +235,7 @@ export class Search {
             size: parent.size + 1,
             slots: parent.slots + unit.slots,
             cost: parent.cost + unit.cost,
+            unlockDifficulty: parent.unlockDifficulty + unit.unlockDifficulty,
             summary,
         };
         for (let k = 0; k < unit.traits.length; k++) {
@@ -230,7 +248,7 @@ export class Search {
 
     private effective(state: State, t: number): number {
         const copies = this.emblemCopies[t];
-        return copies ? state.counts[t] + Math.min(copies, state.size - state.holders[t]) : state.counts[t];
+        return copies ? state.counts[t] + Math.min(copies, state.size - state.holders[t]) * this.emblemValue[t] : state.counts[t];
     }
 
     /**
@@ -253,9 +271,10 @@ export class Search {
     /** Summary delta for trait `t` when a unit adding `add` (and `holder` holders) joins `parent`. */
     private touch(parent: State, t: number, add: number, holder: number, stamp: number): number {
         const copies = this.emblemCopies[t];
-        const before = copies ? parent.counts[t] + Math.min(copies, parent.size - parent.holders[t]) : parent.counts[t];
+        const ev = this.emblemValue[t];
+        const before = copies ? parent.counts[t] + Math.min(copies, parent.size - parent.holders[t]) * ev : parent.counts[t];
         const next = copies
-            ? parent.counts[t] + add + Math.min(copies, parent.size + 1 - parent.holders[t] - holder)
+            ? parent.counts[t] + add + Math.min(copies, parent.size + 1 - parent.holders[t] - holder) * ev
             : parent.counts[t] + add;
         this.stamp[t] = stamp;
         this.scratchCount[t] = next;
@@ -270,7 +289,7 @@ export class Search {
         return this.stamp[t] === this.stampValue ? this.scratchCount[t] : this.effective(parent, t);
     }
 
-    /** Board slots for this set: the trait bonus counts only if its units fit before it applies. */
+    /** Board slots for this set: any trait bonus counts only if its units fit before it applies. */
     capacity(state: State): number {
         const base = this.spec.baseSlots;
         const t = this.sizeTrait;
@@ -305,24 +324,30 @@ export class Search {
 
     /** Same key as score.ts#teamScore, from the fast counts. */
     score(state: State): number[] {
-        return this.scoreFrom(state.summary, state.cost, t => this.effective(state, t));
+        return this.scoreFrom(state.summary, state.cost, state.unlockDifficulty, t => this.effective(state, t));
     }
 
-    private scoreFrom(summary: number, cost: number, countOf: (t: number) => number): number[] {
+    private scoreFrom(summary: number, cost: number, unlockDifficulty: number, countOf: (t: number) => number): number[] {
         const active = field(summary, ACTIVE);
+        const penalty = unlockDifficulty * UNLOCK_SCORE_COST;
         if (this.spec.strategy === 'Vertical') {
             const tiers = this.emblemOrder.map(t => this.tierAt[t][Math.min(countOf(t), MAX_COUNT)] + 1);
-            return [...tiers, active, field(summary, GOLD_PLUS), cost];
+            return [...tiers, active * TRAIT_SCORE_SCALE - penalty, field(summary, GOLD_PLUS), -unlockDifficulty, cost];
         }
         const emblemActive = this.emblemOrder.filter(t => this.tierAt[t][Math.min(countOf(t), MAX_COUNT)] >= 0).length;
-        return [emblemActive, field(summary, BRONZE), active, cost];
+        return [emblemActive, field(summary, BRONZE) * TRAIT_SCORE_SCALE - penalty, active, -unlockDifficulty, cost];
     }
 
-    /** A finished board's score folded like beamValue (cost scaled into the last digit). */
+    /** A finished board's score folded like beamValue (every digit normalized into [0, RADIX)). */
     private foldScore(score: number[]): number {
+        const adjustedIdx = score.length - 4;
         let folded = 0;
-        for (let k = 0; k < score.length - 1; k++) folded = folded * RADIX + score[k];
-        return folded * RADIX + score[score.length - 1] / 100;
+        for (let k = 0; k < adjustedIdx; k++) folded = folded * RADIX + score[k];
+        const adjusted = clampDigit(score[adjustedIdx] / TRAIT_SCORE_SCALE + UNLOCK_SHIFT);
+        folded = folded * RADIX + adjusted;
+        folded = folded * RADIX + score[adjustedIdx + 1];
+        const tieBreak = clampDigit((RADIX - 1) + score[adjustedIdx + 2] + score[adjustedIdx + 3] / 1000);
+        return folded * RADIX + tieBreak;
     }
 
     /** Most a trait can still grow from `slotsLeft` more units (best contributions among unused units). */
@@ -342,29 +367,32 @@ export class Search {
 
     /**
      * Beam ordering for `parent` + unit `i`, folded into one number: progress of each emblem trait toward a
-     * breakpoint it can still reach, then secondary traits, then cost. Finished boards use their real score.
+     * breakpoint it can still reach, then unlock-adjusted secondary traits, then tie-breakers.
+     * Finished boards use their real score.
      */
     private beamValue(parent: State, i: number): number {
         const unit = this.units[i];
         const summary = this.childSummary(parent, i);
         const size = parent.size + 1;
         const cost = parent.cost + unit.cost;
+        const unlockDifficulty = parent.unlockDifficulty + unit.unlockDifficulty;
         const slotsLeft = Math.max(0, this.spec.baseSlots - parent.slots - unit.slots);
         const vertical = this.spec.strategy === 'Vertical';
 
         let emblemPart = 0;
         for (let e = 0; e < this.emblemOrder.length; e++) {
             const t = this.emblemOrder[e];
+            const ev = this.emblemValue[t];
             const count = this.childCount(parent, t);
             const tier = this.tierAt[t][Math.min(count, MAX_COUNT)];
             let progress = tier + 1;
             const next = this.bps[t][tier + 1];
             if (next !== undefined && slotsLeft > 0) {
                 const unitAdds = this.contribution(unit, t);
-                const held = count - parent.counts[t] - unitAdds;
+                const held = (count - parent.counts[t] - unitAdds) / ev;
                 const lacking = size + slotsLeft - parent.holders[t] - (unitAdds > 0 ? 1 : 0);
                 const unheld = Math.max(0, Math.min(this.emblemCopies[t], lacking) - held);
-                if (count + this.maxGain(parent, e, slotsLeft, unit.unitKey) + Math.min(unheld, slotsLeft) >= next) {
+                if (count + this.maxGain(parent, e, slotsLeft, unit.unitKey) + Math.min(unheld, slotsLeft) * ev >= next) {
                     const prev = tier >= 0 ? this.bps[t][tier] : 0;
                     progress += Math.min(0.99, Math.max(0, (count - prev) / (next - prev)));
                 }
@@ -373,11 +401,16 @@ export class Search {
             emblemPart = vertical ? emblemPart * RADIX + progress : emblemPart + Math.min(1, progress);
         }
 
-        if (slotsLeft === 0) return this.foldScore(this.scoreFrom(summary, cost, t => this.childCount(parent, t)));
+        if (slotsLeft === 0) return this.foldScore(this.scoreFrom(summary, cost, unlockDifficulty, t => this.childCount(parent, t)));
         const progress = PROGRESS_WEIGHT * this.childProgress;
+        const unlockAdj = unlockDifficulty * UNLOCK_RATIO;
         const active = field(summary, ACTIVE);
-        if (vertical) return ((emblemPart * RADIX + active + progress) * RADIX + field(summary, GOLD_PLUS)) * RADIX;
-        return ((emblemPart * RADIX + field(summary, BRONZE) + progress) * RADIX + active) * RADIX;
+        if (vertical) {
+            const primary = clampDigit(active + progress - unlockAdj + UNLOCK_SHIFT);
+            return ((emblemPart * RADIX + primary) * RADIX + field(summary, GOLD_PLUS)) * RADIX;
+        }
+        const primary = clampDigit(field(summary, BRONZE) + progress - unlockAdj + UNLOCK_SHIFT);
+        return ((emblemPart * RADIX + primary) * RADIX + active) * RADIX;
     }
 
     /** Runs the beam search from the locked units; returns every finished board it kept, best first. */
@@ -432,7 +465,12 @@ export class Search {
                     const unit = this.units[i];
                     if (i === out || without.usedUnits[unit.unitKey] || without.slots + unit.slots !== best.state.slots) continue;
                     const summary = this.childSummary(without, i);
-                    const score = this.scoreFrom(summary, without.cost + unit.cost, t => this.childCount(without, t));
+                    const score = this.scoreFrom(
+                        summary,
+                        without.cost + unit.cost,
+                        without.unlockDifficulty + unit.unlockDifficulty,
+                        t => this.childCount(without, t),
+                    );
                     if (compareScores(score, best.score) >= 0) continue;
                     const candidate = this.materialize(without, i);
                     if (candidate.slots !== this.capacity(candidate)) continue;
@@ -446,6 +484,8 @@ export class Search {
         return best;
     }
 }
+
+const clampDigit = (value: number) => Math.max(0, Math.min(RADIX - 1, value));
 
 /**
  * Indices of the `k` best distinct children: highest order first, ties by id (deterministic).

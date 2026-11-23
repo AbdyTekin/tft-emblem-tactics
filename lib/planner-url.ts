@@ -12,8 +12,7 @@ export interface PlannerState {
     bonusTeamSize: number;
     strategy: Strategy;
     locked: Champion[];
-    rivalsAugment: boolean;
-    evolvedKhazix: boolean;
+    sonaProducer: boolean;
 }
 
 export const DEFAULT_STATE: PlannerState = {
@@ -22,8 +21,7 @@ export const DEFAULT_STATE: PlannerState = {
     bonusTeamSize: 0,
     strategy: 'BronzeLife',
     locked: [],
-    rivalsAugment: false,
-    evolvedKhazix: false,
+    sonaProducer: false,
 };
 
 export const LEVEL_RANGE = { min: 4, max: 10 } as const;
@@ -44,8 +42,8 @@ export function parsePlannerState(search: string): PlannerState {
     const params = new URLSearchParams(search);
     const list = (key: string) => (params.get(key) ?? '').split(',').map(s => s.trim()).filter(Boolean);
 
-    const evolvedKhazix = params.get('k') === '1';
-    const pool = new Map(candidatePool({ evolvedKhazix }, CHAMPIONS).map(c => [c.id, c]));
+    const sonaProducer = params.get('p') === '1';
+    const pool = new Map(candidatePool({ sonaProducer }, CHAMPIONS).map(c => [c.id, c]));
     const locked: Champion[] = [];
     for (const id of list('lock').slice(0, MAX_LOCKED)) {
         const champion = pool.get(id);
@@ -59,8 +57,7 @@ export function parsePlannerState(search: string): PlannerState {
         bonusTeamSize: intInRange(params.get('b'), 0, MAX_BONUS_TEAM_SIZE, DEFAULT_STATE.bonusTeamSize),
         strategy: (Object.keys(STRATEGY_CODES) as Strategy[]).find(s => STRATEGY_CODES[s] === strategyCode) ?? DEFAULT_STATE.strategy,
         locked,
-        rivalsAugment: params.get('r') === '1',
-        evolvedKhazix,
+        sonaProducer,
     };
 }
 
@@ -72,8 +69,7 @@ export function serializePlannerState(state: PlannerState): string {
     if (state.bonusTeamSize !== DEFAULT_STATE.bonusTeamSize) params.set('b', String(state.bonusTeamSize));
     if (state.strategy !== DEFAULT_STATE.strategy) params.set('s', STRATEGY_CODES[state.strategy]);
     if (state.locked.length) params.set('lock', state.locked.map(c => c.id).join(','));
-    if (state.rivalsAugment) params.set('r', '1');
-    if (state.evolvedKhazix) params.set('k', '1');
+    if (state.sonaProducer) params.set('p', '1');
     // Commas are fine in a query string and keep shared links readable
     return params.toString().replace(/%2C/gi, ',');
 }

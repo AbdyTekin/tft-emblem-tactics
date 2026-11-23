@@ -1,0 +1,3137 @@
+{
+  "meta": {
+    "set": 19,
+    "mutator": "TFTSet19",
+    "patch": "19.1",
+    "channel": "pbe"
+  },
+  "traits": [
+    {
+      "key": "Arcanist",
+      "apiName": "DA_Arcanist19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/t_arcanist19.png",
+      "names": {
+        "en": "Arcanist",
+        "tr": "Sihir Üstadı"
+      },
+      "emblem": {
+        "apiName": "DA_Arcanist19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_arcanist19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Needlessly Large Rod"
+        ]
+      }
+    },
+    {
+      "key": "Bodyguard",
+      "apiName": "DA_Bodyguard19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_bodyguard.png",
+      "names": {
+        "en": "Bodyguard",
+        "tr": "Koruma"
+      },
+      "emblem": {
+        "apiName": "DA_Bodyguard19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_bodyguard_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Chain Vest"
+        ]
+      }
+    },
+    {
+      "key": "Choreographer",
+      "apiName": "DA_Choreographer19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_choreographer.png",
+      "names": {
+        "en": "Choreographer",
+        "tr": "Koreograf"
+      },
+      "emblem": {
+        "apiName": "DA_Choreographer19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_choreographer19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Collab",
+      "apiName": "DA_Collab19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_collab.png",
+      "names": {
+        "en": "Collab",
+        "tr": "Düet"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Encore",
+      "apiName": "DA_Encore19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_encore.png",
+      "names": {
+        "en": "Encore",
+        "tr": "Bir Daha!"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Frontman",
+      "apiName": "DA_Frontman19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_frontman.png",
+      "names": {
+        "en": "Frontman",
+        "tr": "Solist"
+      },
+      "emblem": {
+        "apiName": "DA_Frontman19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_frontman19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Giant's Belt"
+        ]
+      }
+    },
+    {
+      "key": "Hitmaker",
+      "apiName": "DA_Hitmaker19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_hitmaker.png",
+      "names": {
+        "en": "Hitmaker",
+        "tr": "Prodüktör"
+      },
+      "emblem": {
+        "apiName": "DA_Hitmaker19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_hitmaker19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "B.F. Sword"
+        ]
+      }
+    },
+    {
+      "key": "Juggernaut",
+      "apiName": "DA_Juggernaut19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_juggernaut.png",
+      "names": {
+        "en": "Juggernaut",
+        "tr": "Ezergeçer"
+      },
+      "emblem": {
+        "apiName": "DA_Juggernaut19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_juggernaut19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Manager",
+      "apiName": "DA_Manager19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "gold"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_manager.png",
+      "names": {
+        "en": "Manager",
+        "tr": "Menajer"
+      },
+      "emblem": {
+        "apiName": "DA_Manager19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_manager19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Prodigy",
+      "apiName": "DA_Prodigy19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_prodigy.png",
+      "names": {
+        "en": "Prodigy",
+        "tr": "Deha"
+      },
+      "emblem": {
+        "apiName": "TFT_Emblem_CHANGEME",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_prodigy19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Tear Of The Goddess"
+        ]
+      }
+    },
+    {
+      "key": "Renegade",
+      "apiName": "DA_Renegade19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_renegade.png",
+      "names": {
+        "en": "Renegade",
+        "tr": "İsyankâr"
+      },
+      "emblem": {
+        "apiName": "DA_Renegade19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_renegade_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Sparring Gloves"
+        ]
+      }
+    },
+    {
+      "key": "Slayer",
+      "apiName": "DA_Mosher19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_slayer.png",
+      "names": {
+        "en": "Slayer",
+        "tr": "Biçici"
+      },
+      "emblem": {
+        "apiName": "DA_Mosher19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_slayer19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Negatron Cloak"
+        ]
+      }
+    },
+    {
+      "key": "Swiftstriker",
+      "apiName": "DA_Swiftstriker19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_swiftstriker.png",
+      "names": {
+        "en": "Swiftstriker",
+        "tr": "Atik Vurucu"
+      },
+      "emblem": {
+        "apiName": "DA_Swiftstriker19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_swiftstriker19_emblem.png",
+        "recipe": [
+          "Frying Pan",
+          "Recurve Bow"
+        ]
+      }
+    },
+    {
+      "key": "Trickshot",
+      "apiName": "DA_Trickshot19",
+      "kind": "class",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_trickshot.png",
+      "names": {
+        "en": "Trickshot",
+        "tr": "Trickshot"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Beach Pop",
+      "apiName": "DA_OceanSong19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/ui_shared/content/textures/icons/set19/t_traiticon_19_beachpop.png",
+      "names": {
+        "en": "Beach Pop",
+        "tr": "Plaj Popu"
+      },
+      "emblem": {
+        "apiName": "DA_Oceansong19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_oceansong19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Tear Of The Goddess"
+        ]
+      }
+    },
+    {
+      "key": "Classical",
+      "apiName": "DA_Virtuosos19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 5,
+          "style": "silver"
+        },
+        {
+          "min": 6,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_virtuoso.png",
+      "names": {
+        "en": "Classical",
+        "tr": "Klasik"
+      },
+      "emblem": {
+        "apiName": "DA_Virtuosos19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_virtuosos19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Recurve Bow"
+        ]
+      }
+    },
+    {
+      "key": "EDM",
+      "apiName": "DA_EDM19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_edm.png",
+      "names": {
+        "en": "EDM",
+        "tr": "EDM"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Gu Feng",
+      "apiName": "DA_Heavenscale19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_heavenscale.png",
+      "names": {
+        "en": "Gu Feng",
+        "tr": "Gufeng"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Heartsteel",
+      "apiName": "DA_Heartsteel19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_heartsteel.png",
+      "names": {
+        "en": "Heartsteel",
+        "tr": "Heartsteel"
+      },
+      "emblem": {
+        "apiName": "DA_Heartsteel19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_heartsteel19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Chain Vest"
+        ]
+      }
+    },
+    {
+      "key": "Hyperpop",
+      "apiName": "DA_GlitterBomb19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_hyperpop.png",
+      "names": {
+        "en": "Hyperpop",
+        "tr": "Hiperpop"
+      },
+      "emblem": {
+        "apiName": "DA_GlitterBomb19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_hyperpop19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "Illbeats",
+      "apiName": "DA_Illbeats19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_illbeats.png",
+      "names": {
+        "en": "Illbeats",
+        "tr": "Illbeats"
+      },
+      "emblem": {
+        "apiName": "DA_IllBeats19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_illbeats19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Giant's Belt"
+        ]
+      }
+    },
+    {
+      "key": "Ionic Spark",
+      "apiName": "DA_IonicSpark19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": 9,
+          "style": "gold"
+        },
+        {
+          "min": 10,
+          "max": null,
+          "style": "prismatic"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/ui_shared/content/textures/icons/set19/t_traiticon_19_ionicspark.png",
+      "names": {
+        "en": "Ionic Spark",
+        "tr": "Ionic Spark"
+      },
+      "emblem": {
+        "apiName": "DA_IonicSpark19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_ionicspark19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Negatron Cloak"
+        ]
+      }
+    },
+    {
+      "key": "Jazz",
+      "apiName": "DA_Jazz19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 2,
+          "max": 2,
+          "style": "bronze"
+        },
+        {
+          "min": 3,
+          "max": 3,
+          "style": "silver"
+        },
+        {
+          "min": 4,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_jazz.png",
+      "names": {
+        "en": "Jazz",
+        "tr": "Caz"
+      },
+      "emblem": {
+        "apiName": "DA_Jazz19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_jazz19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "K/DA",
+      "apiName": "DA_KDA19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": 9,
+          "style": "silver"
+        },
+        {
+          "min": 10,
+          "max": 12,
+          "style": "silver"
+        },
+        {
+          "min": 13,
+          "max": 14,
+          "style": "silver"
+        },
+        {
+          "min": 15,
+          "max": 20,
+          "style": "gold"
+        },
+        {
+          "min": 21,
+          "max": null,
+          "style": "prismatic"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_kda.png",
+      "names": {
+        "en": "K/DA",
+        "tr": "K/DA"
+      },
+      "emblem": {
+        "apiName": "DA_KDA19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_kda19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Needlessly Large Rod"
+        ]
+      }
+    },
+    {
+      "key": "Pentakill",
+      "apiName": "DA_Pentakill19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_pentakill.png",
+      "names": {
+        "en": "Pentakill",
+        "tr": "Pentakill"
+      },
+      "emblem": {
+        "apiName": "DA_Pentakill19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_pentakill_emblem.png",
+        "recipe": [
+          "Spatula",
+          "B.F. Sword"
+        ]
+      }
+    },
+    {
+      "key": "R&B",
+      "apiName": "DA_RnB19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 1,
+          "max": 1,
+          "style": "bronze"
+        },
+        {
+          "min": 2,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_rnb.png",
+      "names": {
+        "en": "R&B",
+        "tr": "R&B"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Rock",
+      "apiName": "DA_DemonVision19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 3,
+          "style": "bronze"
+        },
+        {
+          "min": 4,
+          "max": 4,
+          "style": "silver"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "style": "silver"
+        },
+        {
+          "min": 7,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_rock.png",
+      "names": {
+        "en": "Rock",
+        "tr": "Rock"
+      },
+      "emblem": {
+        "apiName": "DA_DemonVision19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_demonvision19_emblem.png",
+        "recipe": [
+          "Spatula",
+          "Sparring Gloves"
+        ]
+      }
+    },
+    {
+      "key": "True Damage",
+      "apiName": "DA_TrueDamage19",
+      "kind": "origin",
+      "tiers": [
+        {
+          "min": 3,
+          "max": 4,
+          "style": "bronze"
+        },
+        {
+          "min": 5,
+          "max": null,
+          "style": "gold"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_truedamage.png",
+      "names": {
+        "en": "True Damage",
+        "tr": "True Damage"
+      },
+      "emblem": {
+        "apiName": "DA_TrueDamage19_Emblem",
+        "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconitem/t_truedamage19_emblem.png",
+        "recipe": null
+      }
+    },
+    {
+      "key": "8-Bit",
+      "apiName": "DA_MissFortune19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/missfortune/uniquetrait/t_missfortune19_uniquetrait_icon.png",
+      "names": {
+        "en": "8-Bit",
+        "tr": "8-Bit"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Beat Master",
+      "apiName": "DA_Rell19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_synchmancer.png",
+      "names": {
+        "en": "Beat Master",
+        "tr": "Ritim Ustası"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Boy Band",
+      "apiName": "DA_Rakan19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/rakan/uniquetrait/t_rakan19_uniquetrait_icon.png",
+      "names": {
+        "en": "Boy Band",
+        "tr": "Boy Band"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Composer",
+      "apiName": "DA_Malzahar19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_composer.png",
+      "names": {
+        "en": "Composer",
+        "tr": "Besteci"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Country",
+      "apiName": "DA_Alistar19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_country.png",
+      "names": {
+        "en": "Country",
+        "tr": "Country"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Disco",
+      "apiName": "DA_Nunu19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_disco.png",
+      "names": {
+        "en": "Disco",
+        "tr": "Disko"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Emo",
+      "apiName": "DA_Amumu19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/amumu/uniquetrait/t_amumu19_uniquetrait_icon.png",
+      "names": {
+        "en": "Emo",
+        "tr": "Emo"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Freestyle",
+      "apiName": "DA_Akali_TrueDamage19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_freestyle.png",
+      "names": {
+        "en": "Freestyle",
+        "tr": "Doğaçlama"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Goth",
+      "apiName": "DA_Zeri19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/zeri/uniquetrait/t_traiticon_19_goth.png",
+      "names": {
+        "en": "Goth",
+        "tr": "Gotik"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Hype Man",
+      "apiName": "DA_Teemo19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_hypeman.png",
+      "names": {
+        "en": "Hype Man",
+        "tr": "Hiper Amigo"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Indie",
+      "apiName": "DA_Seraphine19_IndieTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_indie.png",
+      "names": {
+        "en": "Indie",
+        "tr": "Bağımsız"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Mariachi",
+      "apiName": "DA_Nidalee19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_mariachi.png",
+      "names": {
+        "en": "Mariachi",
+        "tr": "Mariachi"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Melodic Heart",
+      "apiName": "DA_Gwen19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_melodicheart.png",
+      "names": {
+        "en": "Melodic Heart",
+        "tr": "Melodik Kalp"
+      },
+      "emblem": null
+    },
+    {
+      "key": "One Monster Band",
+      "apiName": "DA_BaronNashor19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_onemonsterband.png",
+      "names": {
+        "en": "One Monster Band",
+        "tr": "One Monster Band"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Producer",
+      "apiName": "DA_Sona19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_producer.png",
+      "names": {
+        "en": "Producer",
+        "tr": "Yapımcı"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Record Mogul",
+      "apiName": "DA_DrMundo19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/drmundo/uniquetrait/textures/t_traiticon_19_recordmogul.png",
+      "names": {
+        "en": "Record Mogul",
+        "tr": "Plak Patronu"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Synthwave",
+      "apiName": "DA_Garen19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/garen/uniquetrait/t_traiticon_19_synthwave.png",
+      "names": {
+        "en": "Synthwave",
+        "tr": "Synthwave"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Tango",
+      "apiName": "DA_TwistedFate19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/champions/twisted_fate/uniquetrait/t_traiticon_19_tango.png",
+      "names": {
+        "en": "Tango",
+        "tr": "Tango"
+      },
+      "emblem": null
+    },
+    {
+      "key": "Windblessed",
+      "apiName": "DA_Janna19_UniqueTrait",
+      "kind": "unique",
+      "tiers": [
+        {
+          "min": 1,
+          "max": null,
+          "style": "unique"
+        }
+      ],
+      "icon": "tft/plugins/gamefeatures/set_19/content/traits/_traiticons/iconmask/t_traiticon_19_windblessed.png",
+      "names": {
+        "en": "Windblessed",
+        "tr": "Rüzgârla Kutsanmış"
+      },
+      "emblem": null
+    }
+  ],
+  "champions": [
+    {
+      "apiName": "DA_Elise19",
+      "id": "da_elise19",
+      "unitId": "DA_Elise19",
+      "name": "Elise",
+      "names": {
+        "en": "Elise",
+        "tr": "Elise"
+      },
+      "cost": 1,
+      "traits": [
+        "Ionic Spark",
+        "Frontman"
+      ],
+      "plannerCode": 1021,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/elise/ui/t_19_elise_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Gnar19",
+      "id": "da_gnar19",
+      "unitId": "DA_Gnar19",
+      "name": "Gnar",
+      "names": {
+        "en": "Gnar",
+        "tr": "Gnar"
+      },
+      "cost": 1,
+      "traits": [
+        "Pentakill",
+        "Trickshot"
+      ],
+      "plannerCode": 1026,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/gnar/ui/t_19_gnar_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Katarina19",
+      "id": "da_katarina19",
+      "unitId": "DA_Katarina19",
+      "name": "Katarina",
+      "names": {
+        "en": "Katarina",
+        "tr": "Katarina"
+      },
+      "cost": 1,
+      "traits": [
+        "Classical",
+        "Slayer"
+      ],
+      "plannerCode": 1036,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/katarina/ui/t_19_katarina_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Kayn19",
+      "id": "da_kayn19",
+      "unitId": "DA_Kayn19",
+      "name": "Kayn",
+      "names": {
+        "en": "Kayn",
+        "tr": "Kayn"
+      },
+      "cost": 1,
+      "traits": [
+        "Heartsteel",
+        "Slayer"
+      ],
+      "plannerCode": 1038,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/kayn/ui/t_19_kayn_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Kennen19",
+      "id": "da_kennen19",
+      "unitId": "DA_Kennen19",
+      "name": "Kennen",
+      "names": {
+        "en": "Kennen",
+        "tr": "Kennen"
+      },
+      "cost": 1,
+      "traits": [
+        "True Damage",
+        "Bodyguard"
+      ],
+      "plannerCode": 1039,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/kennen/ui/t_19_kennen_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Kobuko19",
+      "id": "da_kobuko19",
+      "unitId": "DA_Kobuko19",
+      "name": "Kobuko",
+      "names": {
+        "en": "Kobuko",
+        "tr": "Kobuko"
+      },
+      "cost": 1,
+      "traits": [
+        "Hyperpop",
+        "Frontman"
+      ],
+      "plannerCode": 1040,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/kobuko/ui/t_19_kobuko_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "2-star Ziggs with 1 item",
+          "tr": "1 eşyaya sahip 2 yıldızlı Ziggs"
+        }
+      }
+    },
+    {
+      "apiName": "DA_Lillia19",
+      "id": "da_lillia19",
+      "unitId": "DA_Lillia19",
+      "name": "Lillia",
+      "names": {
+        "en": "Lillia",
+        "tr": "Lillia"
+      },
+      "cost": 1,
+      "traits": [
+        "K/DA",
+        "Bodyguard"
+      ],
+      "plannerCode": 1043,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/lillia/ui/t_19_lillia_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Neeko19",
+      "id": "da_neeko19",
+      "unitId": "DA_Neeko19",
+      "name": "Neeko",
+      "names": {
+        "en": "Neeko",
+        "tr": "Neeko"
+      },
+      "cost": 1,
+      "traits": [
+        "K/DA",
+        "Encore",
+        "Prodigy"
+      ],
+      "plannerCode": 1052,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/neeko/ui/t_19_neeko_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Olaf19",
+      "id": "da_olaf19",
+      "unitId": "DA_Olaf19",
+      "name": "Olaf",
+      "names": {
+        "en": "Olaf",
+        "tr": "Olaf"
+      },
+      "cost": 1,
+      "traits": [
+        "Pentakill",
+        "Rock",
+        "Juggernaut"
+      ],
+      "plannerCode": 1095,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/olaf/ui/t_19_olaf_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Sett19",
+      "id": "da_sett19",
+      "unitId": "DA_Sett19",
+      "name": "Sett",
+      "names": {
+        "en": "Sett",
+        "tr": "Sett"
+      },
+      "cost": 1,
+      "traits": [
+        "Heartsteel",
+        "Frontman"
+      ],
+      "plannerCode": 1064,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/sett/ui/t_set19_sett_teamplanner_256x256.png"
+    },
+    {
+      "apiName": "DA_Taric19",
+      "id": "da_taric19",
+      "unitId": "DA_Taric19",
+      "name": "Taric",
+      "names": {
+        "en": "Taric",
+        "tr": "Taric"
+      },
+      "cost": 1,
+      "traits": [
+        "Beach Pop",
+        "Juggernaut"
+      ],
+      "plannerCode": 1072,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/taric/ui/t_19_taric_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Varus19",
+      "id": "da_varus19",
+      "unitId": "DA_Varus19",
+      "name": "Varus",
+      "names": {
+        "en": "Varus",
+        "tr": "Varus"
+      },
+      "cost": 1,
+      "traits": [
+        "Rock",
+        "Encore"
+      ],
+      "plannerCode": 1078,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/varus/ui/t_19_varus_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Yunara19",
+      "id": "da_yunara19",
+      "unitId": "DA_Yunara19",
+      "name": "Yunara",
+      "names": {
+        "en": "Yunara",
+        "tr": "Yunara"
+      },
+      "cost": 1,
+      "traits": [
+        "Ionic Spark",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1088,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/yunara/ui/t_19_yunara_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Ziggs19",
+      "id": "da_ziggs19",
+      "unitId": "DA_Ziggs19",
+      "name": "Ziggs",
+      "names": {
+        "en": "Ziggs",
+        "tr": "Ziggs"
+      },
+      "cost": 1,
+      "traits": [
+        "Hyperpop",
+        "Arcanist",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1092,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ziggs/ui/t_19_ziggs_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Zoe19",
+      "id": "da_zoe19",
+      "unitId": "DA_Zoe19",
+      "name": "Zoe",
+      "names": {
+        "en": "Zoe",
+        "tr": "Zoe"
+      },
+      "cost": 1,
+      "traits": [
+        "Beach Pop",
+        "Arcanist"
+      ],
+      "plannerCode": 1093,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/zoe/ui/t_19_zoe_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Annie19",
+      "id": "da_annie19",
+      "unitId": "DA_Annie19",
+      "name": "Annie",
+      "names": {
+        "en": "Annie",
+        "tr": "Annie"
+      },
+      "cost": 2,
+      "traits": [
+        "Ionic Spark",
+        "Arcanist",
+        "Juggernaut"
+      ],
+      "plannerCode": 1008,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/annie/ui/t_19_annie_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Ashe19",
+      "id": "da_ashe19",
+      "unitId": "DA_Ashe19",
+      "name": "Ashe",
+      "names": {
+        "en": "Ashe",
+        "tr": "Ashe"
+      },
+      "cost": 2,
+      "traits": [
+        "Beach Pop",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1010,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ashe/ui/t_19_ashe_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "A Beach Pop champion with 2 items.",
+          "tr": "2 eşyaya sahip bir Plaj Popu şampiyonu."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Camille19",
+      "id": "da_camille19",
+      "unitId": "DA_Camille19",
+      "name": "Camille",
+      "names": {
+        "en": "Camille",
+        "tr": "Camille"
+      },
+      "cost": 2,
+      "traits": [
+        "Rock",
+        "Slayer"
+      ],
+      "plannerCode": 1016,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/camille_/ui/t_19_camille_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Ezreal19",
+      "id": "da_ezreal19",
+      "unitId": "DA_Ezreal19",
+      "name": "Ezreal",
+      "names": {
+        "en": "Ezreal",
+        "tr": "Ezreal"
+      },
+      "cost": 2,
+      "traits": [
+        "Heartsteel",
+        "Encore"
+      ],
+      "plannerCode": 1023,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ezreal/ui/t_19_ezreal_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Gragas19",
+      "id": "da_gragas19",
+      "unitId": "DA_Gragas19",
+      "name": "Gragas",
+      "names": {
+        "en": "Gragas",
+        "tr": "Gragas"
+      },
+      "cost": 2,
+      "traits": [
+        "K/DA",
+        "Juggernaut"
+      ],
+      "plannerCode": 1027,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/gragas/ui/t_19_gragas_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Illaoi19",
+      "id": "da_illaoi19",
+      "unitId": "DA_Illaoi19",
+      "name": "Illaoi",
+      "names": {
+        "en": "Illaoi",
+        "tr": "Illaoi"
+      },
+      "cost": 2,
+      "traits": [
+        "Illbeats",
+        "Frontman"
+      ],
+      "plannerCode": 1029,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/illaoi/ui/t_19_illaoi_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Jax19",
+      "id": "da_jax19",
+      "unitId": "DA_Jax19",
+      "name": "Jax",
+      "names": {
+        "en": "Jax",
+        "tr": "Jax"
+      },
+      "cost": 2,
+      "traits": [
+        "EDM",
+        "Bodyguard",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1031,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/jax/ui/t_19_jax_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Karthus19",
+      "id": "da_karthus19",
+      "unitId": "DA_Karthus19",
+      "name": "Karthus",
+      "names": {
+        "en": "Karthus",
+        "tr": "Karthus"
+      },
+      "cost": 2,
+      "traits": [
+        "Pentakill",
+        "Arcanist"
+      ],
+      "plannerCode": 1035,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/karthus/ui/t_19_karthus_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Lucian19",
+      "id": "da_lucian19",
+      "unitId": "DA_Lucian19",
+      "name": "Lucian",
+      "names": {
+        "en": "Lucian",
+        "tr": "Lucian"
+      },
+      "cost": 2,
+      "traits": [
+        "Jazz",
+        "Hitmaker",
+        "Encore"
+      ],
+      "plannerCode": 1045,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/lucian/ui/t_19_lucian_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Lulu19",
+      "id": "da_lulu19",
+      "unitId": "DA_Lulu19",
+      "name": "Lulu",
+      "names": {
+        "en": "Lulu",
+        "tr": "Lulu"
+      },
+      "cost": 2,
+      "traits": [
+        "Hyperpop",
+        "Choreographer"
+      ],
+      "plannerCode": 1046,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/lulu/ui/t_19_lulu_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "Have your Hyperpop champions cast 10 times with the trait active.",
+          "tr": "Özellik etkinken Hiperpop şampiyonların 10 kez yetenek kullansın."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Lux19",
+      "id": "da_lux19",
+      "unitId": "DA_Lux19",
+      "name": "Lux",
+      "names": {
+        "en": "Lux",
+        "tr": "Lux"
+      },
+      "cost": 2,
+      "traits": [
+        "Ionic Spark",
+        "Prodigy"
+      ],
+      "plannerCode": 1047,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/lux/ui/t_19_lux_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Nasus19",
+      "id": "da_nasus19",
+      "unitId": "DA_Nasus19",
+      "name": "Nasus",
+      "names": {
+        "en": "Nasus",
+        "tr": "Nasus"
+      },
+      "cost": 2,
+      "traits": [
+        "Classical",
+        "Bodyguard"
+      ],
+      "plannerCode": 1097,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/nasus/ui/t_19_nasus_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Qiyana19",
+      "id": "da_qiyana19",
+      "unitId": "DA_Qiyana19",
+      "name": "Qiyana",
+      "names": {
+        "en": "Qiyana",
+        "tr": "Qiyana"
+      },
+      "cost": 2,
+      "traits": [
+        "True Damage",
+        "Renegade"
+      ],
+      "plannerCode": 1057,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/qiyana/ui/t_19_qiyana_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_RenataGlasc19",
+      "id": "da_renataglasc19",
+      "unitId": "DA_RenataGlasc19",
+      "name": "Renata Glasc",
+      "names": {
+        "en": "Renata Glasc",
+        "tr": "Renata Glasc"
+      },
+      "cost": 2,
+      "traits": [
+        "Classical",
+        "Choreographer"
+      ],
+      "plannerCode": 1059,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/renataglasc/ui/t_19_renataglasc_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Renekton19",
+      "id": "da_renekton19",
+      "unitId": "DA_Renekton19",
+      "name": "Renekton",
+      "names": {
+        "en": "Renekton",
+        "tr": "Renekton"
+      },
+      "cost": 2,
+      "traits": [
+        "Beach Pop",
+        "Frontman"
+      ],
+      "plannerCode": 1060,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/renekton/ui/t_19_renekton_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Samira19",
+      "id": "da_samira19",
+      "unitId": "DA_Samira19",
+      "name": "Samira",
+      "names": {
+        "en": "Samira",
+        "tr": "Samira"
+      },
+      "cost": 2,
+      "traits": [
+        "Classical",
+        "Renegade",
+        "Trickshot"
+      ],
+      "plannerCode": 1061,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/samira/ui/t_19_samira_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "2 items on a Classical, Renegade, or Trickshot champion.",
+          "tr": "Bir Klasik, İsyankâr veya Trickshot şampiyonunda 2 eşya."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Seraphine19_Indie",
+      "id": "da_seraphine19_indie",
+      "unitId": "DA_Seraphine19_Indie",
+      "name": "Seraphine",
+      "names": {
+        "en": "Seraphine",
+        "tr": "Seraphine"
+      },
+      "cost": 2,
+      "traits": [
+        "Indie"
+      ],
+      "plannerCode": 1063,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/seraphine/ui/t_set19_seraphinef1_portrait_128x128.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Reroll 4 times before Stage 2 Carousel.",
+          "tr": "Aşama 2'deki çember turundan önce dükkânı 4 kez yenile."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Tristana19",
+      "id": "da_tristana19",
+      "unitId": "DA_Tristana19",
+      "name": "Tristana",
+      "names": {
+        "en": "Tristana",
+        "tr": "Tristana"
+      },
+      "cost": 2,
+      "traits": [
+        "Hyperpop",
+        "Hitmaker"
+      ],
+      "plannerCode": 1076,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/tristana/ui/t_19_tristana_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "Get 5 kills with Hyperpop active.",
+          "tr": "Hiperpop etkinken 5 skor al."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Amumu19",
+      "id": "da_amumu19",
+      "unitId": "DA_Amumu19",
+      "name": "Amumu",
+      "names": {
+        "en": "Amumu",
+        "tr": "Amumu"
+      },
+      "cost": 3,
+      "traits": [
+        "Emo"
+      ],
+      "plannerCode": 1007,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/amumu/ui/t_19_amumu_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Bard19",
+      "id": "da_bard19",
+      "unitId": "DA_Bard19",
+      "name": "Bard",
+      "names": {
+        "en": "Bard",
+        "tr": "Bard"
+      },
+      "cost": 3,
+      "traits": [
+        "Jazz",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1012,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/bard/ui/t_19_bard_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Braum19",
+      "id": "da_braum19",
+      "unitId": "DA_Braum19",
+      "name": "Braum",
+      "names": {
+        "en": "Braum",
+        "tr": "Braum"
+      },
+      "cost": 3,
+      "traits": [
+        "Illbeats",
+        "Juggernaut"
+      ],
+      "plannerCode": 1014,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/braum/ui/t_19_braum_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Briar19",
+      "id": "da_briar19",
+      "unitId": "DA_Briar19",
+      "name": "Briar",
+      "names": {
+        "en": "Briar",
+        "tr": "Briar"
+      },
+      "cost": 3,
+      "traits": [
+        "Ionic Spark",
+        "Slayer"
+      ],
+      "plannerCode": 1015,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/briar/ui/t_19_briar_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Draven19",
+      "id": "da_draven19",
+      "unitId": "DA_Draven19",
+      "name": "Draven",
+      "names": {
+        "en": "Draven",
+        "tr": "Draven"
+      },
+      "cost": 3,
+      "traits": [
+        "Illbeats",
+        "Trickshot"
+      ],
+      "plannerCode": 1018,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/draven/ui/t_19_draven_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Ekko19",
+      "id": "da_ekko19",
+      "unitId": "DA_Ekko19",
+      "name": "Ekko",
+      "names": {
+        "en": "Ekko",
+        "tr": "Ekko"
+      },
+      "cost": 3,
+      "traits": [
+        "True Damage",
+        "Juggernaut",
+        "Prodigy"
+      ],
+      "plannerCode": 1020,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ekko/ui/t_19_ekko_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Evelynn19",
+      "id": "da_evelynn19",
+      "unitId": "DA_Evelynn19",
+      "name": "Evelynn",
+      "names": {
+        "en": "Evelynn",
+        "tr": "Evelynn"
+      },
+      "cost": 3,
+      "traits": [
+        "K/DA",
+        "Renegade"
+      ],
+      "plannerCode": 1022,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/evelynn/ui/t_19_evelynn_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "3 unique K/DA or Renegade champions.",
+          "tr": "3 K/DA veya İsyankâr şampiyon"
+        }
+      }
+    },
+    {
+      "apiName": "DA_Galio19",
+      "id": "da_galio19",
+      "unitId": "DA_Galio19",
+      "name": "Galio",
+      "names": {
+        "en": "Galio",
+        "tr": "Galio"
+      },
+      "cost": 3,
+      "traits": [
+        "Jazz",
+        "Frontman"
+      ],
+      "plannerCode": 1024,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/galio/ui/t_19_galio_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_KSante19",
+      "id": "da_ksante19",
+      "unitId": "DA_KSante19",
+      "name": "K'Sante",
+      "names": {
+        "en": "K'Sante",
+        "tr": "K'Sante"
+      },
+      "cost": 3,
+      "traits": [
+        "Heartsteel",
+        "Bodyguard"
+      ],
+      "plannerCode": 1041,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ksante/ui/t_19_ksante_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Kaisa19",
+      "id": "da_kaisa19",
+      "unitId": "DA_Kaisa19",
+      "name": "Kai'Sa",
+      "names": {
+        "en": "Kai'Sa",
+        "tr": "Kai'Sa"
+      },
+      "cost": 3,
+      "traits": [
+        "K/DA",
+        "Trickshot"
+      ],
+      "plannerCode": 1034,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/kaisa/ui/t_19_kaisa_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Malzahar19",
+      "id": "da_malzahar19",
+      "unitId": "DA_Malzahar19",
+      "name": "Malzahar",
+      "names": {
+        "en": "Malzahar",
+        "tr": "Malzahar"
+      },
+      "cost": 3,
+      "traits": [
+        "Composer",
+        "Prodigy"
+      ],
+      "plannerCode": 1048,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/malzahar/ui/t_19_malzahar_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Senna19",
+      "id": "da_senna19",
+      "unitId": "DA_Senna19",
+      "name": "Senna",
+      "names": {
+        "en": "Senna",
+        "tr": "Senna"
+      },
+      "cost": 3,
+      "traits": [
+        "True Damage",
+        "Hitmaker"
+      ],
+      "plannerCode": 1062,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/senna/ui/t_19_senna_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Swain19",
+      "id": "da_swain19",
+      "unitId": "DA_Swain19",
+      "name": "Swain",
+      "names": {
+        "en": "Swain",
+        "tr": "Swain"
+      },
+      "cost": 3,
+      "traits": [
+        "Rock",
+        "Arcanist",
+        "Frontman"
+      ],
+      "plannerCode": 1069,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/swain/ui/t_19_swain_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Syndra19",
+      "id": "da_syndra19",
+      "unitId": "DA_Syndra19",
+      "name": "Syndra",
+      "names": {
+        "en": "Syndra",
+        "tr": "Syndra"
+      },
+      "cost": 3,
+      "traits": [
+        "Beach Pop",
+        "Choreographer"
+      ],
+      "plannerCode": 1070,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/syndra/ui/t_19_syndra_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Tibbers19",
+      "id": "da_tibbers19",
+      "unitId": "DA_Tibbers19",
+      "name": "Tibbers",
+      "names": {
+        "en": "Tibbers",
+        "tr": "Tibbers"
+      },
+      "cost": 3,
+      "traits": [
+        "Ionic Spark",
+        "Bodyguard"
+      ],
+      "plannerCode": 1075,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/tibbers/ui/t_19_tibbers_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "condition": {
+          "en": "2-star Annie holding 1 item.",
+          "tr": "1 eşyaya sahip 2 yıldızlı Annie"
+        }
+      }
+    },
+    {
+      "apiName": "DA_Viego19",
+      "id": "da_viego19",
+      "unitId": "DA_Viego19",
+      "name": "Viego",
+      "names": {
+        "en": "Viego",
+        "tr": "Viego"
+      },
+      "cost": 3,
+      "traits": [
+        "Pentakill",
+        "Choreographer",
+        "Slayer"
+      ],
+      "plannerCode": 1081,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/viego/ui/t_19_viego_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_19_Ahri",
+      "id": "da_19_ahri",
+      "unitId": "DA_19_Ahri",
+      "name": "Ahri",
+      "names": {
+        "en": "Ahri",
+        "tr": "Ahri"
+      },
+      "cost": 4,
+      "traits": [
+        "K/DA",
+        "Choreographer"
+      ],
+      "plannerCode": 1001,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/ahri/ui/t_19_ahri_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Alistar19",
+      "id": "da_alistar19",
+      "unitId": "DA_Alistar19",
+      "name": "Alistar",
+      "names": {
+        "en": "Alistar",
+        "tr": "Alistar"
+      },
+      "cost": 4,
+      "traits": [
+        "Country"
+      ],
+      "plannerCode": 1005,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/alistar/ui/t_19_alistar_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "A Chain Vest equipped to a Caster or Marksman.",
+          "tr": "Zincir Yelek eşyasına sahip olan bir sahir veya nişancı ileri sür."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Alune19",
+      "id": "da_alune19",
+      "unitId": "DA_Alune19",
+      "name": "Alune",
+      "names": {
+        "en": "Alune",
+        "tr": "Alune"
+      },
+      "cost": 4,
+      "traits": [
+        "Heartsteel",
+        "Manager",
+        "Prodigy"
+      ],
+      "plannerCode": 1006,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/alune/ui/t_19_alune_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "4 unique Heartsteel or Prodigy champions.",
+          "tr": "4 farklı Heartsteel veya Deha şampiyonu."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Aurora19",
+      "id": "da_aurora19",
+      "unitId": "DA_Aurora19",
+      "name": "Aurora",
+      "names": {
+        "en": "Aurora",
+        "tr": "Aurora"
+      },
+      "cost": 4,
+      "traits": [
+        "Ionic Spark",
+        "Renegade"
+      ],
+      "plannerCode": 1011,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/aurora/ui/t_19_aurora_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Garen19",
+      "id": "da_garen19",
+      "unitId": "DA_Garen19",
+      "name": "Garen",
+      "names": {
+        "en": "Garen",
+        "tr": "Garen"
+      },
+      "cost": 4,
+      "traits": [
+        "Synthwave",
+        "Choreographer"
+      ],
+      "plannerCode": 1025,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/garen/ui/t_19_garen_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Graves19",
+      "id": "da_graves19",
+      "unitId": "DA_Graves19",
+      "name": "Graves",
+      "names": {
+        "en": "Graves",
+        "tr": "Graves"
+      },
+      "cost": 4,
+      "traits": [
+        "Beach Pop",
+        "Renegade"
+      ],
+      "plannerCode": 1097,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/graves/ui/t_19_graves_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Jhin19",
+      "id": "da_jhin19",
+      "unitId": "DA_Jhin19",
+      "name": "Jhin",
+      "names": {
+        "en": "Jhin",
+        "tr": "Jhin"
+      },
+      "cost": 4,
+      "traits": [
+        "Classical",
+        "Encore"
+      ],
+      "plannerCode": 1032,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/jhin/ui/t_19_jhin_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Jinx19",
+      "id": "da_jinx19",
+      "unitId": "DA_Jinx19",
+      "name": "Jinx",
+      "names": {
+        "en": "Jinx",
+        "tr": "Jinx"
+      },
+      "cost": 4,
+      "traits": [
+        "Ionic Spark",
+        "Hitmaker"
+      ],
+      "plannerCode": 1033,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/jinx/ui/t_19_jinx_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "3 items on an Ionic Spark or Hitmaker champion.",
+          "tr": "Bir Ionic Spark veya Prodüktör şampiyonunda 3 eşya."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Kayle19",
+      "id": "da_kayle19",
+      "unitId": "DA_Kayle19",
+      "name": "Kayle",
+      "names": {
+        "en": "Kayle",
+        "tr": "Kayle"
+      },
+      "cost": 4,
+      "traits": [
+        "Pentakill",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1037,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/kayle/ui/t_19_kayle_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "4 unique Pentakill or Swiftstriker champions.",
+          "tr": "4 farklı Pentakill veya Atik Vurucu şampiyonu."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Leona19",
+      "id": "da_leona19",
+      "unitId": "DA_Leona19",
+      "name": "Leona",
+      "names": {
+        "en": "Leona",
+        "tr": "Leona"
+      },
+      "cost": 4,
+      "traits": [
+        "K/DA",
+        "Bodyguard",
+        "Manager"
+      ],
+      "plannerCode": 1042,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/leona/ui/t_19_leona_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Locke19",
+      "id": "da_locke19",
+      "unitId": "DA_Locke19",
+      "name": "Locke",
+      "names": {
+        "en": "Locke",
+        "tr": "Locke"
+      },
+      "cost": 4,
+      "traits": [
+        "Rock",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1044,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/locke/ui/t_19_locke_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Mel19",
+      "id": "da_mel19",
+      "unitId": "DA_Mel19",
+      "name": "Mel",
+      "names": {
+        "en": "Mel",
+        "tr": "Mel"
+      },
+      "cost": 4,
+      "traits": [
+        "R&B",
+        "Arcanist"
+      ],
+      "plannerCode": 1049,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/mel/ui/t_19_mel_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Shyvana19",
+      "id": "da_shyvana19",
+      "unitId": "DA_Shyvana19",
+      "name": "Shyvana",
+      "names": {
+        "en": "Shyvana",
+        "tr": "Shyvana"
+      },
+      "cost": 4,
+      "traits": [
+        "Ionic Spark",
+        "Frontman"
+      ],
+      "plannerCode": 1065,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/shyvana/ui/t_19_shyvana_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Thresh19",
+      "id": "da_thresh19",
+      "unitId": "DA_Thresh19",
+      "name": "Thresh",
+      "names": {
+        "en": "Thresh",
+        "tr": "Thresh"
+      },
+      "cost": 4,
+      "traits": [
+        "Classical",
+        "Frontman"
+      ],
+      "plannerCode": 1074,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/thresh/ui/t_19_thresh_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Enemies spend 275 seconds Captivated by Classical.",
+          "tr": "Rakipler Klasik tarafından toplam 275 saniye büyülenmeli."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Vayne19",
+      "id": "da_vayne19",
+      "unitId": "DA_Vayne19",
+      "name": "Vayne",
+      "names": {
+        "en": "Vayne",
+        "tr": "Vayne"
+      },
+      "cost": 4,
+      "traits": [
+        "Rock",
+        "Trickshot"
+      ],
+      "plannerCode": 1079,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/vayne/ui/t_set19_vayne_portrait_128x128.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "Field Rock for 3 combats.",
+          "tr": "3 çatışma boyunca Rock birimi ileri sür."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Wukong19",
+      "id": "da_wukong19",
+      "unitId": "DA_Wukong19",
+      "name": "Wukong",
+      "names": {
+        "en": "Wukong",
+        "tr": "Wukong"
+      },
+      "cost": 4,
+      "traits": [
+        "Gu Feng"
+      ],
+      "plannerCode": 1083,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/wukong/ui/t_19_wukong_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Allies deal 25000 damage while fielding Xayah.",
+          "tr": "Xayah'yı ileri sürerken dost birimler 25000 Hasar versin."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Xayah19",
+      "id": "da_xayah19",
+      "unitId": "DA_Xayah19",
+      "name": "Xayah",
+      "names": {
+        "en": "Xayah",
+        "tr": "Xayah"
+      },
+      "cost": 4,
+      "traits": [
+        "Gu Feng",
+        "Hitmaker"
+      ],
+      "plannerCode": 1084,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/xayah/ui/t_19_xayah_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Yasuo19",
+      "id": "da_yasuo19",
+      "unitId": "DA_Yasuo19",
+      "name": "Yasuo",
+      "names": {
+        "en": "Yasuo",
+        "tr": "Yasuo"
+      },
+      "cost": 4,
+      "traits": [
+        "True Damage",
+        "Slayer"
+      ],
+      "plannerCode": 1085,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/yasuo/ui/t_19_yasuo_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "6 unique star levels of True Damage or Slayer champions.",
+          "tr": "True Damage veya Biçici şampiyonlarında 6 farklı yıldız seviyesi."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Yone19",
+      "id": "da_yone19",
+      "unitId": "DA_Yone19",
+      "name": "Yone",
+      "names": {
+        "en": "Yone",
+        "tr": "Yone"
+      },
+      "cost": 4,
+      "traits": [
+        "Heartsteel",
+        "Slayer"
+      ],
+      "plannerCode": 1086,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/yone/ui/t_19_yone_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Yorick19",
+      "id": "da_yorick19",
+      "unitId": "DA_Yorick19",
+      "name": "Yorick",
+      "names": {
+        "en": "Yorick",
+        "tr": "Yorick"
+      },
+      "cost": 4,
+      "traits": [
+        "Pentakill",
+        "Juggernaut"
+      ],
+      "plannerCode": 1087,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/yorick/ui/t_19_yorick_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Yuumi19",
+      "id": "da_yuumi19",
+      "unitId": "DA_Yuumi19",
+      "name": "Yuumi",
+      "names": {
+        "en": "Yuumi",
+        "tr": "Yuumi"
+      },
+      "cost": 4,
+      "traits": [
+        "Illbeats",
+        "Encore"
+      ],
+      "plannerCode": 1089,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/yuumi/ui/t_19_yuumi_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Zac19",
+      "id": "da_zac19",
+      "unitId": "DA_Zac19",
+      "name": "Zac",
+      "names": {
+        "en": "Zac",
+        "tr": "Zac"
+      },
+      "cost": 4,
+      "traits": [
+        "Beach Pop",
+        "Juggernaut"
+      ],
+      "plannerCode": 1090,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/zac/ui/t_19_zac_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 7,
+        "condition": {
+          "en": "5 unique Beach Pop or Juggernaut champions.",
+          "tr": "5 farklı Sahil Popu veya Ezergeçer şampiyonuna sahip ol."
+        }
+      }
+    },
+    {
+      "apiName": "DA_AkaliKDA19",
+      "id": "da_akalikda19",
+      "unitId": "DA_Akali19",
+      "name": "Akali (K/DA)",
+      "names": {
+        "en": "Akali (K/DA)",
+        "tr": "Akali (K/DA)"
+      },
+      "cost": 5,
+      "traits": [
+        "K/DA"
+      ],
+      "plannerCode": 1004,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/akali_kda/ui/t_set19_akali_portrait_128x128.png",
+      "unlock": {
+        "difficulty": 3,
+        "condition": {
+          "en": "12 unique star levels of K/DA without True Damage Akali unlocked.",
+          "tr": "True Damage Akali açık olmadan 12 farklı K/DA yıldız seviyesi."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Akali_TrueDamage19",
+      "id": "da_akali_truedamage19",
+      "unitId": "DA_Akali19",
+      "name": "Akali (True Damage)",
+      "names": {
+        "en": "Akali (True Damage)",
+        "tr": "Akali (True Damage)"
+      },
+      "cost": 5,
+      "traits": [
+        "True Damage",
+        "Freestyle"
+      ],
+      "plannerCode": 1002,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/akali_truedamage/ui/t_set19_akali_portrait_128x128.png",
+      "unlock": {
+        "difficulty": 3,
+        "condition": {
+          "en": "Earn 320 True Damage Bling without K/DA Akali unlocked.",
+          "tr": "K/DA Akali'yi açmadan 320 True Damage Fiyakası kazan."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Aphelios19",
+      "id": "da_aphelios19",
+      "unitId": "DA_Aphelios19",
+      "name": "Aphelios",
+      "names": {
+        "en": "Aphelios",
+        "tr": "Aphelios"
+      },
+      "cost": 5,
+      "traits": [
+        "Heartsteel"
+      ],
+      "plannerCode": 1009,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/aphelios/ui/t_19_aphelios_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "2-star Alune or Yone.",
+          "tr": "2 Yıldızlı Alune veya Yone."
+        }
+      }
+    },
+    {
+      "apiName": "DA_DrMundo19",
+      "id": "da_drmundo19",
+      "unitId": "DA_DrMundo19",
+      "name": "Dr. Mundo",
+      "names": {
+        "en": "Dr. Mundo",
+        "tr": "Dr. Mundo"
+      },
+      "cost": 5,
+      "traits": [
+        "Record Mogul",
+        "Manager"
+      ],
+      "plannerCode": 1019,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/drmundo/ui/t_19_drmundo_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Gwen19",
+      "id": "da_gwen19",
+      "unitId": "DA_Gwen19",
+      "name": "Gwen",
+      "names": {
+        "en": "Gwen",
+        "tr": "Gwen"
+      },
+      "cost": 5,
+      "traits": [
+        "Ionic Spark",
+        "Melodic Heart"
+      ],
+      "plannerCode": 1028,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/gwen/ui/t_19_gwen_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Ionic Spark fans cheer 250 times.",
+          "tr": "Ionic Spark hayranları 250 kez tezahürat yapar."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Janna19",
+      "id": "da_janna19",
+      "unitId": "DA_Janna19",
+      "name": "Janna",
+      "names": {
+        "en": "Janna",
+        "tr": "Janna"
+      },
+      "cost": 5,
+      "traits": [
+        "Windblessed",
+        "Gu Feng",
+        "Prodigy"
+      ],
+      "plannerCode": 1030,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/janna/ui/t_19_janna_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Earn 25 interest while fielding Xayah.",
+          "tr": "Xayah'yı ileri sürerken 25 birikim altını kazan."
+        }
+      }
+    },
+    {
+      "apiName": "DA_LeeSin19",
+      "id": "da_leesin19",
+      "unitId": "DA_LeeSin19",
+      "name": "Lee Sin",
+      "names": {
+        "en": "Lee Sin",
+        "tr": "Lee Sin"
+      },
+      "cost": 5,
+      "traits": [
+        "Gu Feng"
+      ],
+      "plannerCode": 1103,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/leesin/ui/t_19_leesin_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Deal 40 player damage while fielding Xayah.",
+          "tr": "Xayah'ı ileri sürerken 40 oyuncu hasarı ver."
+        }
+      }
+    },
+    {
+      "apiName": "DA_MissFortune19",
+      "id": "da_missfortune19",
+      "unitId": "DA_MissFortune19",
+      "name": "Miss Fortune",
+      "names": {
+        "en": "Miss Fortune",
+        "tr": "Miss Fortune"
+      },
+      "cost": 5,
+      "traits": [
+        "8-Bit",
+        "Hitmaker"
+      ],
+      "plannerCode": 1050,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/missfortune/ui/t_19_missfortune_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Mordekaiser19",
+      "id": "da_mordekaiser19",
+      "unitId": "DA_Mordekaiser19",
+      "name": "Mordekaiser",
+      "names": {
+        "en": "Mordekaiser",
+        "tr": "Mordekaiser"
+      },
+      "cost": 5,
+      "traits": [
+        "Pentakill"
+      ],
+      "plannerCode": 1097,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/mordekaiser/ui/t_19_mordekaiser_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "10 unique star levels of Pentakill.",
+          "tr": "10 farklı Pentakill yıldız seviyesi."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Nidalee19",
+      "id": "da_nidalee19",
+      "unitId": "DA_Nidalee19",
+      "name": "Nidalee",
+      "names": {
+        "en": "Nidalee",
+        "tr": "Nidalee"
+      },
+      "cost": 5,
+      "traits": [
+        "Mariachi",
+        "Choreographer"
+      ],
+      "plannerCode": 1053,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/nidalee/ui/t_19_nidalee_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Nunu19",
+      "id": "da_nunu19",
+      "unitId": "DA_Nunu19",
+      "name": "Nunu & Willump",
+      "names": {
+        "en": "Nunu & Willump",
+        "tr": "Nunu ve Willump"
+      },
+      "cost": 5,
+      "traits": [
+        "Disco",
+        "Frontman"
+      ],
+      "plannerCode": 1054,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/nunu/ui/t_19_nunu_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Pyke19",
+      "id": "da_pyke19",
+      "unitId": "DA_Pyke19",
+      "name": "Pyke",
+      "names": {
+        "en": "Pyke",
+        "tr": "Pyke"
+      },
+      "cost": 5,
+      "traits": [
+        "Rock",
+        "Renegade"
+      ],
+      "plannerCode": 1056,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/pyke/ui/t_19_pyke_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 3,
+        "levelRequired": 7,
+        "condition": {
+          "en": "Have 85 or more gold at the end of combat.",
+          "tr": "Çatışma sonunda 85 veya daha fazla altına sahip ol."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Rell19",
+      "id": "da_rell19",
+      "unitId": "DA_Rell19",
+      "name": "Rell",
+      "names": {
+        "en": "Rell",
+        "tr": "Rell"
+      },
+      "cost": 5,
+      "traits": [
+        "R&B",
+        "Beat Master"
+      ],
+      "plannerCode": 1058,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/rell/ui/t_19_rell_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Taliyah19",
+      "id": "da_taliyah19",
+      "unitId": "DA_Taliyah19",
+      "name": "Taliyah",
+      "names": {
+        "en": "Taliyah",
+        "tr": "Taliyah"
+      },
+      "cost": 5,
+      "traits": [
+        "Beach Pop",
+        "Encore"
+      ],
+      "plannerCode": 1071,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/taliyah/ui/t_19_taliyah_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "A champion of each cost starts in a Beach Pop hex.",
+          "tr": "Her bedelden bir şampiyon çatışmaya Plaj Popu hücresinde başlasın."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Teemo19",
+      "id": "da_teemo19",
+      "unitId": "DA_Teemo19",
+      "name": "Teemo",
+      "names": {
+        "en": "Teemo",
+        "tr": "Teemo"
+      },
+      "cost": 5,
+      "traits": [
+        "Hyperpop",
+        "Hype Man"
+      ],
+      "plannerCode": 1073,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/teemo/ui/t_19_teemo_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 2,
+        "condition": {
+          "en": "Collect 900 Hyperpop Hype.",
+          "tr": "900 Hiperpop Coşkusu topla."
+        }
+      }
+    },
+    {
+      "apiName": "DA_TwistedFate19",
+      "id": "da_twistedfate19",
+      "unitId": "DA_TwistedFate19",
+      "name": "Twisted Fate",
+      "names": {
+        "en": "Twisted Fate",
+        "tr": "Twisted Fate"
+      },
+      "cost": 5,
+      "traits": [
+        "Tango",
+        "Trickshot"
+      ],
+      "plannerCode": 1077,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/twisted_fate/ui/t_19_twistedfate_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Vi19",
+      "id": "da_vi19",
+      "unitId": "DA_Vi19",
+      "name": "Vi",
+      "names": {
+        "en": "Vi",
+        "tr": "Vi"
+      },
+      "cost": 5,
+      "traits": [
+        "EDM",
+        "Juggernaut"
+      ],
+      "plannerCode": 1080,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/vi/ui/t_19_vi_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_Vladimir19",
+      "id": "da_vladimir19",
+      "unitId": "DA_Vladimir19",
+      "name": "Vladimir",
+      "names": {
+        "en": "Vladimir",
+        "tr": "Vladimir"
+      },
+      "cost": 5,
+      "traits": [
+        "Classical",
+        "Arcanist"
+      ],
+      "plannerCode": 1082,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/vladimir/ui/t_19_vladimir_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 1,
+        "levelRequired": 8,
+        "condition": {
+          "en": "Only 1 champion in the 2 front rows of the battlefield.",
+          "tr": "Savaş alanının ön 2 sırasında yalnızca 1 şampiyon bulunsun."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Zeri19",
+      "id": "da_zeri19",
+      "unitId": "DA_Zeri19",
+      "name": "Zeri",
+      "names": {
+        "en": "Zeri",
+        "tr": "Zeri"
+      },
+      "cost": 5,
+      "traits": [
+        "Goth",
+        "Swiftstriker"
+      ],
+      "plannerCode": 1091,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/zeri/ui/t_19_zeri_teamplanner_portrait.png"
+    },
+    {
+      "apiName": "DA_BaronNashor19",
+      "id": "da_baronnashor19",
+      "unitId": "DA_BaronNashor19",
+      "name": "Baron Nashor",
+      "names": {
+        "en": "Baron Nashor",
+        "tr": "Baron Nashor"
+      },
+      "cost": 7,
+      "traits": [
+        "One Monster Band"
+      ],
+      "plannerCode": 1013,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/baronnashor/baronnashor/textures/t_baronnashor19_faceicon.png",
+      "unlock": {
+        "difficulty": 4,
+        "condition": {
+          "en": "Collect all 5 members of Baron's ensemble. / Deal 60000 damage with your strongest Malzahar.",
+          "tr": "Baron'un orkestrasının tüm 5 üyesini topla. / En güçlü Malzahar biriminle 60000 Hasar ver."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Rakan19",
+      "id": "da_rakan19",
+      "unitId": "DA_Rakan19",
+      "name": "Rakan",
+      "names": {
+        "en": "Rakan",
+        "tr": "Rakan"
+      },
+      "cost": 7,
+      "traits": [
+        "Boy Band",
+        "Choreographer"
+      ],
+      "plannerCode": 1096,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/rakan/ui/t_19_rakan_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 3,
+        "levelRequired": 8,
+        "condition": {
+          "en": "Win 4 combats in a row at Level 8+ / Lose 3 combats in a row at Level 8+",
+          "tr": "8. seviye ve üzerindeyken art arda 4 çatışma kazan. / 8. seviye ve üzerindeyken art arda 4 çatışmada mağlup ol."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Smeech19",
+      "id": "da_smeech19",
+      "unitId": "DA_Smeech19",
+      "name": "Smeech",
+      "names": {
+        "en": "Smeech",
+        "tr": "Smeech"
+      },
+      "cost": 7,
+      "traits": [
+        "Jazz",
+        "Slayer"
+      ],
+      "plannerCode": 1066,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/smeech/ui/t_19_smeech_teamplanner_portrait.png",
+      "unlock": {
+        "difficulty": 3,
+        "levelRequired": 9,
+        "condition": {
+          "en": "Activate 8 or more non-unique traits.",
+          "tr": "8 veya daha fazla eşsiz olmayan özellik etkinleştir."
+        }
+      }
+    },
+    {
+      "apiName": "DA_Sona19",
+      "id": "da_sona19",
+      "unitId": "DA_Sona19",
+      "name": "Sona",
+      "names": {
+        "en": "Sona",
+        "tr": "Sona"
+      },
+      "cost": 7,
+      "traits": [
+        "Producer",
+        "Collab"
+      ],
+      "plannerCode": 1068,
+      "squareIcon": "tft/plugins/gamefeatures/set_19/content/champions/sona/ui/t_sona19_base_teamplannerportait.png",
+      "unlock": {
+        "difficulty": 4,
+        "levelRequired": 10,
+        "condition": {
+          "en": "Collab champions are inspired 15 times during player combat.",
+          "tr": "Düet şampiyonları oyunculara karşı çatışmalarda 15 kez ilham kazanır."
+        }
+      }
+    }
+  ]
+}

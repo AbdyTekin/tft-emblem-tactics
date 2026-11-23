@@ -31,8 +31,7 @@
   "bonus_team_size_down": "Remove a bonus slot",
   "bonus_team_size_up": "Add a bonus slot",
   "advanced": "ADVANCED",
-  "rivals_augment": "Unrivaled augment: Rengar and Kha'Zix together",
-  "evolved_khazix": "Evolved Kha'Zix (extra Executioner, Rapidfire, Ravager or Spellweaver)",
+  "sona_producer": "Sona (Producer): plan with a chosen band (Heartsteel, Ionic Spark, K/DA, Pentakill, or True Damage)",
   "add_emblem": "Add a {trait} emblem",
   "remove_emblem": "Remove one {trait} emblem ({count} selected)",
   "team_code_cut": "The team planner holds {max} units; extra units are left out.",
@@ -46,5 +45,15 @@
   "filter_by_trait": "Filter by trait",
   "filter_by_cost": "Filter by cost",
   "share_link": "SHARE",
-  "one_unit_away": "One unit away from activating"
+  "one_unit_away": "One unit away from activating",
+  "two_slots": "2 SLOTS",
+  "unlock_label": "Unlock",
+  "unlock_level": "Lv {level}+",
+  "unlock_difficulty_1": "Easy",
+  "unlock_difficulty_2": "Medium",
+  "unlock_difficulty_3": "Hard",
+  "unlock_difficulty_4": "Extreme",
+  "unlock_count": "{count} unlock",
+  "unlock_count_hint": "Unlockable champions on this board (hover or focus a unit to see its quest)",
+  "kda_star_hint": "K/DA counts total star levels (2★ assumed per unit and emblem)"
 }

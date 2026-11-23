@@ -1,65 +1,73 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { isTraitSuppressed, khazixVariants, teamSizeFor, traitContribution, unitSlots } from '@/lib/game/rules';
-import { REGULAR_RIFTBEASTS, champ, team } from './helpers';
+import {
+    UNLOCK_LEVEL_PENALTY,
+    candidatePool,
+    emblemContribution,
+    sonaVariants,
+    teamSizeFor,
+    traitContribution,
+    unitSlots,
+    unlockDifficultyFor,
+} from '@/lib/game/rules';
+import { champ, team } from './helpers';
 
-describe('unit rules', () => {
-    it('Elder Dragon takes two slots and adds two Riftbeast (R6)', () => {
-        const dragon = champ('Elder Dragon');
-        assert.equal(unitSlots(dragon), 2);
-        assert.equal(traitContribution(dragon, 'Riftbeast'), 2);
-        assert.equal(traitContribution(dragon, 'Apex Predator'), 1);
+describe('Set 19 unit rules', () => {
+    it('Baron Nashor takes two slots', () => {
+        const baron = champ('Baron Nashor');
+        assert.equal(unitSlots(baron), 2);
+        assert.equal(traitContribution(baron, 'One Monster Band'), 1);
         assert.equal(unitSlots(champ('Ahri')), 1);
+        assert.equal(unitSlots(champ('Rakan')), 1);
     });
 
-    it('Lux counts her regional trait twice and Avatar once (R5)', () => {
-        const lux = champ('Lux (Blossom)');
-        assert.equal(traitContribution(lux, 'Blossom'), 2);
-        assert.equal(traitContribution(lux, 'Avatar'), 1);
-        assert.equal(traitContribution(lux, 'Coven'), 0);
+    it('K/DA counts 2 per champion and 2 per held emblem (2-star assumption)', () => {
+        const ahri = champ('Ahri');
+        assert.equal(traitContribution(ahri, 'K/DA'), 2);
+        assert.equal(traitContribution(ahri, 'Choreographer'), 1);
+        assert.equal(traitContribution(ahri, 'Pentakill'), 0);
+        assert.equal(emblemContribution('K/DA'), 2);
+        assert.equal(emblemContribution('Pentakill'), 1);
     });
 
-    it('Rival is off with two Rivals unless the Rivals augment is taken (R9)', () => {
-        assert.equal(isTraitSuppressed('Rival', 1), false);
-        assert.equal(isTraitSuppressed('Rival', 2), true);
-        assert.equal(isTraitSuppressed('Rival', 2, { rivalsAugment: true }), false);
-        assert.equal(isTraitSuppressed('Coven', 7), false);
-    });
-
-    it('evolved Kha\'Zix gains one extra trait and stays the same unit (R10)', () => {
-        const khazix = champ("Kha'Zix");
-        const variants = khazixVariants(khazix);
+    it('Sona (Producer) gains one of the five band traits while staying the same unit', () => {
+        const sona = champ('Sona');
+        const variants = sonaVariants(sona);
         assert.deepEqual(variants.map(v => v.traits), [
-            ['Rival', 'Executioner'], ['Rival', 'Rapidfire'], ['Rival', 'Ravager'], ['Rival', 'Spellweaver'],
+            ['Producer', 'Collab', 'Heartsteel'],
+            ['Producer', 'Collab', 'Ionic Spark'],
+            ['Producer', 'Collab', 'K/DA'],
+            ['Producer', 'Collab', 'Pentakill'],
+            ['Producer', 'Collab', 'True Damage'],
         ]);
         for (const v of variants) {
-            assert.equal(v.unitId, khazix.unitId);
-            assert.equal(v.plannerCode, khazix.plannerCode);
+            assert.equal(v.unitId, sona.unitId);
+            assert.equal(v.plannerCode, sona.plannerCode);
+            assert.deepEqual(v.unlock, sona.unlock);
         }
+        const kdaSona = variants.find(v => v.traits.includes('K/DA'))!;
+        assert.equal(traitContribution(kdaSona, 'K/DA'), 2);
+        assert.equal(candidatePool({ sonaProducer: false }).some(c => c.apiName.includes(':')), false);
+        assert.equal(candidatePool({ sonaProducer: true }).filter(c => c.unitId === sona.unitId).length, 6);
+    });
+
+    it('scores unlock hardness and penalizes level-gated unlocks below their required level', () => {
+        assert.equal(unlockDifficultyFor(champ('Ahri'), 8), 0);
+        assert.equal(unlockDifficultyFor(champ('Ashe'), 6), 1);
+        assert.equal(unlockDifficultyFor(champ('Mordekaiser'), 8), 2);
+        assert.equal(unlockDifficultyFor(champ('Baron Nashor'), 8), 4);
+        // Smeech requires Level 9; Sona requires Level 10
+        assert.equal(unlockDifficultyFor(champ('Smeech'), 9), 3);
+        assert.equal(unlockDifficultyFor(champ('Smeech'), 8), 3 + UNLOCK_LEVEL_PENALTY);
+        assert.equal(unlockDifficultyFor(champ('Sona'), 10), 4);
+        assert.equal(unlockDifficultyFor(champ('Sona'), 8), 4 + UNLOCK_LEVEL_PENALTY);
     });
 });
 
-describe('team size (R7, R8)', () => {
-    const dragonPlus = (regulars: number, ...extra: string[]) =>
-        team('Elder Dragon', ...REGULAR_RIFTBEASTS.slice(0, regulars), ...extra);
-
-    it('is the level when no bonus applies', () => {
+describe('team size', () => {
+    it('is the level plus any item or augment bonuses', () => {
         assert.equal(teamSizeFor(team('Ahri', 'Sett'), { level: 8 }), 8);
-        assert.equal(teamSizeFor(dragonPlus(7), { level: 10 }), 10, '9 Riftbeast: no bonus');
-    });
-
-    it('adds item and augment bonuses to the level', () => {
         assert.equal(teamSizeFor(team('Ahri'), { level: 8, bonusTeamSize: 1 }), 9);
-    });
-
-    it('grows by two once Riftbeast 10 fits on the board before the bonus', () => {
-        assert.equal(teamSizeFor(dragonPlus(8), { level: 10 }), 12);
-        assert.equal(teamSizeFor(dragonPlus(9, 'Ahri'), { level: 10 }), 12, 'Riftbeast 11 + one more unit');
-        assert.equal(teamSizeFor(dragonPlus(8), { level: 9, bonusTeamSize: 1 }), 12, "level 9 + Tactician's item");
-    });
-
-    it("doesn't let Elder Dragon use the slots it unlocks", () => {
-        // Level 9: Elder Dragon + 8 regulars needs 10 slots before the bonus applies.
-        assert.equal(teamSizeFor(dragonPlus(8), { level: 9 }), 9);
+        assert.equal(teamSizeFor(team('Ahri'), { level: 10, bonusTeamSize: 2 }), 12);
     });
 });

@@ -2,7 +2,6 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { solveTeams, type SolveRequest, type SolveResult, type TeamResult } from '@/lib/solver';
 import { compareScores } from '@/lib/solver/score';
-import { REGULAR_RIFTBEASTS, champ } from './helpers';
 
 function teamsOf(result: SolveResult): TeamResult[] {
     assert.equal(result.status, 'ok', JSON.stringify(result));
@@ -24,12 +23,12 @@ describe('solver invariants', () => {
     const scenarios: SolveRequest[] = [];
     for (const strategy of ['Vertical', 'BronzeLife'] as const) {
         for (const level of [7, 8, 10]) {
-            for (const emblems of [['Blossom'], ['Hunter'], ['Fae', 'Primal'], ['Coven', 'Coven', 'Invoker']]) {
+            for (const emblems of [['Pentakill'], ['K/DA'], ['Beach Pop', 'Arcanist'], ['Heartsteel', 'Heartsteel', 'Prodigy']]) {
                 scenarios.push({ strategy, level, emblems });
             }
         }
     }
-    scenarios.push({ strategy: 'Vertical', level: 8, emblems: ['Elderwood'], locked: ['DA_18_ElderDragon', 'DA_18_Lux_Fae'] });
+    scenarios.push({ strategy: 'Vertical', level: 8, emblems: ['Ionic Spark'], locked: ['DA_BaronNashor19', 'DA_AkaliKDA19'] });
 
     for (const request of scenarios) {
         it(`${request.strategy} ${request.emblems.join('+')} level ${request.level}${request.locked ? ' with locks' : ''}`, () => {
@@ -63,68 +62,82 @@ describe('solver invariants', () => {
     }
 
     it('leads with teams that differ by at least two units', () => {
-        const teams = teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Blossom'] }));
+        const teams = teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Pentakill'] }));
         for (let i = 1; i < 8; i++) {
             for (let j = 0; j < i; j++) assert.ok(differsByTwo(teams[j], teams[i]), `teams ${j + 1} and ${i + 1} are near-copies`);
         }
     });
 
     it('returns the same teams for the same request', () => {
-        const request: SolveRequest = { strategy: 'BronzeLife', level: 9, emblems: ['Juggernaut', 'Fae'] };
+        const request: SolveRequest = { strategy: 'BronzeLife', level: 9, emblems: ['Juggernaut', 'Beach Pop'] };
         const names = (r: SolveResult) => teamsOf(r).map(t => t.champions.map(c => c.apiName).join(','));
         assert.deepEqual(names(solveTeams(request)), names(solveTeams(request)));
     });
 
     it('solves a level 10 board well within a second', () => {
         const start = performance.now();
-        solveTeams({ strategy: 'BronzeLife', level: 10, emblems: ['Brawler', 'Blackthorn', 'Juggernaut'] });
+        solveTeams({ strategy: 'BronzeLife', level: 10, emblems: ['Frontman', 'Beach Pop', 'Juggernaut'] });
         assert.ok(performance.now() - start < 1500);
     });
 });
 
-describe('solver results for the audited cases', () => {
-    it('Vertical Blossom level 8: many boards at Blossom 9 with a holder for the emblem', () => {
-        const teams = teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Blossom'] }));
+describe('Set 19 solver scenarios', () => {
+    it('Vertical Pentakill level 8 hits Pentakill 7 gold with a holder for the emblem', () => {
+        const teams = teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Pentakill'] }));
         assert.ok(teams.length >= 10);
         const [top] = teams;
-        assert.equal(top.metrics.vertical?.count, 9);
+        assert.ok((top.metrics.vertical?.count ?? 0) >= 7);
         assert.equal(top.metrics.vertical?.style, 'gold');
         assert.ok(top.evaluation.emblemHolders[0].holder, 'emblem is held');
     });
 
-    it('three Blossom emblems at level 8 cap at Blossom 9 (holders)', () => {
-        for (const team of teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Blossom', 'Blossom', 'Blossom'] }))) {
-            assert.ok((trait(team, 'Blossom')?.count ?? 0) <= 9);
+    it('Vertical K/DA counts 2 stars per unit and per held K/DA emblem', () => {
+        const [top] = teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['K/DA'] }));
+        assert.equal(top.metrics.vertical?.trait, 'K/DA');
+        assert.ok((top.metrics.vertical?.count ?? 0) >= 15, `K/DA count ${top.metrics.vertical?.count}`);
+        assert.equal(top.metrics.vertical?.style, 'gold');
+        assert.ok(top.evaluation.emblemHolders[0].holder, 'K/DA emblem is held');
+    });
+
+    it('three Pentakill emblems at level 8 cap by eligible holders', () => {
+        for (const team of teamsOf(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Pentakill', 'Pentakill', 'Pentakill'] }))) {
+            assert.ok((trait(team, 'Pentakill')?.count ?? 0) <= 10);
+            for (const h of team.evaluation.emblemHolders) {
+                if (h.holder) assert.ok(!h.holder.traits.includes('Pentakill'));
+            }
         }
     });
 
     it('activates the second emblem instead of overfilling the first', () => {
-        const [top] = teamsOf(solveTeams({ strategy: 'Vertical', level: 9, emblems: ['Blossom', 'Coven'] }));
-        assert.equal(trait(top, 'Blossom')?.style, 'gold');
-        assert.ok(trait(top, 'Coven')?.style, 'Coven active');
+        const [top] = teamsOf(solveTeams({ strategy: 'Vertical', level: 9, emblems: ['Pentakill', 'Arcanist'] }));
+        assert.equal(trait(top, 'Pentakill')?.style, 'gold');
+        assert.ok(trait(top, 'Arcanist')?.style, 'Arcanist active');
     });
 
-    it('Bronze For Life counts Bronze-tier traits and uses the emblem', () => {
-        const [top] = teamsOf(solveTeams({ strategy: 'BronzeLife', level: 8, emblems: ['Blossom'] }));
-        assert.ok(top.metrics.bronze >= 10, `bronze ${top.metrics.bronze}`);
-        assert.ok(trait(top, 'Blossom')?.style, 'Blossom active');
+    it('Bronze For Life counts Bronze-tier traits and activates the emblem', () => {
+        const [top] = teamsOf(solveTeams({ strategy: 'BronzeLife', level: 8, emblems: ['Beach Pop'] }));
+        assert.ok(top.metrics.bronze >= 8, `bronze ${top.metrics.bronze}`);
+        assert.ok(trait(top, 'Beach Pop')?.style, 'Beach Pop active');
+    });
+
+    it('avoids out-of-level extreme unlocks like Lv10 Sona on a Level 8 board', () => {
+        const [top] = teamsOf(solveTeams({ strategy: 'BronzeLife', level: 8, emblems: ['Slayer'] }));
+        assert.equal(top.champions.some(c => c.apiName === 'DA_Sona19'), false);
     });
 
     it('rejects locked boards that break the rules', () => {
-        const riftbeast10 = ['DA_18_ElderDragon', ...REGULAR_RIFTBEASTS.slice(0, 8).map(n => champ(n).apiName)];
-        assert.deepEqual(solveTeams({ strategy: 'Vertical', level: 9, emblems: ['Hunter'], locked: riftbeast10 }), { status: 'invalid-lock', reason: 'too-many-slots' });
-        assert.deepEqual(solveTeams({ strategy: 'Vertical', level: 8, emblems: ['Fae'], locked: ['DA_18_Lux_Fae', 'DA_Lux18_Blossom'] }), { status: 'invalid-lock', reason: 'duplicate-unit' });
+        assert.deepEqual(
+            solveTeams({ strategy: 'Vertical', level: 4, emblems: ['Slayer'], locked: ['DA_BaronNashor19', 'DA_19_Ahri', 'DA_Sett19', 'DA_Taric19'] }),
+            { status: 'invalid-lock', reason: 'too-many-slots' },
+        );
+        assert.deepEqual(
+            solveTeams({ strategy: 'Vertical', level: 8, emblems: ['K/DA'], locked: ['DA_AkaliKDA19', 'DA_Akali_TrueDamage19'] }),
+            { status: 'invalid-lock', reason: 'duplicate-unit' },
+        );
     });
 
-    it('fills 12 slots once Riftbeast 10 is reached at level 10', () => {
-        const locked = ['DA_18_ElderDragon', ...REGULAR_RIFTBEASTS.slice(0, 8).map(n => champ(n).apiName)];
-        const [top] = teamsOf(solveTeams({ strategy: 'Vertical', level: 10, emblems: ['Hunter'], locked }));
-        assert.equal(top.evaluation.teamSize, 12);
-        assert.equal(top.evaluation.slotsUsed, 12);
-    });
-
-    it('can plan around an evolved Kha\'Zix, one Kha\'Zix at a time', () => {
-        const teams = teamsOf(solveTeams({ strategy: 'BronzeLife', level: 8, emblems: ['Executioner'], evolvedKhazix: true }));
-        for (const team of teams) assert.ok(team.champions.filter(c => c.unitId === 'DA_18_KhaZix').length <= 1);
+    it('can plan around Sona (Producer) variants, at most one Sona per board', () => {
+        const teams = teamsOf(solveTeams({ strategy: 'Vertical', level: 10, emblems: ['Ionic Spark'], sonaProducer: true }));
+        for (const team of teams) assert.ok(team.champions.filter(c => c.unitId === 'DA_Sona19').length <= 1);
     });
 });

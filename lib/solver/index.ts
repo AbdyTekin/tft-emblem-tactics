@@ -30,8 +30,8 @@ export function solveTeams(request: SolveRequest): SolveResult {
         locked,
         emblems: request.emblems,
         strategy: request.strategy,
+        level: request.level,
         baseSlots: baseTeamSize(request),
-        rivalsAugment: request.rivalsAugment ?? false,
         beamWidth: BEAM_WIDTH,
         polishCount: POLISH_COUNT,
     });
@@ -41,12 +41,11 @@ export function solveTeams(request: SolveRequest): SolveResult {
         level: request.level,
         bonusTeamSize: request.bonusTeamSize,
         emblems: request.emblems,
-        rivalsAugment: request.rivalsAugment,
     };
     const results: TeamResult[] = search.run().slice(0, EXACT_CANDIDATES).map(({ state }) => {
         const champions = displayOrder(state.members.map(i => search.units[i].champion), locked);
         const evaluation = evaluateTeam(champions, options);
-        const metrics = teamMetrics(evaluation, champions, request.emblems);
+        const metrics = teamMetrics(evaluation, champions, request.emblems, request.level);
         return { champions, evaluation, metrics, score: teamScore(request.strategy, metrics, evaluation, request.emblems) };
     });
     // Stable: ties keep the search's order

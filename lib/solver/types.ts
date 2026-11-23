@@ -12,13 +12,11 @@ export interface SolveRequest {
     strategy: Strategy;
     /** apiNames of units that must be on the board. */
     locked?: readonly string[];
-    /** Rivals augment: Rengar and Kha'Zix together without penalty. */
-    rivalsAugment?: boolean;
-    /** Plan for Kha'Zix evolving into one extra trait. */
-    evolvedKhazix?: boolean;
+    /** Plan for Sona (Producer) featuring one of her 5 band traits. */
+    sonaProducer?: boolean;
     /** Number of teams to return (default 20). */
     limit?: number;
-    /** Candidate pool override, for tests. Defaults to every Set 18 champion. */
+    /** Candidate pool override, for tests. Defaults to every Set 19 champion. */
     pool?: readonly Champion[];
 }
 
@@ -33,6 +31,8 @@ export interface TeamMetrics {
     emblemTraitsActive: number;
     /** The first emblem's trait, for the Vertical strategy. */
     vertical: { trait: string; count: number; style: TierStyle | null } | null;
+    /** Sum of estimated unlock hardness across unlockable champions on the board (0 when all are base shop units). */
+    unlockDifficulty: number;
     cost: number;
 }
 

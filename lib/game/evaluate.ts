@@ -1,29 +1,27 @@
 import { getTrait } from '@/lib/game/data';
 import { assignEmblems } from '@/lib/game/emblems';
-import { isTraitSuppressed, teamSizeFor, traitContribution, unitSlots, type BoardSize } from '@/lib/game/rules';
+import { emblemContribution, isTraitSuppressed, teamSizeFor, traitContribution, unitSlots, type BoardSize } from '@/lib/game/rules';
 import { activeTier, nextBreakpoint, STYLE_RANK } from '@/lib/game/traits';
 import type { Champion, TierStyle, TraitKind } from '@/lib/game/types';
 
 export interface TeamOptions extends BoardSize {
     /** One entry per emblem owned, highest priority first. */
     emblems?: readonly string[];
-    /** Rivals augment: Rengar and Kha'Zix can be fielded together. */
-    rivalsAugment?: boolean;
 }
 
 export interface TraitState {
     trait: string;
     kind: TraitKind;
-    /** Units (Lux and Elder Dragon count double where they do) plus emblems that have a holder. */
+    /** Units plus emblems that have a holder (K/DA counts 2 per unit/emblem for 2-star boards). */
     count: number;
-    /** Emblems counted in `count`. */
+    /** Number of held emblem items contributing to `count`. */
     emblems: number;
     tierIndex: number;
     /** Null when inactive. */
     style: TierStyle | null;
     /** Next breakpoint above `count`, or null at the top tier. */
     next: number | null;
-    /** Active by count but switched off by a rule (two Rivals without the Rivals augment). */
+    /** Active by count but switched off by a rule outside breakpoints. */
     suppressed: boolean;
 }
 
@@ -60,15 +58,16 @@ export function evaluateTeam(team: readonly Champion[], options: TeamOptions): T
     const emblemCounts = new Map<string, number>();
     emblems.forEach((trait, i) => {
         if (holders[i] === null) return;
-        add(trait, 1, 1);
-        emblemCounts.set(trait, (emblemCounts.get(trait) ?? 0) + 1);
+        const contribution = emblemContribution(trait);
+        add(trait, contribution, 1);
+        emblemCounts.set(trait, (emblemCounts.get(trait) ?? 0) + contribution);
     });
 
     const traits: TraitState[] = [];
     for (const [key, { count, emblems: fromEmblems }] of counts) {
         const trait = getTrait(key);
         if (!trait) continue;
-        const suppressed = isTraitSuppressed(key, count, options);
+        const suppressed = isTraitSuppressed();
         const active = suppressed ? null : activeTier(trait, count);
         traits.push({
             trait: key,

@@ -15,7 +15,7 @@ import ScrollArea from '@/components/ScrollArea';
 function MainLayout() {
   // Settings live in the URL, so every setup is a shareable link
   const [planner, update] = usePlannerState();
-  const { emblems, level, bonusTeamSize, strategy, locked, rivalsAugment, evolvedKhazix } = planner;
+  const { emblems, level, bonusTeamSize, strategy, locked, sonaProducer } = planner;
 
   const request = useMemo<SolveRequest | null>(() => {
     // No emblems selected: nothing to build around, even when champions are locked.
@@ -26,10 +26,9 @@ function MainLayout() {
       bonusTeamSize,
       strategy,
       locked: locked.map(c => c.apiName),
-      rivalsAugment,
-      evolvedKhazix,
+      sonaProducer,
     };
-  }, [emblems, level, bonusTeamSize, strategy, locked, rivalsAugment, evolvedKhazix]);
+  }, [emblems, level, bonusTeamSize, strategy, locked, sonaProducer]);
 
   // Solved in a Web Worker; the previous result stays on screen (dimmed) until the new one arrives.
   const { solution, solving } = useTeamSolver(request);
@@ -58,12 +57,10 @@ function MainLayout() {
                 setBonusTeamSize={value => update({ bonusTeamSize: value })}
                 strategy={strategy}
                 setStrategy={value => update({ strategy: value })}
-                rivalsAugment={rivalsAugment}
-                setRivalsAugment={value => update({ rivalsAugment: value })}
-                evolvedKhazix={evolvedKhazix}
-                setEvolvedKhazix={value => update(s => ({
-                  evolvedKhazix: value,
-                  // Evolved variants only exist while the option is on
+                sonaProducer={sonaProducer}
+                setSonaProducer={value => update(s => ({
+                  sonaProducer: value,
+                  // Producer band variants only exist while the option is on
                   locked: value ? s.locked : s.locked.filter(c => !c.apiName.includes(':')),
                 }))}
               />
@@ -72,7 +69,7 @@ function MainLayout() {
                 initialTeam={locked}
                 setInitialTeam={team => update({ locked: team })}
                 boardSize={{ level, bonusTeamSize }}
-                evolvedKhazix={evolvedKhazix}
+                sonaProducer={sonaProducer}
               />
 
               <TraitList

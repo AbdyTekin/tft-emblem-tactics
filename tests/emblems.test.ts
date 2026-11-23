@@ -6,32 +6,32 @@ import { team } from './helpers';
 const holderNames = (units: ReturnType<typeof team>, holders: (number | null)[]) =>
     holders.map(h => (h === null ? null : units[h].name));
 
-describe('emblem holders (R4)', () => {
+describe('emblem holders', () => {
     it('never gives an emblem to a unit that already has the trait', () => {
-        const units = team('Ahri', 'Sett', 'Karma');
-        assert.deepEqual(assignEmblems(units, ['Blossom']), [null]);
+        const units = team('Ahri', 'Lillia', 'Neeko');
+        assert.deepEqual(assignEmblems(units, ['K/DA']), [null]);
     });
 
     it('needs a different holder for each copy of the same emblem', () => {
-        const units = team('Ahri', 'Sett', 'Soraka');
-        assert.deepEqual(holderNames(units, assignEmblems(units, ['Blossom', 'Blossom', 'Blossom'])), ['Soraka', null, null]);
+        const units = team('Ahri', 'Lillia', 'Sett');
+        assert.deepEqual(holderNames(units, assignEmblems(units, ['K/DA', 'K/DA', 'K/DA'])), ['Sett', null, null]);
     });
 
     it('lets one unit hold several different emblems, up to three items', () => {
-        const units = team('Leona');
+        const units = team('Sett');
         assert.deepEqual(
-            holderNames(units, assignEmblems(units, ['Blossom', 'Coven', 'Fae', 'Hunter'])),
-            ['Leona', 'Leona', 'Leona', null],
+            holderNames(units, assignEmblems(units, ['K/DA', 'Pentakill', 'Rock', 'Slayer'])),
+            ['Sett', 'Sett', 'Sett', null],
         );
     });
 
     it('reroutes earlier emblems to fit later ones', () => {
-        // Tristana already has Fae, Sprykin and Hunter, so only Leona can hold those three;
-        // Blossom must move to Tristana to make room.
-        const units = team('Leona', 'Tristana');
+        // Ziggs already has Hyperpop, Arcanist, and Swiftstriker, so only Taric can hold those three;
+        // K/DA must move to Ziggs to make room.
+        const units = team('Taric', 'Ziggs');
         assert.deepEqual(
-            holderNames(units, assignEmblems(units, ['Blossom', 'Fae', 'Sprykin', 'Hunter'])),
-            ['Tristana', 'Leona', 'Leona', 'Leona'],
+            holderNames(units, assignEmblems(units, ['K/DA', 'Hyperpop', 'Arcanist', 'Swiftstriker'])),
+            ['Ziggs', 'Taric', 'Taric', 'Taric'],
         );
     });
 });

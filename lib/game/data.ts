@@ -1,4 +1,4 @@
-import setData from '@/lib/data/set18.json';
+import setData from '@/lib/data/set19.json';
 import type { Champion, SetData, TraitData } from '@/lib/game/types';
 
 const data = setData as SetData;

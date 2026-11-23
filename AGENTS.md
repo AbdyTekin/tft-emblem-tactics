@@ -15,8 +15,8 @@ Instructions for AI coding agents.
 
 The site is only useful if it matches the live game, and mechanics change with every set, so don't rely on what you remember about TFT.
 
-- Check mechanics against `lib/data/set18.json`, `lib/game/rules.ts` and the README's rules table. If they don't settle it, ask.
-- CommunityDragon is the only game data source. New-set data can reach it days after the set hits PBE, so wait for it. Ask before adding another source, such as MetaTFT.
+- Check mechanics against `lib/data/set19.json`, `lib/game/rules.ts` and the README's rules table. If they don't settle it, ask.
+- Starting with Set 19 on Riot's standalone Unreal Engine TFT client, CommunityDragon's new export (`explore.communitydragon.org/tft/`) only provides textures and localization (no `en_us.json` yet). `scripts/update-data.mjs` pulls structured Set 19 data from MetaTFT's lookups at build/update time and resolves icon paths against `explore.communitydragon.org/tft/` so the static site stays 100% self-hosted. Switch back to CommunityDragon once it exports structured Unreal TFT data, and switch `scripts/update-data.mjs` default channel from `pbe` to `latest` once Patch 19.1 goes live.
 
 ## Constraints
 
@@ -41,5 +41,6 @@ Commit or push only when asked. Pushing `master` deploys to production through V
 
 ## Open items
 
-- Do copied Team Planner codes import correctly in the TFT client? This hasn't been confirmed, so if you change `lib/game/team-code.ts`, ask for an in-game check.
+- Do copied Team Planner codes import correctly in the standalone Set 19 TFT client? In the PBE 19.1 lookup, `Graves`, `Mordekaiser` and `Nasus` all currently share planner code `0x449` (`1097`), so re-run `npm run data:update` when live 19.1 ships and verify imports in-game.
+- Beach Pop's PBE asset currently has a placeholder `0–300` tier overridden in `scripts/update-data.mjs` (`TIER_OVERRIDES`); verify once Riot replaces it on live 19.1.
 - Comparing or pinning teams and adding strategies were left out because they need a product decision. Ask before building them.

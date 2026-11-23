@@ -4,7 +4,7 @@ import { LanguageProvider } from '@/context/language-context';
 import DynamicMetadata from '@/components/DynamicMetadata';
 
 const description =
-  "Build Teamfight Tactics Set 18 boards around your emblems: vertical and Bronze For Life teams that follow the real game rules.";
+  "Build Teamfight Tactics Set 19 boards around your emblems: vertical and Bronze For Life teams that follow the real game rules.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tft-emblem-tactics.vercel.app"),

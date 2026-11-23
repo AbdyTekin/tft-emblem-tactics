@@ -8,7 +8,8 @@ import HorizontalScrollArea from '@/components/HorizontalScrollArea';
 import ScrollArea from '@/components/ScrollArea';
 import { useLocale, useTranslations } from 'next-intl';
 import HoverCard from '@/components/HoverCard';
-import { TRAITS } from '@/lib/game/data';
+import ChampionTooltip, { LockIcon, UNLOCK_BADGE_STYLE } from '@/components/ChampionTooltip';
+import { TRAITS, getTrait } from '@/lib/game/data';
 import TraitIcon from '@/components/TraitIcon';
 import { GOLD_ICON, championImage } from '@/lib/assets';
 import { evaluateTeam } from '@/lib/game/evaluate';
@@ -16,14 +17,13 @@ import type { BoardSize } from '@/lib/game/rules';
 import { candidatePool } from '@/lib/game/rules';
 import { useIsClient } from '@/lib/hooks/use-is-client';
 import { useNames } from '@/lib/hooks/use-names';
-import { getTrait } from '@/lib/game/data';
 
 interface ChampionSelectorProps {
     initialTeam: Champion[];
     setInitialTeam: (team: Champion[]) => void;
     boardSize: BoardSize;
-    /** Offer evolved Kha'Zix variants too. */
-    evolvedKhazix: boolean;
+    /** Offer Sona (Producer) band variants too. */
+    sonaProducer: boolean;
 }
 
 /**
@@ -84,11 +84,41 @@ const COST_DOT: Record<number, string> = {
     3: 'bg-blue-400',
     4: 'bg-purple-400',
     5: 'bg-yellow-400',
+    7: 'bg-cyan-400',
 };
 
-export default function ChampionSelector({ initialTeam, setInitialTeam, boardSize, evolvedKhazix }: ChampionSelectorProps) {
+const COST_BTN_STYLES: Record<number, string> = {
+    1: 'bg-gray-900/40 border-gray-500/50 text-gray-400',
+    2: 'bg-green-900/30 border-green-500/50 text-green-400',
+    3: 'bg-blue-900/30 border-blue-500/50 text-blue-400',
+    4: 'bg-purple-900/30 border-purple-500/50 text-purple-400',
+    5: 'bg-yellow-900/30 border-yellow-500/50 text-yellow-400',
+    7: 'bg-cyan-900/30 border-cyan-500/50 text-cyan-300',
+};
+
+const COST_COLOR_MAP: Record<number, string> = {
+    1: 'text-gray-400',
+    2: 'text-green-400',
+    3: 'text-blue-400',
+    4: 'text-purple-400',
+    5: 'text-yellow-400',
+    7: 'text-cyan-300',
+};
+
+const COST_ACTIVE_BG_MAP: Record<number, string> = {
+    1: 'bg-gray-800/50',
+    2: 'bg-green-900/30',
+    3: 'bg-blue-900/30',
+    4: 'bg-purple-900/30',
+    5: 'bg-yellow-900/30',
+    7: 'bg-cyan-900/30',
+};
+
+const SET_COSTS = [1, 2, 3, 4, 5, 7] as const;
+
+export default function ChampionSelector({ initialTeam, setInitialTeam, boardSize, sonaProducer }: ChampionSelectorProps) {
     const { champions: setChampions } = useTFT();
-    const champions = useMemo(() => candidatePool({ evolvedKhazix }, setChampions), [evolvedKhazix, setChampions]);
+    const champions = useMemo(() => candidatePool({ sonaProducer }, setChampions), [sonaProducer, setChampions]);
     const t = useTranslations();
     const names = useNames();
     const locale = useLocale();
@@ -159,7 +189,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    /** Locking `champion` must leave a legal board (slots, including Elder Dragon's two). */
+    /** Locking `champion` must leave a legal board (slots, including Baron Nashor's two). */
     const withChampion = (champion: Champion) => [...initialTeam.filter(c => c.unitId !== champion.unitId), champion];
     const canLock = (champion: Champion) => evaluateTeam(withChampion(champion), boardSize).valid;
 
@@ -167,7 +197,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
         if (initialTeam.some(c => c.apiName === champion.apiName)) {
             setInitialTeam(initialTeam.filter(c => c.apiName !== champion.apiName));
         } else if (canLock(champion)) {
-            // One unit per unit id: picking another Lux variant replaces the current one
+            // One unit per unit id: picking another Akali or Sona variant replaces the current one
             setInitialTeam(withChampion(champion));
         }
     };
@@ -201,10 +231,15 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                         decoding="async"
                         className={`w-full h-full object-cover transition-opacity ${isSelected ? 'opacity-100' : 'opacity-60 group-hover:opacity-90'}`}
                     />
+                    {champ.unlock && (
+                        <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full border flex items-center justify-center ${UNLOCK_BADGE_STYLE[champ.unlock.difficulty]}`}>
+                            <LockIcon className="w-2.5 h-2.5" />
+                        </div>
+                    )}
                     <div className={`absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full ${COST_DOT[champ.cost] ?? COST_DOT[1]}`} />
                 </button>
             }>
-                <span>{names.champion(champ)}</span>
+                <ChampionTooltip champion={champ} />
             </HoverCard>
         );
     };
@@ -327,7 +362,7 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                                 >
                                                     <span>{t('all_traits')}</span>
                                                 </button>
-                                                {/* Regions */}
+                                                {/* Origins */}
                                                 <div className="px-3 py-1 text-[9px] font-bold text-gray-600 uppercase tracking-wider border-t border-white/5">{t('origins')}</div>
                                                 {regionClassTraits.origins.map(trait => (
                                                     <button
@@ -364,17 +399,11 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                         onClick={() => { setIsCostDropdownOpen(!isCostDropdownOpen); setIsTraitDropdownOpen(false); }}
                                         aria-label={t('filter_by_cost')}
                                         aria-expanded={isCostDropdownOpen}
-                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${(() => {
-                                            if (filterCost === null) return 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300';
-                                            const costBtnStyles: Record<number, string> = {
-                                                1: 'bg-gray-900/40 border-gray-500/50 text-gray-400',
-                                                2: 'bg-green-900/30 border-green-500/50 text-green-400',
-                                                3: 'bg-blue-900/30 border-blue-500/50 text-blue-400',
-                                                4: 'bg-purple-900/30 border-purple-500/50 text-purple-400',
-                                                5: 'bg-yellow-900/30 border-yellow-500/50 text-yellow-400',
-                                            };
-                                            return costBtnStyles[filterCost] || '';
-                                        })()}`}
+                                        className={`h-[30px] flex items-center gap-1 px-2 rounded-lg border text-xs font-bold transition-all cursor-pointer ${
+                                            filterCost === null
+                                                ? 'bg-black/20 border-white/10 text-gray-400 hover:border-white/20 hover:text-gray-300'
+                                                : (COST_BTN_STYLES[filterCost] ?? '')
+                                        }`}
                                     >
                                         <div
                                             className="w-4 h-4 bg-current"
@@ -401,32 +430,16 @@ export default function ChampionSelector({ initialTeam, setInitialTeam, boardSiz
                                             >
                                                 <span>-</span>
                                             </button>
-                                            {[1, 2, 3, 4, 5].map(cost => {
-                                                const costColorMap: Record<number, string> = {
-                                                    1: 'text-gray-400',
-                                                    2: 'text-green-400',
-                                                    3: 'text-blue-400',
-                                                    4: 'text-purple-400',
-                                                    5: 'text-yellow-400',
-                                                };
-                                                const activeBgMap: Record<number, string> = {
-                                                    1: 'bg-gray-800/50',
-                                                    2: 'bg-green-900/30',
-                                                    3: 'bg-blue-900/30',
-                                                    4: 'bg-purple-900/30',
-                                                    5: 'bg-yellow-900/30',
-                                                };
-                                                return (
-                                                    <button
-                                                        key={cost}
-                                                        onClick={() => { setFilterCost(filterCost === cost ? null : cost); setIsCostDropdownOpen(false); }}
-                                                        className={`w-full flex items-center justify-center px-2 py-1.5 text-xs font-bold transition-colors cursor-pointer ${filterCost === cost ? `${activeBgMap[cost]} ${costColorMap[cost]}` : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
-                                                            }`}
-                                                    >
-                                                        <span className={costColorMap[cost]}>{cost}</span>
-                                                    </button>
-                                                );
-                                            })}
+                                            {SET_COSTS.map(cost => (
+                                                <button
+                                                    key={cost}
+                                                    onClick={() => { setFilterCost(filterCost === cost ? null : cost); setIsCostDropdownOpen(false); }}
+                                                    className={`w-full flex items-center justify-center px-2 py-1.5 text-xs font-bold transition-colors cursor-pointer ${filterCost === cost ? `${COST_ACTIVE_BG_MAP[cost]} ${COST_COLOR_MAP[cost]}` : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
+                                                        }`}
+                                                >
+                                                    <span className={COST_COLOR_MAP[cost]}>{cost}</span>
+                                                </button>
+                                            ))}
                                         </div>
                                     )}
                                 </div>

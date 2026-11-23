@@ -11,10 +11,8 @@ interface ControlsProps {
     setBonusTeamSize: (bonus: number) => void;
     strategy: Strategy;
     setStrategy: (strategy: Strategy) => void;
-    rivalsAugment: boolean;
-    setRivalsAugment: (on: boolean) => void;
-    evolvedKhazix: boolean;
-    setEvolvedKhazix: (on: boolean) => void;
+    sonaProducer: boolean;
+    setSonaProducer: (on: boolean) => void;
 }
 
 const MIN_LEVEL = 4;
@@ -26,7 +24,7 @@ const stepButton = "cursor-pointer flex items-center justify-center rounded-xl b
 
 export default function Controls({
     level, setLevel, bonusTeamSize, setBonusTeamSize, strategy, setStrategy,
-    rivalsAugment, setRivalsAugment, evolvedKhazix, setEvolvedKhazix,
+    sonaProducer, setSonaProducer,
 }: ControlsProps) {
     const t = useTranslations();
 
@@ -74,7 +72,7 @@ export default function Controls({
                 {/* Extra team slots from items and augments */}
                 <div className="flex items-center justify-between gap-2 px-5 mt-1">
                     <HoverCard trigger={
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-dotted border-gray-600 cursor-help">
+                        <span tabIndex={0} className="text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-dotted border-gray-600 cursor-help">
                             {t('bonus_team_size')}
                         </span>
                     }>
@@ -169,12 +167,8 @@ export default function Controls({
                 </summary>
                 <div className="mt-2 flex flex-col gap-2 text-[11px] text-gray-400">
                     <label className="flex items-start gap-2 cursor-pointer">
-                        <input type="checkbox" className="mt-0.5 accent-indigo-500" checked={rivalsAugment} onChange={e => setRivalsAugment(e.target.checked)} />
-                        <span>{t('rivals_augment')}</span>
-                    </label>
-                    <label className="flex items-start gap-2 cursor-pointer">
-                        <input type="checkbox" className="mt-0.5 accent-indigo-500" checked={evolvedKhazix} onChange={e => setEvolvedKhazix(e.target.checked)} />
-                        <span>{t('evolved_khazix')}</span>
+                        <input type="checkbox" className="mt-0.5 accent-indigo-500" checked={sonaProducer} onChange={e => setSonaProducer(e.target.checked)} />
+                        <span>{t('sona_producer')}</span>
                     </label>
                 </div>
             </details>
